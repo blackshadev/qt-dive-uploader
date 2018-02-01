@@ -38,12 +38,14 @@ ApplicationWindow {
         RowLayout {
             Label {
                 renderType: "NativeRendering"
-                text: "TestLabel"
+                text: "Computer"
             }
 
             ComboBox {
+                editable: true
                 Layout.fillWidth: true
-                model: myModel
+                model: dc_available_computers
+
             }
         }
         RowLayout {
@@ -63,6 +65,16 @@ ApplicationWindow {
                 onClicked: {
                     fileDialog.open();
                 }
+            }
+        }
+        RowLayout {
+            Label {
+                renderType: Text.NativeRendering
+                text: "DC Version"
+            }
+            Label {
+                renderType: Text.NativeRendering
+                text: dc_version
             }
         }
     }
