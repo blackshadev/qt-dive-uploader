@@ -5,6 +5,7 @@
 #include <QQmlContext>
 #include <QSerialPortInfo>
 #include <QQuickStyle>
+#include <libdivecomputer/device.h>
 
 int main(int argc, char *argv[])
 {
@@ -22,6 +23,15 @@ int main(int argc, char *argv[])
     QList<QSerialPortInfo> data = QSerialPortInfo::availablePorts();
     for(QSerialPortInfo info : data ) {
        dataList.append(info.portName());
+    }
+
+    dc_descriptor_t* descriptor;
+    dc_iterator_t* iterator;
+    dc_status_t status;
+    dc_descriptor_iterator(&iterator);
+    while((status = dc_iterator_next(iterator, &descriptor)) == DC_STATUS_SUCCESS) {
+        qInfo( dc_descriptor_get_product(descriptor) );
+        qInfo( dc_descriptor_get_vendor(descriptor) );
     }
 
     QQmlContext *ctxt = engine.rootContext();
