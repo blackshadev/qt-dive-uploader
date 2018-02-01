@@ -1,9 +1,70 @@
-import QtQuick 2.10
-import QtQuick.Window 2.10
+import QtQuick 2.9
+import QtQuick.Window 2.2
+import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.0
 
-Window {
+ApplicationWindow {
     visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
+    property int margin: 11
+    width: mainLayout.implicitWidth + 2 * margin
+    height: mainLayout.implicitHeight + 2 * margin
+    minimumWidth: mainLayout.Layout.minimumWidth + 2 * margin
+    minimumHeight: mainLayout.Layout.minimumHeight + 2 * margin
+    title: "Dive Uploader"
+
+    FileDialog {
+        visible: false
+        id: fileDialog
+        title: "Please choose a file"
+        folder: shortcuts.home
+        onAccepted: {
+            filePath.text = fileDialog.fileUrl
+            fileDialog.close();
+        }
+        onRejected: {
+            console.log("Canceled")
+            fileDialog.close();
+
+        }
+    }
+
+    ColumnLayout {
+        id: mainLayout
+        anchors.fill: parent
+        anchors.margins: margin
+
+
+        RowLayout {
+            Label {
+                renderType: "NativeRendering"
+                text: "TestLabel"
+            }
+
+            ComboBox {
+                Layout.fillWidth: true
+                model: myModel
+            }
+        }
+        RowLayout {
+            Label {
+                renderType: Text.NativeRendering
+                text: "TestLabel"
+            }
+
+            TextField {
+                id: filePath
+                readOnly: true
+                Layout.fillWidth: true
+            }
+
+            Button {
+                text: "Browse..."
+                onClicked: {
+                    fileDialog.open();
+                }
+            }
+        }
+    }
+
 }
