@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.0
 
 ApplicationWindow {
     visible: true
-    property int margin: 11
+    property int margin: 21
     width: mainLayout.implicitWidth + 2 * margin
     height: mainLayout.implicitHeight + 2 * margin
     minimumWidth: mainLayout.Layout.minimumWidth + 2 * margin
@@ -29,54 +29,58 @@ ApplicationWindow {
         }
     }
 
-    ColumnLayout {
+    ColumnLayout{
+
         id: mainLayout
         anchors.fill: parent
         anchors.margins: margin
 
+        ColumnLayout {
 
-        RowLayout {
-            Label {
-                renderType: "NativeRendering"
-                text: "Computer"
+            RowLayout {
+                Label {
+                    renderType: "NativeRendering"
+                    text: "Computer"
+                }
+
+                ComboBox {
+                    editable: true
+                    Layout.fillWidth: true
+                    model: dc_available_computers
+
+                }
             }
 
-            ComboBox {
-                editable: true
-                Layout.fillWidth: true
-                model: dc_available_computers
+            RowLayout {
+                Label {
+                    renderType: Text.NativeRendering
+                    text: "TestLabel"
+                }
 
-            }
-        }
-        RowLayout {
-            Label {
-                renderType: Text.NativeRendering
-                text: "TestLabel"
+                TextField {
+                    id: filePath
+                    readOnly: true
+                    Layout.fillWidth: true
+                }
+
+                Button {
+                    text: "Browse..."
+                    onClicked: {
+                        fileDialog.open();
+                    }
+                }
             }
 
-            TextField {
-                id: filePath
-                readOnly: true
-                Layout.fillWidth: true
-            }
-
-            Button {
-                text: "Browse..."
-                onClicked: {
-                    fileDialog.open();
+            RowLayout {
+                Label {
+                    renderType: Text.NativeRendering
+                    text: "DC Version"
+                }
+                Label {
+                    renderType: Text.NativeRendering
+                    text: dc_version
                 }
             }
         }
-        RowLayout {
-            Label {
-                renderType: Text.NativeRendering
-                text: "DC Version"
-            }
-            Label {
-                renderType: Text.NativeRendering
-                text: dc_version
-            }
-        }
     }
-
 }
