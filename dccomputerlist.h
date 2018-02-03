@@ -8,8 +8,8 @@
 class DCComputer : public QObject
 {
 public:
-    DCComputer(const dc_descriptor_t* descr);
-    const dc_descriptor_t* descriptor;
+    DCComputer(dc_descriptor_t* descr);
+    dc_descriptor_t* descriptor;
     QString vendor;
     QString product;
 };
@@ -20,8 +20,7 @@ class DCComputerList: public QAbstractListModel
 {   Q_OBJECT
 
 public:
-    explicit DCComputerList(QObject *parent = 0);
-    ~DCComputerList();
+    DCComputerList(QObject *parent = 0);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

@@ -1,14 +1,10 @@
 #include "dccomputerlist.h"
 
-DCComputer::DCComputer(const dc_descriptor_t *descr)
+DCComputer::DCComputer(dc_descriptor_t* descr)
 {
     descriptor = descr;
-    vendor = dc_descriptor_get_vendor(descr);
-    product= dc_descriptor_get_product(descr);
-}
-
-DCComputerList::DCComputerList()
-{
+    vendor = QString(dc_descriptor_get_vendor(descr));
+    product= QString(dc_descriptor_get_product(descr));
 }
 
 int DCComputerList::rowCount(const QModelIndex& parent) const
