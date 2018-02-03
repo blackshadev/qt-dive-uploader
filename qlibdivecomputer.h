@@ -1,13 +1,17 @@
 #ifndef QLIBDIVECOMPUTER_H
 #define QLIBDIVECOMPUTER_H
 #include <QString>
+#include <QStringList>
 
 class QLibDiveComputer
 {
 public:
     QLibDiveComputer();
-    static QString version;
-    static void update_version();
+    ~QLibDiveComputer();
+    QString version;
+    QStringList* get_devices();
+private:
+    void get_version();
 };
 
 #endif // QLIBDIVECOMPUTER_H

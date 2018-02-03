@@ -5,7 +5,6 @@
 #include <QQmlContext>
 #include <QSerialPortInfo>
 #include <QQuickStyle>
-#include <libdivecomputer/device.h>
 #include <string>
 #include "qlibdivecomputer.h"
 
@@ -27,30 +26,23 @@ int main(int argc, char *argv[])
        dataList.append(info.portName());
     }
 
-    dc_descriptor_t* descriptor;
-    dc_iterator_t* iterator;
-    dc_status_t status;
-    dc_descriptor_iterator(&iterator);
-    QStringList compList;
 
-    QLibDiveComputer::update_version();
 
-    while((status = dc_iterator_next(iterator, &descriptor)) == DC_STATUS_SUCCESS) {
-        QString s = QString();
-        s += dc_descriptor_get_vendor(descriptor);
-        s += ' ';
-        s += dc_descriptor_get_product(descriptor);
-        compList.append(s);
-    }
-    compList.sort();
+    QLibDiveComputer* dc = new QLibDiveComputer();
+    QStringList* compList = dc->get_devices();
 
     QQmlContext *ctxt = engine.rootContext();
-    ctxt->setContextProperty("dc_available_computers", QVariant::fromValue(compList));
-    ctxt->setContextProperty("dc_version", QVariant::fromValue(QLibDiveComputer::version));
+    ctxt->setContextProperty("dc_available_computers", QVariant::fromValue(*compList));
+    ctxt->setContextProperty("dc_version", QVariant::fromValue(dc->version));
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 
-    return app.exec();
+    int res = app.exec();
+
+    delete compList;
+    delete dc;
+
+    return res;
 }
