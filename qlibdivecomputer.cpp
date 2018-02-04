@@ -1,4 +1,5 @@
 #include "qlibdivecomputer.h"
+#include "dccomputerlist.h"
 #include <libdivecomputer/version.h>
 #include <libdivecomputer/device.h>
 
@@ -13,7 +14,8 @@ QLibDiveComputer::~QLibDiveComputer()
     this->version.clear();
 }
 
-void QLibDiveComputer::get_version() {
+void QLibDiveComputer::get_version()
+{
     dc_version_t version;
     dc_version(&version);
 
@@ -23,21 +25,17 @@ void QLibDiveComputer::get_version() {
 
 }
 
-QStringList* QLibDiveComputer::get_devices() {
-    QStringList* list = new QStringList();
+DCComputerList* QLibDiveComputer::get_devices()
+{
+    DCComputerList* list = new DCComputerList();
     dc_descriptor_t* descriptor;
     dc_iterator_t* iterator;
     dc_status_t status;
     dc_descriptor_iterator(&iterator);
 
     while((status = dc_iterator_next(iterator, &descriptor)) == DC_STATUS_SUCCESS) {
-        QString s = QString();
-        s += dc_descriptor_get_vendor(descriptor);
-        s += ' ';
-        s += dc_descriptor_get_product(descriptor);
-        list->append(s);
+        list->add(new DCComputer(descriptor));
     }
-    list->sort();
+
     return list;
 }
-

@@ -14,11 +14,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     qlibdivecomputer.cpp \
-    dccomputerlist.cpp
+    dccomputerlist.cpp \
+    sessionstore.cpp
 
 HEADERS += \
     qlibdivecomputer.h \
-    dccomputerlist.h
+    dccomputerlist.h \
+    sessionstore.h
 
 RESOURCES += qml.qrc
 DESTDIR = bin

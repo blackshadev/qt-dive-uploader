@@ -12,6 +12,7 @@ public:
     dc_descriptor_t* descriptor;
     QString vendor;
     QString product;
+    QString description;
 };
 
 Q_DECLARE_METATYPE(DCComputer*)
@@ -20,6 +21,12 @@ class DCComputerList: public QAbstractListModel
 {   Q_OBJECT
 
 public:
+    enum ComputerRoles {
+        VendorRole = Qt::UserRole + 1,
+        ProductRole,
+        DescriptionRole
+    };
+
     DCComputerList(QObject *parent = 0);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -29,6 +36,9 @@ public slots:
     // Extra function to get the thing easily from outside Repeaters.
     DCComputer* get(int idx);
     void add(DCComputer* comp);
+    void clear();
+protected:
+    QHash<int, QByteArray> roleNames() const ;
 
 private:
     QList<DCComputer*> mComputers;

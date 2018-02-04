@@ -1,5 +1,6 @@
 #ifndef QLIBDIVECOMPUTER_H
 #define QLIBDIVECOMPUTER_H
+#include "dccomputerlist.h"
 #include <QString>
 #include <QStringList>
 
@@ -9,7 +10,7 @@ public:
     QLibDiveComputer();
     ~QLibDiveComputer();
     QString version;
-    QStringList* get_devices();
+    DCComputerList* get_devices();
 private:
     void get_version();
 };

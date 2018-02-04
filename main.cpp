@@ -1,3 +1,4 @@
+#include <string>
 #include <QGuiApplication>
 #include <QQuickWindow>
 #include <QQmlApplicationEngine>
@@ -5,8 +6,9 @@
 #include <QQmlContext>
 #include <QSerialPortInfo>
 #include <QQuickStyle>
-#include <string>
+#include <QSortFilterProxyModel>
 #include "qlibdivecomputer.h"
+#include "sessionstore.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,13 +28,22 @@ int main(int argc, char *argv[])
        dataList.append(info.portName());
     }
 
-
+    SessionStore sess("./session.json");
+    sess.load();
 
     QLibDiveComputer* dc = new QLibDiveComputer();
-    QStringList* compList = dc->get_devices();
+    DCComputerList* compList = dc->get_devices();
+
+    QSortFilterProxyModel sortedCompList;
+    sortedCompList.setSourceModel(compList);
+    sortedCompList.setSortRole(DCComputerList::ComputerRoles::DescriptionRole);
+    sortedCompList.setDynamicSortFilter(true);
+    sortedCompList.sort(0);
+
 
     QQmlContext *ctxt = engine.rootContext();
-    ctxt->setContextProperty("dc_available_computers", QVariant::fromValue(*compList));
+    ctxt->setContextProperty("session", &sess.data);
+    ctxt->setContextProperty("dc_available_computers", &sortedCompList);
     ctxt->setContextProperty("dc_version", QVariant::fromValue(dc->version));
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
@@ -40,6 +51,8 @@ int main(int argc, char *argv[])
         return -1;
 
     int res = app.exec();
+
+    sess.save();
 
     delete compList;
     delete dc;

@@ -16,10 +16,12 @@ ApplicationWindow {
     FileDialog {
         visible: false
         id: fileDialog
+        selectExisting: false
         title: "Please choose a file"
-        folder: shortcuts.home
+        nameFilters: [ "JSON files (*.json)", "All files (*)" ]
         onAccepted: {
-            filePath.text = fileDialog.fileUrl
+            filePath.text = fileDialog.fileUrl;
+            session.path = fileDialog.fileUrl;
             fileDialog.close();
         }
         onRejected: {
@@ -44,21 +46,38 @@ ApplicationWindow {
                 }
 
                 ComboBox {
-                    editable: true
+                    property bool loaded: false
+                    id: computerSelection
                     Layout.fillWidth: true
+                    editable: true
                     model: dc_available_computers
+                    textRole: "description"
+                    Component.onCompleted: {
+                        var idx = computerSelection.find(session.computer);
+                        if(idx > -1) {
+                            computerSelection.currentIndex = idx;
+                        }
+                        loaded = true;
+                    }
+                    onCurrentIndexChanged: {
+                        if(loaded) {
+                            session.computer = computerSelection.textAt(computerSelection.currentIndex);
+                        }
+                    }
 
                 }
             }
 
+
             RowLayout {
                 Label {
                     renderType: Text.NativeRendering
-                    text: "TestLabel"
+                    text: "Output file"
                 }
 
                 TextField {
                     id: filePath
+                    text: session.path
                     readOnly: true
                     Layout.fillWidth: true
                 }
@@ -70,6 +89,7 @@ ApplicationWindow {
                     }
                 }
             }
+
 
             RowLayout {
                 Label {
