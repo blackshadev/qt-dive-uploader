@@ -4,9 +4,8 @@
 #include <libdivecomputer/device.h>
 
 
-QLibDiveComputer::QLibDiveComputer()
+QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 {
-    this->version = QString();
     this->get_version();
 }
 QLibDiveComputer::~QLibDiveComputer()

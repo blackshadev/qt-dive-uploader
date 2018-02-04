@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("session", &sess.data);
+    ctxt->setContextProperty("libdivecomputer", dc);
     ctxt->setContextProperty("dc_available_computers", &sortedCompList);
     ctxt->setContextProperty("dc_version", QVariant::fromValue(dc->version));
 

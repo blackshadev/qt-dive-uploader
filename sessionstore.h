@@ -39,7 +39,7 @@ protected :
 
 Q_DECLARE_METATYPE(SessionData*)
 
-class SessionStore : public QObject
+class SessionStore
 {
 public:
     SessionStore(const char* path);

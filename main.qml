@@ -37,70 +37,82 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.margins: margin
 
-        ColumnLayout {
 
-            RowLayout {
-                Label {
-                    renderType: "NativeRendering"
-                    text: "Computer"
-                }
+        RowLayout {
 
-                ComboBox {
-                    property bool loaded: false
-                    id: computerSelection
-                    Layout.fillWidth: true
-                    editable: true
-                    model: dc_available_computers
-                    textRole: "description"
-                    Component.onCompleted: {
-                        var idx = computerSelection.find(session.computer);
-                        if(idx > -1) {
-                            computerSelection.currentIndex = idx;
-                        }
-                        loaded = true;
-                    }
-                    onCurrentIndexChanged: {
-                        if(loaded) {
-                            session.computer = computerSelection.textAt(computerSelection.currentIndex);
-                        }
-                    }
+            Layout.fillWidth: true
 
-                }
+            Label {
+                text: "Computer"
             }
 
-
-            RowLayout {
-                Label {
-                    renderType: Text.NativeRendering
-                    text: "Output file"
+            ComboBox {
+                property bool loaded: false
+                id: computerSelection
+                Layout.fillWidth: true
+                editable: true
+                model: dc_available_computers
+                textRole: "description"
+                Component.onCompleted: {
+                    var idx = computerSelection.find(session.computer);
+                    if(idx > -1) {
+                        computerSelection.currentIndex = idx;
+                    }
+                    loaded = true;
                 }
-
-                TextField {
-                    id: filePath
-                    text: session.path
-                    readOnly: true
-                    Layout.fillWidth: true
-                }
-
-                Button {
-                    text: "Browse..."
-                    onClicked: {
-                        fileDialog.open();
+                onCurrentIndexChanged: {
+                    if(loaded) {
+                        session.computer = computerSelection.textAt(computerSelection.currentIndex);
                     }
                 }
+
+            }
+        }
+
+
+        RowLayout {
+            Layout.fillWidth: true
+            Label {
+                text: "Output file"
             }
 
+            TextField {
+                id: filePath
+                text: session.path
+                readOnly: true
+                Layout.fillWidth: true
+            }
 
-            RowLayout {
-                Label {
-                    renderType: Text.NativeRendering
-                    text: "DC Version"
-                }
-                Label {
-                    renderType: Text.NativeRendering
-                    text: dc_version
+            Button {
+                text: "Browse..."
+                onClicked: {
+                    fileDialog.open();
                 }
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignRight
+            Button {
+                text: "Start"
+                clicked: {
+
+                }
+            }
+        }
+
+        RowLayout {
+
+            Layout.fillWidth: true
+
+            Label {
+                text: "DC Version"
+            }
+            Label {
+                text: dc_version
+            }
+        }
+
     }
 }
