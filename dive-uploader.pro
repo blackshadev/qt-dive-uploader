@@ -16,13 +16,13 @@ SOURCES += main.cpp \
     qlibdivecomputer.cpp \
     dccomputerlist.cpp \
     sessionstore.cpp \
-    libdivecomputerdownloader.cpp
+    divedownloader.cpp
 
 HEADERS += \
     qlibdivecomputer.h \
     dccomputerlist.h \
     sessionstore.h \
-    libdivecomputerdownloader.h
+    divedownloader.h
 
 RESOURCES += qml.qrc
 DESTDIR = bin

@@ -1,5 +1,5 @@
-#ifndef LIBDIVECOMPUTERDOWNLOADER_H
-#define LIBDIVECOMPUTERDOWNLOADER_H
+#ifndef DIVEDOWNLOADER_H
+#define DIVEDOWNLOADER_H
 
 #include <QObject>
 #include <libdivecomputer/common.h>
@@ -7,12 +7,12 @@
 #include <libdivecomputer/device.h>
 #include <libdivecomputer/descriptor.h>
 
-class LibDiveComputerDownloader : public QObject
+class DiveDownloader : public QObject
 {
     Q_OBJECT
 public:
-    explicit LibDiveComputerDownloader(QObject *parent = 0);
-    ~LibDiveComputerDownloader();
+    explicit DiveDownloader(QObject *parent = 0);
+    ~DiveDownloader();
     void start();
     void setPortName(char * port);
     void setLogLevel(dc_loglevel_t err = DC_LOGLEVEL_ERROR);
@@ -25,4 +25,4 @@ protected:
     dc_context_t* m_context;
 };
 
-#endif // LIBDIVECOMPUTERDOWNLOADER_H
+#endif // DIVEDOWNLOADER_H

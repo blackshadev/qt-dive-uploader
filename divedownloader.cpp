@@ -1,22 +1,22 @@
-#include "libdivecomputerdownloader.h"
+#include "divedownloader.h"
 
-LibDiveComputerDownloader::LibDiveComputerDownloader(QObject *parent) : QObject(parent)
+DiveDownloader::DiveDownloader(QObject *parent) : QObject(parent)
 {
      qInfo("HERE");
 }
 
-LibDiveComputerDownloader::~LibDiveComputerDownloader() {
+DiveDownloader::~DiveDownloader() {
 }
 
-void LibDiveComputerDownloader::setDescriptor(dc_descriptor_t *descriptor) {
+void DiveDownloader::setDescriptor(dc_descriptor_t *descriptor) {
     m_descriptor = descriptor;
 }
 
-void LibDiveComputerDownloader::setPortName(char *port_name) {
+void DiveDownloader::setPortName(char *port_name) {
     m_port_name = port_name;
 }
 
-void LibDiveComputerDownloader::setLogLevel(dc_loglevel_t err) {
+void DiveDownloader::setLogLevel(dc_loglevel_t err) {
     m_loglevel = err;
 }
 
@@ -31,7 +31,7 @@ static void logfunc (dc_context_t *context, dc_loglevel_t loglevel, const char *
     }
 }
 
-void LibDiveComputerDownloader::start() {
+void DiveDownloader::start() {
     dc_device_t *device;
     dc_context_t *context;
 
