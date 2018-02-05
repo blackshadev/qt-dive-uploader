@@ -1,4 +1,4 @@
-QT += quick serialport quickcontrols2
+QT += qml quick serialport quickcontrols2
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -15,12 +15,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     qlibdivecomputer.cpp \
     dccomputerlist.cpp \
-    sessionstore.cpp
+    sessionstore.cpp \
+    divedownloader.cpp
 
 HEADERS += \
     qlibdivecomputer.h \
     dccomputerlist.h \
-    sessionstore.h
+    sessionstore.h \
+    divedownloader.h
 
 RESOURCES += qml.qrc
 DESTDIR = bin
@@ -36,8 +38,17 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix|win32: LIBS += -L$$PWD/libdivecomputer/lib/ -llibdivecomputer
+include(vendor/vendor.pri)
 
-INCLUDEPATH += $$PWD/libdivecomputer/include
-DEPENDPATH += $$PWD/libdivecomputer/include
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/release/ -ldivecomputer
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/debug/ -ldivecomputer
+else:unix: LIBS += -L$$PWD/../../../../usr/local/lib/ -ldivecomputer
 
+INCLUDEPATH += $$PWD/../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../usr/local/include
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/release/libdivecomputer.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/debug/libdivecomputer.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/release/divecomputer.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/debug/divecomputer.lib
+else:unix: PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/libdivecomputer.a
