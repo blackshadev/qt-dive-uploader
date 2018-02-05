@@ -1,4 +1,4 @@
-QT += quick serialport quickcontrols2
+QT += qml quick serialport quickcontrols2
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -15,12 +15,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     qlibdivecomputer.cpp \
     dccomputerlist.cpp \
-    sessionstore.cpp
+    sessionstore.cpp \
+    divedownloader.cpp
 
 HEADERS += \
     qlibdivecomputer.h \
     dccomputerlist.h \
-    sessionstore.h
+    sessionstore.h \
+    divedownloader.h
 
 RESOURCES += qml.qrc
 DESTDIR = bin
@@ -41,3 +43,4 @@ unix|win32: LIBS += -L$$PWD/libdivecomputer/lib/ -llibdivecomputer
 INCLUDEPATH += $$PWD/libdivecomputer/include
 DEPENDPATH += $$PWD/libdivecomputer/include
 
+include(vendor/vendor.pri)

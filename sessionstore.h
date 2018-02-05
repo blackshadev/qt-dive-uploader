@@ -12,16 +12,16 @@ using namespace std;
 class SessionData : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
-    Q_PROPERTY(QString computer READ getComputer WRITE setComputer NOTIFY computerChanged)
+    Q_PROPERTY(QString m_path READ getPath WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(QString m_computer READ getComputer WRITE setComputer NOTIFY computerChanged)
 
 public:
 
     QString getComputer();
-    void setComputer(QString computer);
+    void setComputer(QString m_computer);
 
     QString getPath();
-    void setPath(QString path);
+    void setPath(QString m_path);
 
     void read(const QJsonObject &json);
     void write(QJsonObject &json);
@@ -31,15 +31,15 @@ signals:
     void computerChanged(QString);
 
 protected :
-    QString computer;
-    QString path;
+    QString m_computer;
+    QString m_path;
 
 };
 
 
 Q_DECLARE_METATYPE(SessionData*)
 
-class SessionStore : public QObject
+class SessionStore
 {
 public:
     SessionStore(const char* path);

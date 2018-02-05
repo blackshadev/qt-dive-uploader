@@ -1,38 +1,38 @@
 #include "sessionstore.h"
 
 void SessionData::setComputer(QString computer) {
-    this->computer = computer;
+    this->m_computer = computer;
     emit computerChanged(computer);
 }
 QString SessionData::getComputer() {
-    return computer;
+    return m_computer;
 }
 
 void SessionData::setPath(QString path) {
-    this->path = path;
+    this->m_path = path;
     emit pathChanged(path);
 }
 
 QString SessionData::getPath() {
-    return path;
+    return m_path;
 }
 
 void SessionData::read(const QJsonObject &json)
 {
     if(json.contains("path") && json["path"].isString()) {
-        path = json["path"].toString();
+        m_path = json["path"].toString();
     }
 
     if(json.contains("computer") && json["computer"].isString()) {
-        computer = json["computer"].toString();
+        m_computer = json["computer"].toString();
     }
 
 }
 
 void SessionData::write(QJsonObject &json)
 {
-    json["path"] = path;
-    json["computer"] = computer;
+    json["path"] = m_path;
+    json["computer"] = m_computer;
 }
 
 SessionStore::SessionStore(const char* path)
