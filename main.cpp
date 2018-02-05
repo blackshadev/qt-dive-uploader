@@ -34,18 +34,18 @@ int main(int argc, char *argv[])
     QLibDiveComputer* dc = new QLibDiveComputer();
     DCComputerList* compList = dc->get_devices();
 
-    QSortFilterProxyModel sortedCompList;
-    sortedCompList.setSourceModel(compList);
-    sortedCompList.setSortRole(DCComputerList::ComputerRoles::DescriptionRole);
-    sortedCompList.setDynamicSortFilter(true);
-    sortedCompList.sort(0);
+//    QSortFilterProxyModel sortedCompList;
+//    sortedCompList.setSourceModel(compList);
+//    sortedCompList.setSortRole(DCComputerList::ComputerRoles::DescriptionRole);
+//    sortedCompList.setDynamicSortFilter(true);
+//    sortedCompList.sort(0);
+
 
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("session", &sess.data);
     ctxt->setContextProperty("libdivecomputer", dc);
-    ctxt->setContextProperty("dc_available_computers", &sortedCompList);
-    ctxt->setContextProperty("dc_version", QVariant::fromValue(dc->version));
+    ctxt->setContextProperty("dc_available_computers", compList);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

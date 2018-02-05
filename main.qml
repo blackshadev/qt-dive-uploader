@@ -3,6 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.0
+import SortFilterProxyModel 0.1
 
 ApplicationWindow {
     visible: true
@@ -51,7 +52,12 @@ ApplicationWindow {
                 id: computerSelection
                 Layout.fillWidth: true
                 editable: true
-                model: dc_available_computers
+                model: SortFilterProxyModel {
+                    sourceModel: dc_available_computers
+                    sortRoleName: "description"
+                    dynamicSortFilter: true
+                    sortOrder: "AscendingOrder"
+                }
                 textRole: "description"
                 Component.onCompleted: {
                     var idx = computerSelection.find(session.computer);
@@ -96,7 +102,7 @@ ApplicationWindow {
             Layout.alignment: Qt.AlignRight
             Button {
                 text: "Start"
-                clicked: {
+                onClicked: {
 
                 }
             }
@@ -110,7 +116,7 @@ ApplicationWindow {
                 text: "DC Version"
             }
             Label {
-                text: dc_version
+                text: libdivecomputer.version
             }
         }
 
