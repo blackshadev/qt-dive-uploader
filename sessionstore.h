@@ -5,17 +5,17 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <iostream>
-#include <fstream>
 using namespace std;
 
 class SessionData : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString m_path READ getPath WRITE setPath NOTIFY pathChanged)
-    Q_PROPERTY(QString m_computer READ getComputer WRITE setComputer NOTIFY computerChanged)
+    Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(QString computer READ getComputer WRITE setComputer NOTIFY computerChanged)
+    Q_PROPERTY(QString portname READ getPortname WRITE setPortname NOTIFY portnameChanged)
 
 public:
+    explicit SessionData(QObject* parent = NULL);
 
     QString getComputer();
     void setComputer(QString m_computer);
@@ -23,16 +23,21 @@ public:
     QString getPath();
     void setPath(QString m_path);
 
+    QString getPortname();
+    void setPortname(QString m_portname);
+
     void read(const QJsonObject &json);
     void write(QJsonObject &json);
 
 signals:
     void pathChanged(QString);
     void computerChanged(QString);
+    void portnameChanged(QString);
 
 protected :
     QString m_computer;
     QString m_path;
+    QString m_portname;
 
 };
 
@@ -46,10 +51,10 @@ public:
     ~SessionStore();
     bool save();
     bool load();
-    SessionData data;
+    SessionData m_data;
 protected:
-    QJsonDocument jsonDoc;
-    QString path;
+    QJsonDocument m_jsonDoc;
+    QString m_path;
 
 };
 

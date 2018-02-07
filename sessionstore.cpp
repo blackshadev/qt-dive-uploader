@@ -1,15 +1,30 @@
 #include "sessionstore.h"
 
+SessionData::SessionData(QObject *parent) : QObject(parent) {
+    m_computer = "";
+    m_path = "";
+    m_portname = "";
+}
+
 void SessionData::setComputer(QString computer) {
-    this->m_computer = computer;
+    m_computer = computer;
     emit computerChanged(computer);
 }
 QString SessionData::getComputer() {
     return m_computer;
 }
 
+void SessionData::setPortname(QString portname) {
+    m_portname = portname;
+    emit portnameChanged(portname);
+}
+QString SessionData::getPortname() {
+    return m_portname;
+}
+
+
 void SessionData::setPath(QString path) {
-    this->m_path = path;
+    m_path = path;
     emit pathChanged(path);
 }
 
@@ -27,17 +42,23 @@ void SessionData::read(const QJsonObject &json)
         m_computer = json["computer"].toString();
     }
 
+    if(json.contains("portname") && json["portname"].isString()) {
+        m_computer = json["portname"].toString();
+    }
+
 }
 
 void SessionData::write(QJsonObject &json)
 {
     json["path"] = m_path;
     json["computer"] = m_computer;
+    json["portname"] = m_portname;
 }
 
+// -- SessionStore --
 SessionStore::SessionStore(const char* path)
 {
-    this->path = QString(path);
+    m_path = QString(path);
 }
 
 SessionStore::~SessionStore()
@@ -47,7 +68,7 @@ SessionStore::~SessionStore()
 
 bool SessionStore::load()
 {
-     QFile loadFile(path);
+     QFile loadFile(m_path);
 
      if (!loadFile.open(QIODevice::ReadOnly)) {
          qWarning("Couldn't open save file.");
@@ -56,14 +77,14 @@ bool SessionStore::load()
 
      QByteArray saveData = loadFile.readAll();
      QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
-     data.read(loadDoc.object());
+     m_data.read(loadDoc.object());
 
      return true;
 }
 
 bool SessionStore::save()
 {
-    QFile saveFile(path);
+    QFile saveFile(m_path);
 
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
@@ -71,7 +92,7 @@ bool SessionStore::save()
     }
 
     QJsonObject jsonObj;
-    data.write(jsonObj);
+    m_data.write(jsonObj);
     QJsonDocument saveDoc(jsonObj);
     saveFile.write(saveDoc.toJson());
 

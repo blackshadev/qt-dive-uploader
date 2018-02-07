@@ -13,16 +13,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-    qlibdivecomputer.cpp \
-    dccomputerlist.cpp \
+    libdivecomputer/qlibdivecomputer.cpp \
+    libdivecomputer/dccomputerlist.cpp \
     sessionstore.cpp \
-    divedownloader.cpp
+    libdivecomputer/dcdownloadcontext.cpp
 
 HEADERS += \
-    qlibdivecomputer.h \
-    dccomputerlist.h \
+    libdivecomputer/qlibdivecomputer.h \
+    libdivecomputer/dccomputerlist.h \
     sessionstore.h \
-    divedownloader.h
+    libdivecomputer/dcdownloadcontext.h
 
 RESOURCES += qml.qrc
 DESTDIR = bin

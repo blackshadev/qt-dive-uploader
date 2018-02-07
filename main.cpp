@@ -4,10 +4,9 @@
 #include <QQmlApplicationEngine>
 #include <QQuickView>
 #include <QQmlContext>
-#include <QSerialPortInfo>
 #include <QQuickStyle>
 #include <QSortFilterProxyModel>
-#include "qlibdivecomputer.h"
+#include "libdivecomputer/qlibdivecomputer.h"
 #include "sessionstore.h"
 
 int main(int argc, char *argv[])
@@ -22,17 +21,10 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    QStringList dataList;
-    QList<QSerialPortInfo> data = QSerialPortInfo::availablePorts();
-    for(QSerialPortInfo info : data ) {
-       dataList.append(info.portName());
-    }
-
     SessionStore sess("./session.json");
     sess.load();
 
     QLibDiveComputer* dc = new QLibDiveComputer();
-    DCComputerList* compList = dc->get_devices();
 
 //    QSortFilterProxyModel sortedCompList;
 //    sortedCompList.setSourceModel(compList);
@@ -43,9 +35,8 @@ int main(int argc, char *argv[])
 
 
     QQmlContext *ctxt = engine.rootContext();
-    ctxt->setContextProperty("session", &sess.data);
+    ctxt->setContextProperty("session", &sess.m_data);
     ctxt->setContextProperty("libdivecomputer", dc);
-    ctxt->setContextProperty("dc_available_computers", compList);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
@@ -55,8 +46,6 @@ int main(int argc, char *argv[])
 
     sess.save();
 
-    delete compList;
     delete dc;
-
     return res;
 }

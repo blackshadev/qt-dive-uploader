@@ -44,6 +44,36 @@ ApplicationWindow {
             Layout.fillWidth: true
 
             Label {
+                text: "Port"
+            }
+
+            ComboBox {
+                property bool loaded: false
+                id: portSelection
+                Layout.fillWidth: true
+                editable: true
+                model: libdivecomputer.ports
+                Component.onCompleted: {
+                    var idx = portSelection.find(session.portname);
+                    if(idx > -1) {
+                        portSelection.currentIndex = idx;
+                    }
+                    loaded = true;
+                }
+                onCurrentIndexChanged: {
+                    if(loaded) {
+                        session.portname = portSelection.textAt(portSelection.currentIndex);
+                    }
+                }
+
+            }
+        }
+
+        RowLayout {
+
+            Layout.fillWidth: true
+
+            Label {
                 text: "Computer"
             }
 
@@ -53,7 +83,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 editable: true
                 model: SortFilterProxyModel {
-                    sourceModel: dc_available_computers
+                    sourceModel: libdivecomputer.devices
                     sortRoleName: "description"
                     dynamicSortFilter: true
                     sortOrder: "AscendingOrder"
@@ -103,7 +133,7 @@ ApplicationWindow {
             Button {
                 text: "Start"
                 onClicked: {
-
+                    libdivecomputer.start_download()
                 }
             }
         }
