@@ -4,10 +4,14 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.0
 import SortFilterProxyModel 0.1
+import DCComputer 0.1
 
 ApplicationWindow {
     visible: true
     property int margin: 21
+    property int labelColumnWidth: 120
+    property int selfRole: ComputerRoles.SelfRole
+
     width: mainLayout.implicitWidth + 2 * margin
     height: mainLayout.implicitHeight + 2 * margin
     minimumWidth: mainLayout.Layout.minimumWidth + 2 * margin
@@ -32,91 +36,92 @@ ApplicationWindow {
         }
     }
 
-    ColumnLayout{
+    GridLayout{
 
         id: mainLayout
         anchors.fill: parent
         anchors.margins: margin
+        columns: 2
 
-
-        RowLayout {
-
-            Layout.fillWidth: true
-
-            Label {
-                text: "Port"
-            }
-
-            ComboBox {
-                property bool loaded: false
-                id: portSelection
-                Layout.fillWidth: true
-                editable: true
-                model: libdivecomputer.ports
-                Component.onCompleted: {
-                    var idx = portSelection.find(session.portname);
-                    if(idx > -1) {
-                        portSelection.currentIndex = idx;
-                    }
-                    loaded = true;
-                }
-                onCurrentIndexChanged: {
-                    if(loaded) {
-                        session.portname = portSelection.textAt(portSelection.currentIndex);
-                    }
-                }
-
-            }
+        Label {
+            text: "Port"
+            Layout.minimumWidth: labelColumnWidth
+            Layout.maximumWidth: labelColumnWidth
         }
 
-        RowLayout {
-
+        ComboBox {
             Layout.fillWidth: true
 
-            Label {
-                text: "Computer"
+            property bool loaded: false
+            id: portSelection
+            editable: true
+            model: libdivecomputer.ports
+            Component.onCompleted: {
+                var idx = portSelection.find(session.portname);
+                if(idx > -1) {
+                    portSelection.currentIndex = idx;
+                }
+                loaded = true;
+            }
+            onCurrentIndexChanged: {
+                if(loaded) {
+                    session.portname = portSelection.textAt(portSelection.currentIndex);
+                }
             }
 
-            ComboBox {
-                property bool loaded: false
-                id: computerSelection
-                Layout.fillWidth: true
-                editable: true
-                model: SortFilterProxyModel {
-                    sourceModel: libdivecomputer.devices
-                    sortRoleName: "description"
-                    dynamicSortFilter: true
-                    sortOrder: "AscendingOrder"
-                }
-                textRole: "description"
-                Component.onCompleted: {
-                    var idx = computerSelection.find(session.computer);
-                    if(idx > -1) {
-                        computerSelection.currentIndex = idx;
-                    }
-                    loaded = true;
-                }
-                onCurrentIndexChanged: {
-                    if(loaded) {
-                        session.computer = computerSelection.textAt(computerSelection.currentIndex);
-                    }
-                }
+        }
 
+        Label {
+            text: "Computer"
+            Layout.minimumWidth: labelColumnWidth
+            Layout.maximumWidth: labelColumnWidth
+        }
+
+        ComboBox {
+            Layout.fillWidth: true
+
+            property bool loaded: false
+            id: computerSelection
+            editable: true
+            model: SortFilterProxyModel {
+                sourceModel: libdivecomputer.devices
+                sortRoleName: "description"
+                dynamicSortFilter: true
+                sortOrder: "AscendingOrder"
             }
+            textRole: "description"
+            Component.onCompleted: {
+                var idx = computerSelection.find(session.computer);
+
+                if(idx > -1) {
+                    computerSelection.currentIndex = idx;
+                }
+                loaded = true;
+            }
+            onCurrentIndexChanged: {
+                if(loaded) {
+                    session.computer = computerSelection.textAt(computerSelection.currentIndex);
+                }
+            }
+
         }
 
 
+        Label {
+            text: "Output file"
+            Layout.minimumWidth: labelColumnWidth
+            Layout.maximumWidth: labelColumnWidth
+        }
+
         RowLayout {
             Layout.fillWidth: true
-            Label {
-                text: "Output file"
-            }
 
             TextField {
+                Layout.fillWidth: true
+
                 id: filePath
                 text: session.path
                 readOnly: true
-                Layout.fillWidth: true
             }
 
             Button {
@@ -127,27 +132,45 @@ ApplicationWindow {
             }
         }
 
-        RowLayout {
+        ProgressBar {
+            id: downloadProgress
+            Layout.columnSpan: 2
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight
-            Button {
-                text: "Start"
-                onClicked: {
-                    libdivecomputer.start_download()
+
+            Connections {
+                target: libdivecomputer
+                onProgress: {
+
+                    console.log("HERE");
+                    console.log(current);
+                    console.log(total);
+
                 }
             }
         }
 
-        RowLayout {
+        Button {
+            Layout.columnSpan: 2
+            Layout.alignment: Qt.AlignRight
+            text: "Start"
+            onClicked: {
 
+                var idx = computerSelection.model.index(computerSelection.currentIndex, 0);
+                libdivecomputer.start_download(
+                    portSelection.currentText,
+                    computerSelection.model.data(idx, selfRole)
+                );
+
+            }
+        }
+
+        Label {
+            text: "DC Version"
+        }
+
+        Label {
             Layout.fillWidth: true
-
-            Label {
-                text: "DC Version"
-            }
-            Label {
-                text: libdivecomputer.version
-            }
+            text: libdivecomputer.version
         }
 
     }

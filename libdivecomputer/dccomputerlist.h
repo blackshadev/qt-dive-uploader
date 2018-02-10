@@ -24,13 +24,16 @@ public:
     enum ComputerRoles {
         VendorRole = Qt::UserRole + 1,
         ProductRole,
-        DescriptionRole
+        DescriptionRole,
+        SelfRole,
     };
+    Q_ENUMS(ComputerRoles)
 
     DCComputerList(QObject *parent = 0);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+
 public slots:
 
     // Extra function to get the thing easily from outside Repeaters.
@@ -43,5 +46,4 @@ protected:
 private:
     QList<DCComputer*> mComputers;
 };
-
 #endif // DCCOMPUTERLIST_H

@@ -39,17 +39,18 @@ DCComputerList* QLibDiveComputer::get_devices()
     return list;
 }
 
-void QLibDiveComputer::start_download(char *port_name, dc_descriptor_t *descriptor) {
-    create_context(port_name, descriptor);
-    emit onStart();
+void QLibDiveComputer::start_download(QString port_name, DCComputer* descriptor) {
+    create_context(port_name.toLatin1().data(), descriptor->descriptor);
 
-    emit onProcess(1, 5);
-    emit onProcess(2, 5);
-    emit onProcess(3, 5);
-    emit onProcess(4, 5);
-    emit onProcess(5, 5);
+    emit start();
 
-    emit onDone();
+    emit progress(1, 5);
+    emit progress(2, 5);
+    emit progress(3, 5);
+    emit progress(4, 5);
+    emit progress(5, 5);
+
+    emit done();
 }
 
 void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descriptor) {

@@ -5,6 +5,7 @@
 #include <QStringList>
 #include <QObject>
 #include "dcdownloadcontext.h"
+#include "dccomputerlist.h"
 
 class QLibDiveComputer: public QObject
 {
@@ -22,13 +23,13 @@ public:
     QStringList* m_available_portnames;
     DCComputerList* m_available_devices;
 
-    Q_INVOKABLE void start_download(char* port_name, dc_descriptor_t* descriptor);
+    Q_INVOKABLE void start_download(QString port_name, DCComputer* descriptor);
 
 signals:
-    void onDive();
-    void onProcess(uint current, uint total);
-    void onStart();
-    void onDone();
+    void dive();
+    void progress(uint current, uint total);
+    void start();
+    void done();
 
 private:
     DCComputerList* get_devices();

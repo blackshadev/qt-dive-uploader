@@ -10,7 +10,6 @@ DCComputer::DCComputer(dc_descriptor_t* descr)
     description += vendor;
     description += " ";
     description += product;
-
 }
 
 DCComputerList::DCComputerList(QObject *parent) : QAbstractListModel(parent)
@@ -36,6 +35,8 @@ QVariant DCComputerList::data(const QModelIndex& index, int role) const
         return QVariant::fromValue(comp->product);
     case DescriptionRole:
         return QVariant::fromValue(comp->description);
+    case SelfRole:
+        return QVariant::fromValue(comp);
     }
 
     return QVariant(QVariant::Invalid);
@@ -67,5 +68,6 @@ QHash<int, QByteArray> DCComputerList::roleNames() const {
     roles[VendorRole] = "vendor";
     roles[ProductRole] = "product";
     roles[DescriptionRole] = "description";
+    roles[SelfRole] = "self";
     return roles;
 }

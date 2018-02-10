@@ -43,7 +43,7 @@ void SessionData::read(const QJsonObject &json)
     }
 
     if(json.contains("portname") && json["portname"].isString()) {
-        m_computer = json["portname"].toString();
+        m_portname = json["portname"].toString();
     }
 
 }

@@ -7,6 +7,7 @@
 #include <QQuickStyle>
 #include <QSortFilterProxyModel>
 #include "libdivecomputer/qlibdivecomputer.h"
+#include "libdivecomputer/dccomputerlist.h"
 #include "sessionstore.h"
 
 int main(int argc, char *argv[])
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
     QQuickStyle::setStyle("Fusion");
+    qmlRegisterType<DCComputerList>("DCComputer", 0, 1, "ComputerRoles");
 
     QQmlApplicationEngine engine;
 
@@ -25,14 +27,6 @@ int main(int argc, char *argv[])
     sess.load();
 
     QLibDiveComputer* dc = new QLibDiveComputer();
-
-//    QSortFilterProxyModel sortedCompList;
-//    sortedCompList.setSourceModel(compList);
-//    sortedCompList.setSortRole(DCComputerList::ComputerRoles::DescriptionRole);
-//    sortedCompList.setDynamicSortFilter(true);
-//    sortedCompList.sort(0);
-
-
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("session", &sess.m_data);
