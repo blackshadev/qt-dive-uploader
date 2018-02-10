@@ -22,11 +22,18 @@ ApplicationWindow {
         visible: false
         id: fileDialog
         selectExisting: false
-        title: "Please choose a file"
+        folder: shortcuts.home
+        title: "Please choose a file to save"
         nameFilters: [ "JSON files (*.json)", "All files (*)" ]
         onAccepted: {
-            filePath.text = fileDialog.fileUrl;
-            session.path = fileDialog.fileUrl;
+            var text = /^file:\/\/(.*)$/.exec(fileDialog.fileUrl)[1];
+            if(!/\.json$/.test(text)) {
+                text += ".json";
+            }
+
+            filePath.text = text;
+            session.path = text;
+
             fileDialog.close();
         }
         onRejected: {
@@ -137,19 +144,10 @@ ApplicationWindow {
             Layout.columnSpan: 2
             Layout.fillWidth: true
 
-            Connections {
-                target: libdivecomputer
-                onProgress: {
-
-                    console.log("HERE");
-                    console.log(current);
-                    console.log(total);
-
-                }
-            }
         }
 
         Button {
+            id: startButton
             Layout.columnSpan: 2
             Layout.alignment: Qt.AlignRight
             text: "Start"
@@ -164,6 +162,15 @@ ApplicationWindow {
             }
         }
 
+
+        Label {
+            id: "errorLabel"
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: "red"
+            text: ""
+        }
+
         Label {
             text: "DC Version"
         }
@@ -173,5 +180,21 @@ ApplicationWindow {
             text: libdivecomputer.version
         }
 
+    }
+
+    Connections {
+        target: libdivecomputer
+        onProgress: {
+            downloadProgress.value = current / total;
+        }
+        onStart: {
+            startButton.enabled = false;
+        }
+        onDone: {
+            startButton.enabled = true;
+        }
+        onError: {
+            errorLabel.text = msg;
+        }
     }
 }

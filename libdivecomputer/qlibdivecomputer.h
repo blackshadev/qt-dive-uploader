@@ -30,6 +30,7 @@ signals:
     void progress(uint current, uint total);
     void start();
     void done();
+    void error(QString msg);
 
 private:
     DCComputerList* get_devices();
