@@ -20,6 +20,9 @@ public:
     void setFingerprint(char data[4]);
 signals:
     void log(const char* loglevel, const char* msg);
+    void deviceInfo(uint model, uint serial, uint firmware);
+    void clock(uint devtime, uint systime);
+    void progress(uint current, uint total);
 protected:
     char *m_port_name;
     dc_loglevel_t m_loglevel;

@@ -40,6 +40,7 @@ void DCDownloadContext::setDescriptor(dc_descriptor_t *descriptor) {
 }
 
 void DCDownloadContext::setPortName(const char *port_name) {
+    // Copy it over, something changes the port_name afterwards
     strcpy(m_port_name, port_name);
 }
 
@@ -81,6 +82,44 @@ void DCDownloadContext::start() {
     qInfo("Open device with %s", m_port_name);
     dc_device_t *device;
     dc_device_open(&device, m_context, m_descriptor, m_port_name);
+    dc_device_set_events(device, DC_EVENT_DEVINFO, [](dc_device_t* device, dc_event_type_t type, const void* data, void* userdata) {
+        DCDownloadContext* ctx = (DCDownloadContext *)userdata;
+        dc_event_devinfo_t* devinfo = (dc_event_devinfo_t*)data;
+        emit ctx->deviceInfo(devinfo->model, devinfo->serial, devinfo->firmware);
+    }, this);
+
+    dc_device_set_events(device, DC_EVENT_CLOCK, [](dc_device_t* device, dc_event_type_t type, const void* data, void* userdata) {
+        DCDownloadContext* ctx = (DCDownloadContext *)userdata;
+        dc_event_clock_t* clock = (dc_event_clock_t*)data;
+        emit ctx->clock(clock->devtime, clock->systime);
+    }, this);
+
+    dc_device_set_events(device, DC_EVENT_CLOCK, [](dc_device_t* device, dc_event_type_t type, const void* data, void* userdata) {
+        DCDownloadContext* ctx = (DCDownloadContext *)userdata;
+        dc_event_progress_t* prog = (dc_event_progress_t*)data;
+        emit ctx->progress(prog->current, prog->maximum);
+    }, this);
+
+    dc_device_set_events(device, DC_EVENT_WAITING, [](dc_device_t* device, dc_event_type_t type, const void* data, void* userdata) {
+        DCDownloadContext* ctx = (DCDownloadContext *)userdata;
+        qInfo("waiting");
+    }, this);
+
+    dc_device_foreach(
+        device,
+        [](
+            const unsigned char* data,
+            uint size,
+            const unsigned char* fingerprint,
+            uint fsize,
+            void* userdata
+        ) {
+            DCDownloadContext* ctx = (DCDownloadContext *)userdata;
+            qInfo("Got dive: %s", fingerprint);
+
+        },
+        this
+    );
 
     dc_device_close(device);
 

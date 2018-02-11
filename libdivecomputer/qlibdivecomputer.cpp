@@ -46,15 +46,6 @@ void QLibDiveComputer::start_download(QString port_name, DCComputer* descriptor)
     try {
         m_context->start();
 
-        emit start();
-
-        emit progress(1, 5);
-        emit progress(2, 5);
-        emit progress(3, 5);
-        emit progress(4, 5);
-        emit progress(5, 5);
-
-        emit done();
     } catch(std::exception &err) {
         emit error(err.what());
     }
@@ -67,6 +58,13 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->setPortName(port_name);
     m_context->setDescriptor(descriptor);
     m_context->connect(m_context, SIGNAL(log(const char*,const char*)), this, SLOT(recvLog(const char*,const char*)));
+    m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(progress(uint,uint)));
+    m_context->connect(m_context, &DCDownloadContext::deviceInfo, this, [=](uint model, uint serial, uint firmware) {
+        qInfo("model: %u; serial: %u; firmware: %u", model, serial, firmware);
+    });
+    m_context->connect(m_context, &DCDownloadContext::clock, this, [=](uint devtime, uint systime) {
+        qInfo("devtime: %u; systime: %u", devtime, systime);
+    });
 }
 
 void QLibDiveComputer::free_context() {
