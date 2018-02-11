@@ -7,7 +7,7 @@
 
 QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 {
-    m_last_context = NULL;
+    m_context = NULL;
     m_available_devices = get_devices();
     m_available_portnames = get_ports();
     get_version();
@@ -42,30 +42,44 @@ DCComputerList* QLibDiveComputer::get_devices()
 void QLibDiveComputer::start_download(QString port_name, DCComputer* descriptor) {
     create_context(port_name.toLatin1().data(), descriptor->descriptor);
 
-    emit start();
+    try {
+        m_context->start();
 
-    emit progress(1, 5);
-    emit progress(2, 5);
-    emit progress(3, 5);
-    emit progress(4, 5);
-    emit progress(5, 5);
+        emit start();
 
-    emit done();
+        emit log("TEST", "TESTEr");
+        emit progress(1, 5);
+        emit progress(2, 5);
+        emit progress(3, 5);
+        emit progress(4, 5);
+        emit progress(5, 5);
+
+        qInfo("Here?");
+        emit done();
+    } catch(std::exception &err) {
+        emit error(err.what());
+    }
 }
 
 void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descriptor) {
     free_context();
 
-    m_last_context = new DCDownloadContext(this);
-    m_last_context->setPortName(port_name);
-    m_last_context->setDescriptor(descriptor);
+    m_context = new DCDownloadContext(this);
+    m_context->setPortName(port_name);
+    m_context->setDescriptor(descriptor);
+    m_context->connect(m_context, SIGNAL(log(const char*,const char*)), this, SLOT(recvLog(const char*,const char*)));
 }
 
 void QLibDiveComputer::free_context() {
-    if(m_last_context != NULL) {
-        delete m_last_context;
-        m_last_context = NULL;
+    if(m_context != NULL) {
+        m_context->disconnect();
+        delete m_context;
+        m_context = NULL;
     }
+}
+
+void QLibDiveComputer::recvLog(const char *lvl, const char *msg) {
+    emit log(QString(lvl), QString(msg));
 }
 
 QStringList* QLibDiveComputer::get_ports() {

@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>DownloadView.qml</file>
+        <file>LogView.qml</file>
     </qresource>
 </RCC>

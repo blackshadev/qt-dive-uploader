@@ -16,7 +16,7 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(QVariant ports READ get_ports_as_qvariant CONSTANT)
 
 public:
-    explicit QLibDiveComputer(QObject *parent = 0);
+    explicit QLibDiveComputer(QObject* parent = 0);
     ~QLibDiveComputer();
     QVariant get_ports_as_qvariant();
     QString m_version;
@@ -31,11 +31,14 @@ signals:
     void start();
     void done();
     void error(QString msg);
+    void log(QString lvl, QString msg);
+protected slots:
+    void recvLog(const char* lvl, const char* msg);
 
 private:
     DCComputerList* get_devices();
     QStringList* get_ports();
-    DCDownloadContext* m_last_context;
+    DCDownloadContext* m_context;
     void create_context(char* port_name, dc_descriptor_t* descriptor);
     void free_context();
     void get_version();

@@ -18,6 +18,8 @@ public:
     void setLogLevel(dc_loglevel_t err = DC_LOGLEVEL_ERROR);
     void setDescriptor(dc_descriptor_t* descriptor);
     void setFingerprint(char data[4]);
+signals:
+    void log(const char* loglevel, const char* msg);
 protected:
     char *m_port_name;
     dc_loglevel_t m_loglevel;
