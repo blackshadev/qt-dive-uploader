@@ -40,6 +40,7 @@ DCComputerList* QLibDiveComputer::get_devices()
 }
 
 void QLibDiveComputer::start_download(QString port_name, DCComputer* descriptor) {
+
     create_context(port_name.toLatin1().data(), descriptor->descriptor);
 
     try {
@@ -47,14 +48,12 @@ void QLibDiveComputer::start_download(QString port_name, DCComputer* descriptor)
 
         emit start();
 
-        emit log("TEST", "TESTEr");
         emit progress(1, 5);
         emit progress(2, 5);
         emit progress(3, 5);
         emit progress(4, 5);
         emit progress(5, 5);
 
-        qInfo("Here?");
         emit done();
     } catch(std::exception &err) {
         emit error(err.what());
@@ -87,7 +86,7 @@ QStringList* QLibDiveComputer::get_ports() {
     QStringList* dataList = new QStringList();
     QList<QSerialPortInfo> data = QSerialPortInfo::availablePorts();
     for(QSerialPortInfo info : data ) {
-       dataList->append(info.portName());
+       dataList->append(info.systemLocation());
     }
 
     return dataList;

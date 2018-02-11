@@ -5,11 +5,13 @@ DCDownloadContext::DCDownloadContext(QObject *parent) : QObject(parent)
 {
     m_loglevel = DC_LOGLEVEL_ALL;
     m_context = NULL;
-    m_port_name = NULL;
+    m_port_name = new char[256];
     m_descriptor = NULL;
 }
 
 DCDownloadContext::~DCDownloadContext() {
+    delete m_port_name;
+    m_port_name = NULL;
 }
 
 void DCDownloadContext::newContext() {
@@ -37,8 +39,8 @@ void DCDownloadContext::setDescriptor(dc_descriptor_t *descriptor) {
     m_descriptor = descriptor;
 }
 
-void DCDownloadContext::setPortName(char *port_name) {
-    m_port_name = port_name;
+void DCDownloadContext::setPortName(const char *port_name) {
+    strcpy(m_port_name, port_name);
 }
 
 void DCDownloadContext::setLogLevel(dc_loglevel_t err) {
@@ -62,6 +64,8 @@ void DCDownloadContext::logfunc (dc_context_t *context, dc_loglevel_t loglevel, 
 }
 
 void DCDownloadContext::start() {
+
+    qInfo("start with %s", m_port_name);
     newContext();
 
     if(m_context == NULL) {
@@ -74,6 +78,7 @@ void DCDownloadContext::start() {
         throw std::invalid_argument("No device selected");
     }
 
+    qInfo("Open device with %s", m_port_name);
     dc_device_t *device;
     dc_device_open(&device, m_context, m_descriptor, m_port_name);
 
