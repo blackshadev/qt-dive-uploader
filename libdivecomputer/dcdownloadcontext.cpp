@@ -109,18 +109,19 @@ void DCDownloadContext::start() {
         device,
         [](
             const unsigned char* data,
-            uint size,
+            unsigned int size,
             const unsigned char* fingerprint,
-            uint fsize,
+            unsigned  int fsize,
             void* userdata
-        ) {
+        ) -> int {
             DCDownloadContext* ctx = (DCDownloadContext *)userdata;
             qInfo("Got dive: %s", fingerprint);
-
+            return 1;
         },
         this
     );
 
+    qInfo("closing");
     dc_device_close(device);
-
+    qInfo("closed");
 }
