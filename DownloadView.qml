@@ -170,6 +170,7 @@ GridLayout {
     Connections {
         target: libdivecomputer
         onProgress: {
+            console.log("progress: " + current + " / " + total);
             downloadProgress.value = current / total;
         }
         onStart: {

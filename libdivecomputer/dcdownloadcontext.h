@@ -14,7 +14,7 @@ public:
     explicit DCDownloadContext(QObject *parent = 0);
     ~DCDownloadContext();
     void start();
-    void setPortName(const char * port);
+    void setPortName(const char* port);
     void setLogLevel(dc_loglevel_t err = DC_LOGLEVEL_ERROR);
     void setDescriptor(dc_descriptor_t* descriptor);
     void setFingerprint(char data[4]);
@@ -23,6 +23,8 @@ signals:
     void deviceInfo(uint model, uint serial, uint firmware);
     void clock(uint devtime, uint systime);
     void progress(uint current, uint total);
+    void waiting();
+    void vendor(const unsigned char* data, uint size);
 protected:
     char *m_port_name;
     dc_loglevel_t m_loglevel;
