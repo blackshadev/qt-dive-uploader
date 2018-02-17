@@ -16,13 +16,15 @@ SOURCES += main.cpp \
     libdivecomputer/qlibdivecomputer.cpp \
     libdivecomputer/dccomputerlist.cpp \
     sessionstore.cpp \
-    libdivecomputer/dcdownloadcontext.cpp
+    libdivecomputer/dcdownloadcontext.cpp \
+    libdivecomputer/dive.cpp
 
 HEADERS += \
     libdivecomputer/qlibdivecomputer.h \
     libdivecomputer/dccomputerlist.h \
     sessionstore.h \
-    libdivecomputer/dcdownloadcontext.h
+    libdivecomputer/dcdownloadcontext.h \
+    libdivecomputer/dive.h
 
 RESOURCES += qml.qrc
 DESTDIR = bin
@@ -43,6 +45,8 @@ include(vendor/vendor.pri)
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/release/ -ldivecomputer
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/debug/ -ldivecomputer
 else:unix: LIBS += -L$$PWD/../../../../usr/local/lib/ -ldivecomputer
+
+INCLUDEPATH += $$PWD/../../../../usr/local/boost_1_66_0
 
 INCLUDEPATH += $$PWD/../../../../usr/local/include
 DEPENDPATH += $$PWD/../../../../usr/local/include

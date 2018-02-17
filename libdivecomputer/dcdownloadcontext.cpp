@@ -1,6 +1,8 @@
 #include "dcdownloadcontext.h"
 #include <stdexcept>
 #include <QCoreApplication>
+#include <libdivecomputer/parser.h>
+#include "dive.h"
 
 DCDownloadContext::DCDownloadContext(QObject *parent) : QThread(parent)
 {
@@ -120,6 +122,7 @@ void DCDownloadContext::run() {
 
     }, this);
 
+
     dc_device_foreach(
         device,
         [](
@@ -129,8 +132,17 @@ void DCDownloadContext::run() {
             unsigned  int fsize,
             void* userdata
         ) -> int {
+
+            dc_parser_t* parser;
+            dc_parser_new(&parser, device);
+
             DCDownloadContext* ctx = (DCDownloadContext *)userdata;
             qInfo("Got dive: %s", fingerprint);
+            Dive d(parser, data, size);
+
+            qInfo("dt: "  + d.divetime);
+
+            dc_parser_destroy(parser);
             return 1;
         },
         this
