@@ -10,7 +10,6 @@ ApplicationWindow {
     visible: true
     property int margin: 21
     property int labelColumnWidth: 120
-    property int selfRole: ComputerRoles.SelfRole
 
     width: mainLayout.implicitWidth + 2 * margin
     height: mainLayout.implicitHeight + 2 * margin

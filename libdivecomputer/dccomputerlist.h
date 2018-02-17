@@ -8,11 +8,13 @@
 class DCComputer : public QObject
 {
 public:
-    DCComputer(dc_descriptor_t* descr);
+    DCComputer(int index, dc_descriptor_t* descr);
+    virtual ~DCComputer();
     dc_descriptor_t* descriptor;
-    QString vendor;
-    QString product;
-    QString description;
+    QString* vendor;
+    QString* product;
+    QString* description;
+    int index;
 };
 
 Q_DECLARE_METATYPE(DCComputer*)
@@ -25,14 +27,16 @@ public:
         VendorRole = Qt::UserRole + 1,
         ProductRole,
         DescriptionRole,
-        SelfRole,
+        IndexRole
     };
     Q_ENUMS(ComputerRoles)
 
     DCComputerList(QObject *parent = 0);
+    virtual ~DCComputerList();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    DCComputer* addComputer(dc_descriptor_t* descr);
 
 public slots:
 

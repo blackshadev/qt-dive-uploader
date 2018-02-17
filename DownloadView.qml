@@ -143,7 +143,7 @@ GridLayout {
             var idx = computerSelection.model.index(computerSelection.currentIndex, 0);
             libdivecomputer.start_download(
                 portSelection.currentText,
-                computerSelection.model.data(idx, selfRole)
+                computerSelection.model.data(idx, ComputerRoles.IndexRole)
             );
 
         }

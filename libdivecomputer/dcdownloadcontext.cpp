@@ -1,7 +1,8 @@
 #include "dcdownloadcontext.h"
 #include <stdexcept>
+#include <QCoreApplication>
 
-DCDownloadContext::DCDownloadContext(QObject *parent) : QObject(parent)
+DCDownloadContext::DCDownloadContext(QObject *parent) : QThread(parent)
 {
     m_loglevel = DC_LOGLEVEL_ALL;
     m_context = NULL;
@@ -10,14 +11,15 @@ DCDownloadContext::DCDownloadContext(QObject *parent) : QObject(parent)
 }
 
 DCDownloadContext::~DCDownloadContext() {
-    delete m_port_name;
+    delete[] m_port_name;
     m_port_name = NULL;
+    free_context();
 }
 
-void DCDownloadContext::newContext() {
+void DCDownloadContext::new_context() {
 
     if(m_context != NULL) {
-        freeContext();
+        free_context();
     }
 
     dc_context_new(&m_context);
@@ -30,7 +32,7 @@ void DCDownloadContext::newContext() {
 
 }
 
-void DCDownloadContext::freeContext() {
+void DCDownloadContext::free_context() {
     dc_context_free(m_context);
     m_context = NULL;
 }
@@ -54,20 +56,12 @@ void DCDownloadContext::logfunc (dc_context_t *context, dc_loglevel_t loglevel, 
     const char *loglevels[] = {"NONE", "ERROR", "WARNING", "INFO", "DEBUG", "ALL"};
     DCDownloadContext* ctx = (DCDownloadContext*)userdata;
 
-
-//    if (loglevel == DC_LOGLEVEL_ERROR || loglevel == DC_LOGLEVEL_WARNING) {
-//        qWarning("%s: %s [in %s:%d (%s)]", loglevels[loglevel], msg, file, line, function);
-//    } else {
-//        qInfo("%s: %s", loglevels[loglevel], msg);
-//    }
-
     emit ctx->log(loglevels[loglevel], msg);
 }
 
-void DCDownloadContext::start() {
+void DCDownloadContext::run() {
 
-    qInfo("start with %s", m_port_name);
-    newContext();
+    new_context();
 
     if(m_context == NULL) {
         throw std::invalid_argument("Context not initialized. Constructor not called or destructor was already called");
@@ -142,7 +136,6 @@ void DCDownloadContext::start() {
         this
     );
 
-    qInfo("closing");
     dc_device_close(device);
-    qInfo("closed");
+
 }

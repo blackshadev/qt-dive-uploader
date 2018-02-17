@@ -1,19 +1,45 @@
 #include "dccomputerlist.h"
 
-DCComputer::DCComputer(dc_descriptor_t* descr)
+DCComputer::DCComputer(int idx, dc_descriptor_t* descr)
 {
+    index = idx;
     descriptor = descr;
-    vendor = QString(dc_descriptor_get_vendor(descr));
-    product = QString(dc_descriptor_get_product(descr));
-    description = QString();
+    vendor = new QString(dc_descriptor_get_vendor(descr));
+    product = new QString(dc_descriptor_get_product(descr));
+    description = new QString();
 
-    description += vendor;
-    description += " ";
-    description += product;
+    description->append(vendor);
+    description->append(" ");
+    description->append(product);
+}
+DCComputer::~DCComputer() {
+    index = -1;
+    delete vendor;
+    delete product;
+    delete description;
+
+    product = NULL;
+    vendor = NULL;
+    description = NULL;
+    descriptor = NULL;
+
+    dc_descriptor_free(descriptor);
 }
 
-DCComputerList::DCComputerList(QObject *parent) : QAbstractListModel(parent)
+DCComputerList::DCComputerList(QObject*parent) : QAbstractListModel(parent)
 {
+}
+
+DCComputerList::~DCComputerList()
+{
+    this->clear();
+}
+
+DCComputer* DCComputerList::addComputer(dc_descriptor_t* descr)
+{
+    auto comp = new DCComputer(mComputers.size(), descr);
+    this->add(comp);
+    return comp;
 }
 
 int DCComputerList::rowCount(const QModelIndex& parent) const
@@ -30,13 +56,13 @@ QVariant DCComputerList::data(const QModelIndex& index, int role) const
     DCComputer* comp = mComputers[i];
     switch (role) {
     case VendorRole:
-        return QVariant::fromValue(comp->vendor);
+        return QVariant::fromValue(*(comp->vendor));
     case ProductRole:
-        return QVariant::fromValue(comp->product);
+        return QVariant::fromValue(*(comp->product));
     case DescriptionRole:
-        return QVariant::fromValue(comp->description);
-    case SelfRole:
-        return QVariant::fromValue(comp);
+        return QVariant::fromValue(*(comp->description));
+    case IndexRole:
+        return QVariant::fromValue(comp->index);
     }
 
     return QVariant(QVariant::Invalid);
@@ -57,6 +83,7 @@ void DCComputerList::add(DCComputer *comp)
 
 void DCComputerList::clear()
 {
+    qInfo("Clear List");
     for(DCComputer* c : mComputers) {
         delete c;
     }
@@ -68,6 +95,6 @@ QHash<int, QByteArray> DCComputerList::roleNames() const {
     roles[VendorRole] = "vendor";
     roles[ProductRole] = "product";
     roles[DescriptionRole] = "description";
-    roles[SelfRole] = "self";
+    roles[IndexRole] = "index";
     return roles;
 }

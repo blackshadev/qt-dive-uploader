@@ -2,18 +2,18 @@
 #define DIVEDOWNLOADER_H
 
 #include <QObject>
+#include <QThread>
 #include <libdivecomputer/common.h>
 #include <libdivecomputer/context.h>
 #include <libdivecomputer/device.h>
 #include <libdivecomputer/descriptor.h>
 
-class DCDownloadContext : public QObject
+class DCDownloadContext : public QThread
 {
     Q_OBJECT
 public:
     explicit DCDownloadContext(QObject *parent = 0);
     ~DCDownloadContext();
-    void start();
     void setPortName(const char* port);
     void setLogLevel(dc_loglevel_t err = DC_LOGLEVEL_ERROR);
     void setDescriptor(dc_descriptor_t* descriptor);
@@ -26,13 +26,14 @@ signals:
     void waiting();
     void vendor(const unsigned char* data, uint size);
 protected:
+    void run() override;
     char *m_port_name;
     dc_loglevel_t m_loglevel;
     dc_descriptor_t* m_descriptor;
     dc_context_t* m_context;
 private:
-    void newContext();
-    void freeContext();
+    void new_context();
+    void free_context();
     static void logfunc (dc_context_t *context, dc_loglevel_t loglevel, const char *file, unsigned int line, const char *function, const char *msg, void *userdata);
 };
 

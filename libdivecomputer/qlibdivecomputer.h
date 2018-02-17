@@ -16,6 +16,9 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(QVariant ports READ get_ports_as_qvariant CONSTANT)
 
 public:
+    typedef dc_logfunc_t loglevel;
+    Q_ENUMS(loglevel)
+
     explicit QLibDiveComputer(QObject* parent = 0);
     ~QLibDiveComputer();
     QVariant get_ports_as_qvariant();
@@ -23,7 +26,7 @@ public:
     QStringList* m_available_portnames;
     DCComputerList* m_available_devices;
 
-    Q_INVOKABLE void start_download(QString port_name, DCComputer* descriptor);
+    Q_INVOKABLE void start_download(QString port_name, int comp_index);
 
 signals:
     void dive();

@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
     QQuickStyle::setStyle("Fusion");
     qmlRegisterType<DCComputerList>("DCComputer", 0, 1, "ComputerRoles");
+    qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "loglevel");
 
     QQmlApplicationEngine engine;
 
