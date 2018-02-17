@@ -45,7 +45,7 @@ DCComputerList* QLibDiveComputer::get_devices()
 }
 
 QStringList QLibDiveComputer::get_loglevels() {
-
+    qInfo("Get loglevels");
     auto meta = QLibDiveComputer::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);
@@ -55,17 +55,27 @@ QStringList QLibDiveComputer::get_loglevels() {
         list.append(QString(data.key(iX)));
     }
 
+
     return list;
 }
 
-dc_loglevel_t QLibDiveComputer::get_loglevel(QString key) {
-
+QString QLibDiveComputer::get_loglevel() {
     auto meta = QLibDiveComputer::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);
-    auto cKey = key.toLocal8Bit().data();
 
-    return (dc_loglevel_t) data.keyToValue(cKey);
+    auto key = data.key((int)m_loglevel);
+    return QString(key);
+}
+
+void QLibDiveComputer::set_loglevel(QString lvl) {
+    auto meta = QLibDiveComputer::staticMetaObject;
+    auto idx = meta.indexOfEnumerator("loglevel");
+    auto data = meta.enumerator(idx);
+
+    dc_loglevel_t loglevel = (dc_loglevel_t) data.keyToValue(lvl.toLocal8Bit().data());
+    m_loglevel = loglevel;
+    emit loglevelChanged();
 
 }
 
@@ -89,6 +99,7 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context = new DCDownloadContext(this);
     m_context->setPortName(port_name);
     m_context->setDescriptor(descriptor);
+    m_context->setLogLevel(m_loglevel);
     m_context->connect(m_context, SIGNAL(started()), this, SIGNAL(start()));
     m_context->connect(m_context, SIGNAL(finished()), this, SIGNAL(done()));
     m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(progress(uint,uint)));

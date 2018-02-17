@@ -17,8 +17,6 @@ ApplicationWindow {
     minimumHeight: mainLayout.Layout.minimumHeight + 2 * margin
     title: "Dive Uploader"
 
-
-
     ColumnLayout {
 
         id: mainLayout

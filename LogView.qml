@@ -4,6 +4,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
 
 ColumnLayout {
+
     property string logText: ""
     function log(lvl, msg) {
         logText += msg + "\n";
@@ -13,16 +14,22 @@ ColumnLayout {
     Layout.fillHeight: true
 
     ComboBox {
+        property bool loaded: false
         Layout.fillWidth: true
         id: loglevelSelector
-        model: ListModel {
-            id: logLevelModel
-            ListElement { text: "All" }
-            ListElement { text: "Debug" }
-            ListElement { text: "Info" }
-            ListElement { text: "Warning" }
-            ListElement { text: "Error" }
-            ListElement { text: "None" }
+        model: libdivecomputer.loglevels
+        Component.onCompleted: {
+            loaded = true;
+            var idx = loglevelSelector.find(libdivecomputer.loglevel);
+            if(idx > -1) {
+                loglevelSelector.currentIndex = idx;
+            }
+        }
+
+        onCurrentTextChanged: {
+            if(loaded) {
+                libdivecomputer.loglevel = loglevelSelector.currentText;
+            }
         }
     }
 
