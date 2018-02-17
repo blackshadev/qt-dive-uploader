@@ -1,5 +1,7 @@
 #include "qlibdivecomputer.h"
 #include "dccomputerlist.h"
+#include <QMetaObject>
+#include <QMetaEnum>
 #include <libdivecomputer/version.h>
 #include <libdivecomputer/device.h>
 #include <libdivecomputer/descriptor.h>
@@ -40,6 +42,31 @@ DCComputerList* QLibDiveComputer::get_devices()
     dc_iterator_free(iterator);
 
     return list;
+}
+
+QStringList QLibDiveComputer::get_loglevels() {
+
+    auto meta = QLibDiveComputer::staticMetaObject;
+    auto idx = meta.indexOfEnumerator("loglevel");
+    auto data = meta.enumerator(idx);
+
+    QStringList list;
+    for(int iX = 0; iX < data.keyCount(); iX++) {
+        list.append(QString(data.key(iX)));
+    }
+
+    return list;
+}
+
+dc_loglevel_t QLibDiveComputer::get_loglevel(QString key) {
+
+    auto meta = QLibDiveComputer::staticMetaObject;
+    auto idx = meta.indexOfEnumerator("loglevel");
+    auto data = meta.enumerator(idx);
+    auto cKey = key.toLocal8Bit().data();
+
+    return (dc_loglevel_t) data.keyToValue(cKey);
+
 }
 
 void QLibDiveComputer::start_download(QString port_name, int comp_idx) {

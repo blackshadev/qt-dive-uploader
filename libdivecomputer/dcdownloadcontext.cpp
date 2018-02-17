@@ -4,7 +4,7 @@
 
 DCDownloadContext::DCDownloadContext(QObject *parent) : QThread(parent)
 {
-    m_loglevel = DC_LOGLEVEL_ALL;
+    m_loglevel = DC_LOGLEVEL_WARNING;
     m_context = NULL;
     m_port_name = new char[256];
     m_descriptor = NULL;

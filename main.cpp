@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     SessionStore sess("./session.json");
     sess.load();
 
-    QLibDiveComputer* dc = new QLibDiveComputer();
+    QLibDiveComputer* dc = new QLibDiveComputer();    
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("session", &sess.m_data);

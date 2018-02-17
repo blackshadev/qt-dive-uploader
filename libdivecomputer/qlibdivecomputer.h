@@ -14,6 +14,7 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(QString version MEMBER m_version CONSTANT)
     Q_PROPERTY(DCComputerList* devices MEMBER m_available_devices CONSTANT)
     Q_PROPERTY(QVariant ports READ get_ports_as_qvariant CONSTANT)
+    Q_PROPERTY(QStringList loglevels READ get_loglevels CONSTANT)
 
 public:
     typedef dc_logfunc_t loglevel;
@@ -27,6 +28,7 @@ public:
     DCComputerList* m_available_devices;
 
     Q_INVOKABLE void start_download(QString port_name, int comp_index);
+    Q_INVOKABLE dc_loglevel_t get_loglevel(QString key);
 
 signals:
     void dive();
@@ -41,6 +43,7 @@ protected slots:
 private:
     DCComputerList* get_devices();
     QStringList* get_ports();
+    QStringList get_loglevels();
     DCDownloadContext* m_context;
     void create_context(char* port_name, dc_descriptor_t* descriptor);
     void free_context();

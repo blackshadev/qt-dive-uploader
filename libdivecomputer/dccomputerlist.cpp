@@ -83,7 +83,6 @@ void DCComputerList::add(DCComputer *comp)
 
 void DCComputerList::clear()
 {
-    qInfo("Clear List");
     for(DCComputer* c : mComputers) {
         delete c;
     }
