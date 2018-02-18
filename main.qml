@@ -46,10 +46,5 @@ ApplicationWindow {
             }
         }
 
-        Connections {
-            target: libdivecomputer
-            onError: logView.log("ERROR", msg)
-            onLog: logView.log(lvl, msg)
-        }
     }
 }

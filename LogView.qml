@@ -45,4 +45,9 @@ ColumnLayout {
         text: logText
     }
 
+    Connections {
+        target: libdivecomputer
+        onLog: log(lvl, msg)
+    }
+
 }

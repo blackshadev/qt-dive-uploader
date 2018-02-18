@@ -48,7 +48,7 @@ signals:
     void error(QString msg);
     void log(QString lvl, QString msg);
 protected slots:
-    void recvLog(const char* lvl, const char* msg);
+protected:
     QString get_loglevel();
     void set_loglevel(QString lvl);
 private:

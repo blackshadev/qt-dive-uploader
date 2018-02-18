@@ -1,7 +1,6 @@
 #include "dcdownloadcontext.h"
 #include <stdexcept>
 #include <QCoreApplication>
-#include <libdivecomputer/parser.h>
 #include "dive.h"
 
 DCDownloadContext::DCDownloadContext(QObject *parent) : QThread(parent)
@@ -10,12 +9,18 @@ DCDownloadContext::DCDownloadContext(QObject *parent) : QThread(parent)
     m_context = NULL;
     m_port_name = new char[256];
     m_descriptor = NULL;
+    m_device = NULL;
 }
 
 DCDownloadContext::~DCDownloadContext() {
     delete[] m_port_name;
     m_port_name = NULL;
     free_context();
+
+    if(m_device) {
+        dc_device_close(m_device);
+        m_device = NULL;
+    }
 }
 
 void DCDownloadContext::new_context() {
@@ -58,12 +63,24 @@ void DCDownloadContext::logfunc (dc_context_t *context, dc_loglevel_t loglevel, 
     const char *loglevels[] = {"NONE", "ERROR", "WARNING", "INFO", "DEBUG", "ALL"};
     DCDownloadContext* ctx = (DCDownloadContext*)userdata;
 
-    emit ctx->log(loglevels[loglevel], msg);
+    emit ctx->log(QString(loglevels[loglevel]), QString(msg));
 }
 
 void DCDownloadContext::run() {
+    try {
+        do_work();
+    } catch(const std::invalid_argument& exp) {
+        emit error(QString(exp.what()));
+    }
+}
+
+void DCDownloadContext::do_work() {
 
     new_context();
+
+    if(m_device != NULL) {
+        throw std::invalid_argument("Device already created. DownloadContext already running?");
+    }
 
     if(m_context == NULL) {
         throw std::invalid_argument("Context not initialized. Constructor not called or destructor was already called");
@@ -76,11 +93,10 @@ void DCDownloadContext::run() {
     }
 
     qInfo("Open device with %s", m_port_name);
-    dc_device_t *device;
-    dc_device_open(&device, m_context, m_descriptor, m_port_name);
+    dc_device_open(&m_device, m_context, m_descriptor, m_port_name);
 
     int all_events = DC_EVENT_WAITING|DC_EVENT_CLOCK|DC_EVENT_PROGRESS|DC_EVENT_DEVINFO|DC_EVENT_VENDOR;
-    dc_device_set_events(device, all_events, [](dc_device_t* device, dc_event_type_t type, const void* data, void* userdata) {
+    dc_device_set_events(m_device, all_events, [](dc_device_t* device, dc_event_type_t type, const void* data, void* userdata) {
         DCDownloadContext* ctx = (DCDownloadContext *)userdata;
         switch(type) {
 
@@ -114,17 +130,15 @@ void DCDownloadContext::run() {
             case DC_EVENT_VENDOR:
             {
                 dc_event_vendor_t* vend = (dc_event_vendor_t*)data;
-                emit ctx->vendor(vend->data, vend->size);
-
+                emit ctx->vendor(QString((const char*)vend->data), vend->size);
             }
             break;
         }
 
     }, this);
 
-
     dc_device_foreach(
-        device,
+        m_device,
         [](
             const unsigned char* data,
             unsigned int size,
@@ -133,21 +147,27 @@ void DCDownloadContext::run() {
             void* userdata
         ) -> int {
 
-            dc_parser_t* parser;
-            dc_parser_new(&parser, device);
-
             DCDownloadContext* ctx = (DCDownloadContext *)userdata;
             qInfo("Got dive: %s", fingerprint);
+
+            dc_parser_t* parser;
+            auto st = dc_parser_new(&parser, ctx->m_device);
+            if(st != DC_STATUS_SUCCESS) {
+                throw std::runtime_error("Failed to create parser, got status: " + st);
+            }
+
             Dive d(parser, data, size);
 
             qInfo("dt: "  + d.divetime);
 
             dc_parser_destroy(parser);
+            parser = NULL;
+
             return 1;
         },
         this
     );
 
-    dc_device_close(device);
-
+    dc_device_close(m_device);
+    m_device = NULL;
 }

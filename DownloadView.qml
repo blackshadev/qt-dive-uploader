@@ -180,6 +180,7 @@ GridLayout {
             startButton.enabled = true;
         }
         onError: {
+            console.log(msg);
             errorLabel.text = msg;
         }
     }

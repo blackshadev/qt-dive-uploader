@@ -89,7 +89,7 @@ void QLibDiveComputer::start_download(QString port_name, int comp_idx) {
         m_context->start();
 
     } catch(std::exception &err) {
-        emit error(err.what());
+        emit error(QString(err.what()));
     }
 }
 
@@ -104,7 +104,10 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->connect(m_context, SIGNAL(finished()), this, SIGNAL(done()));
     m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(progress(uint,uint)));
 
-    m_context->connect(m_context, SIGNAL(log(const char*,const char*)), this, SLOT(recvLog(const char*,const char*)));
+    m_context->connect(m_context, &DCDownloadContext::error, this, [=](QString msg) {
+        emit error(QString(msg));
+    });
+    m_context->connect(m_context, SIGNAL(log(QString, QString)), this, SIGNAL(log(QString,QString)));
 
     m_context->connect(m_context, &DCDownloadContext::deviceInfo, this, [=](uint model, uint serial, uint firmware) {
         qInfo("model: %u; serial: %u; firmware: %u", model, serial, firmware);
@@ -122,9 +125,6 @@ void QLibDiveComputer::free_context() {
     }
 }
 
-void QLibDiveComputer::recvLog(const char *lvl, const char *msg) {
-    emit log(QString(lvl), QString(msg));
-}
 
 QStringList* QLibDiveComputer::get_ports() {
 
