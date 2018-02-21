@@ -24,7 +24,12 @@ HEADERS += \
     libdivecomputer/dccomputerlist.h \
     sessionstore.h \
     libdivecomputer/dcdownloadcontext.h \
-    libdivecomputer/dive.h
+    libdivecomputer/dive.h \
+    common/list.h \
+    common/optional.h \
+    common/list.h \
+    common/list.hpp
+
 
 RESOURCES += qml.qrc
 DESTDIR = bin

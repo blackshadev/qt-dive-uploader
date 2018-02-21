@@ -143,7 +143,7 @@ void DCDownloadContext::do_work() {
             const unsigned char* data,
             unsigned int size,
             const unsigned char* fingerprint,
-            unsigned  int fsize,
+            unsigned int fsize,
             void* userdata
         ) -> int {
 
