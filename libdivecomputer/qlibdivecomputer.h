@@ -6,6 +6,7 @@
 #include <QObject>
 #include "dcdownloadcontext.h"
 #include "dccomputerlist.h"
+#include "divewriter.h"
 
 class QLibDiveComputer: public QObject
 {
@@ -16,6 +17,7 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(QVariant ports READ get_ports_as_qvariant CONSTANT)
     Q_PROPERTY(QStringList loglevels READ get_loglevels CONSTANT)
     Q_PROPERTY(QString loglevel READ get_loglevel WRITE set_loglevel NOTIFY loglevelChanged)
+    Q_PROPERTY(QString path MEMBER m_path NOTIFY pathChanged)
 
 
 public:
@@ -36,12 +38,13 @@ public:
     QString m_version;
     QStringList* m_available_portnames;
     DCComputerList* m_available_devices;
+    QString m_path;
 
     Q_INVOKABLE void start_download(QString port_name, int comp_index);
 
 signals:
     void loglevelChanged();
-    void dive();
+    void pathChanged();
     void progress(uint current, uint total);
     void start();
     void done();
@@ -57,6 +60,9 @@ private:
     QStringList* get_ports();
     QStringList get_loglevels();
     DCDownloadContext* m_context;
+    DiveWriter* m_writer;
+    void create_writer();
+    void free_writer();
     void create_context(char* port_name, dc_descriptor_t* descriptor);
     void free_context();
     void get_version();

@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+
 using namespace std;
 
 class SessionData : public QObject

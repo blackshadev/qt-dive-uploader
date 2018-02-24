@@ -148,17 +148,20 @@ void DCDownloadContext::do_work() {
         ) -> int {
 
             DCDownloadContext* ctx = (DCDownloadContext *)userdata;
-            qInfo("Got dive: %s", fingerprint);
 
             dc_parser_t* parser;
             auto st = dc_parser_new(&parser, ctx->m_device);
             if(st != DC_STATUS_SUCCESS) {
                 throw std::runtime_error("Failed to create parser, got status: " + st);
             }
+            dc_parser_set_data(parser, data, size);
 
-            Dive d(parser, data, size);
+            Dive* d = new Dive();
+            d->parse(parser);
+            d->set_fingerprint(fingerprint, fsize);
 
-            qInfo("dt: "  + d.divetime);
+            emit ctx->dive(d);
+            qInfo("dt: "  + d->divetime);
 
             dc_parser_destroy(parser);
             parser = NULL;

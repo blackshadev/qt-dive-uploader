@@ -1,9 +1,11 @@
 #include "dive.h"
 
-Dive::Dive(dc_parser_t* parser, const unsigned char* data, size_t size)
+Dive::Dive()
 {
+}
 
-    dc_parser_set_data(parser, data, size);
+void Dive::parse(dc_parser_t* parser)
+{
     dc_parser_get_datetime(parser, &datetime);
 
     get_field(parser, DC_FIELD_MAXDEPTH, &maxDepth);
@@ -19,6 +21,11 @@ Dive::Dive(dc_parser_t* parser, const unsigned char* data, size_t size)
     get_list_field(parser, DC_FIELD_TANK_COUNT, DC_FIELD_TANK, &tankPressures);
     get_list_field(parser, DC_FIELD_GASMIX_COUNT, DC_FIELD_GASMIX, &gasMixures);
 
+}
+
+void Dive::set_fingerprint(const unsigned char* fdata, unsigned int fsize)
+{
+    fingerprint.set((unsigned char*)fdata, fsize);
 }
 
 template <typename T>
@@ -39,8 +46,9 @@ void Dive::get_list_field(dc_parser_t* parser, dc_field_type_t length_type, dc_f
 
     field->resize(count);
 
+    TData* data = field->data();
     for(unsigned int i = 0; i < count; i++) {
-        get_field(parser, data_type, &field->data[i], i);
+        get_field(parser, data_type, &data[i], i);
     }
 
 }

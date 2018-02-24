@@ -26,6 +26,7 @@ GridLayout {
 
             filePath.text = text;
             session.path = text;
+            libdivecomputer.path = text;
 
             fileDialog.close();
         }

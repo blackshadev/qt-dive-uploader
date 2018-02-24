@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     libdivecomputer/dccomputerlist.cpp \
     sessionstore.cpp \
     libdivecomputer/dcdownloadcontext.cpp \
-    libdivecomputer/dive.cpp
+    libdivecomputer/dive.cpp \
+    libdivecomputer/divewriter.cpp
 
 HEADERS += \
     libdivecomputer/qlibdivecomputer.h \
@@ -28,7 +29,8 @@ HEADERS += \
     common/list.h \
     common/optional.h \
     common/list.h \
-    common/list.hpp
+    common/list.hpp \
+    libdivecomputer/divewriter.h
 
 
 RESOURCES += qml.qrc

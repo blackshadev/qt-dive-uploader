@@ -8,6 +8,7 @@
 #include <libdivecomputer/device.h>
 #include <libdivecomputer/descriptor.h>
 #include <libdivecomputer/parser.h>
+#include "dive.h"
 
 class DCDownloadContext : public QThread
 {
@@ -27,6 +28,7 @@ signals:
     void waiting();
     void vendor(QString data, uint size);
     void error(QString);
+    void dive(Dive* d);
 protected:
     void run() override;
     void do_work();

@@ -11,6 +11,7 @@
 QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 {
     m_context = NULL;
+    m_writer = NULL;
     m_available_devices = get_devices();
     m_available_portnames = get_ports();
     get_version();
@@ -55,7 +56,6 @@ QStringList QLibDiveComputer::get_loglevels() {
         list.append(QString(data.key(iX)));
     }
 
-
     return list;
 }
 
@@ -76,20 +76,37 @@ void QLibDiveComputer::set_loglevel(QString lvl) {
     dc_loglevel_t loglevel = (dc_loglevel_t) data.keyToValue(lvl.toLocal8Bit().data());
     m_loglevel = loglevel;
     emit loglevelChanged();
-
 }
+
 
 void QLibDiveComputer::start_download(QString port_name, int comp_idx) {
 
     auto computer = m_available_devices->get(comp_idx);
 
-    create_context(port_name.toLatin1().data(), computer->descriptor);
-
     try {
+        create_context(port_name.toLatin1().data(), computer->descriptor);
+        create_writer();
         m_context->start();
 
     } catch(std::exception &err) {
         emit error(QString(err.what()));
+    }
+}
+
+void QLibDiveComputer::create_writer() {
+    if(m_writer != NULL) {
+        free_writer();
+    }
+
+    m_writer = new DiveWriter();
+    m_writer->setFileName(m_path);
+    m_writer->open();
+}
+
+void QLibDiveComputer::free_writer() {
+    if(m_writer != NULL) {
+        delete m_writer;
+        m_writer = NULL;
     }
 }
 
@@ -101,7 +118,6 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->setDescriptor(descriptor);
     m_context->setLogLevel(m_loglevel);
     m_context->connect(m_context, SIGNAL(started()), this, SIGNAL(start()));
-    m_context->connect(m_context, SIGNAL(finished()), this, SIGNAL(done()));
     m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(progress(uint,uint)));
 
     m_context->connect(m_context, &DCDownloadContext::error, this, [=](QString msg) {
@@ -115,6 +131,17 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->connect(m_context, &DCDownloadContext::clock, this, [=](uint devtime, uint systime) {
         qInfo("devtime: %u; systime: %u", devtime, systime);
     });
+
+    m_context->connect(m_context, &DCDownloadContext::dive, this, [=](Dive* dive) {
+        m_writer->write(dive);
+        delete dive;
+    });
+
+    m_context->connect(m_context, &DCDownloadContext::finished, this, [=]() {
+        m_writer->close();
+        emit done();
+    });
+
 }
 
 void QLibDiveComputer::free_context() {

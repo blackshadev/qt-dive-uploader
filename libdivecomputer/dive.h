@@ -18,13 +18,13 @@ public:
     optional_t<dc_salinity_t> salinity;
     optional_t<dc_divemode_t> divemode;
 
-
     List<unsigned char> fingerprint;
     List<dc_tank_t> tankPressures;
     List<dc_gasmix_t> gasMixures;
 
-    Dive(dc_parser_t* parser, const unsigned char* data, size_t size);
-
+    Dive();
+    void parse(dc_parser_t* parser);
+    void set_fingerprint(const unsigned char* fingerprint, unsigned int fsize);
 protected:
 
     template <typename T>
