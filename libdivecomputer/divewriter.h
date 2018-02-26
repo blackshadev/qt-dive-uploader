@@ -16,7 +16,10 @@ public:
     void write(Dive* d);
     void close();
     void open();
-    void setFileName(QString path);
+    void set_filename(QString path);
+    static void write_tank(QJsonArray* tanksArray, Dive* dive);
+    static void write_samples(QJsonArray* tanksArray, Dive* dive);
+
 protected:
     QFile file;
     QJsonObject jsonObject;

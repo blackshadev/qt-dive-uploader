@@ -10,6 +10,8 @@ public:
 
     void resize(unsigned int len);
     TData* data();
+    TData item(int idx);
+    TData* itemPtr(int idx);
     unsigned int length();
     void set(TData* data, unsigned int len);
 private:

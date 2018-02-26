@@ -161,7 +161,6 @@ void DCDownloadContext::do_work() {
             d->set_fingerprint(fingerprint, fsize);
 
             emit ctx->dive(d);
-            qInfo("dt: "  + d->divetime);
 
             dc_parser_destroy(parser);
             parser = NULL;

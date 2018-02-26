@@ -99,7 +99,7 @@ void QLibDiveComputer::create_writer() {
     }
 
     m_writer = new DiveWriter();
-    m_writer->setFileName(m_path);
+    m_writer->set_filename(m_path);
     m_writer->open();
 }
 

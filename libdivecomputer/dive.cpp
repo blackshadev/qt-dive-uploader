@@ -2,6 +2,13 @@
 
 Dive::Dive()
 {
+    current_sample = NULL;
+}
+
+Dive::~Dive() {
+    for(auto sample : samples) {
+        delete sample;
+    }
 }
 
 void Dive::parse(dc_parser_t* parser)
@@ -11,8 +18,8 @@ void Dive::parse(dc_parser_t* parser)
     get_field(parser, DC_FIELD_MAXDEPTH, &maxDepth);
     get_field(parser, DC_FIELD_DIVETIME, &divetime);
 
-    get_optional_field(parser, DC_FIELD_TEMPERATURE_MAXIMUM, &minTemperature);
-    get_optional_field(parser, DC_FIELD_TEMPERATURE_MINIMUM, &maxTemperature);
+    get_optional_field(parser, DC_FIELD_TEMPERATURE_MAXIMUM, &maxTemperature);
+    get_optional_field(parser, DC_FIELD_TEMPERATURE_MINIMUM, &minTemperature);
     get_optional_field(parser, DC_FIELD_TEMPERATURE_SURFACE, &surfaceTemperature);
     get_optional_field(parser, DC_FIELD_ATMOSPHERIC, &atmosphericPressure);
     get_optional_field(parser, DC_FIELD_SALINITY, &salinity);
@@ -21,7 +28,43 @@ void Dive::parse(dc_parser_t* parser)
     get_list_field(parser, DC_FIELD_TANK_COUNT, DC_FIELD_TANK, &tankPressures);
     get_list_field(parser, DC_FIELD_GASMIX_COUNT, DC_FIELD_GASMIX, &gasMixures);
 
+    dc_parser_samples_foreach(
+        parser,
+        [](dc_sample_type_t type, dc_sample_value_t value, void *userdata) {
+        Dive* dive = (Dive*)userdata;
+        dive->process_sample(type, value);
+    }, this);
+
+    if(current_sample != NULL) {
+        samples.push_back(current_sample);
+    }
 }
+
+void Dive::process_sample(dc_sample_type_t type, dc_sample_value_t value)
+{
+    switch(type) {
+        case DC_SAMPLE_TIME:
+            new_sample();
+            current_sample->time = value.time;
+        break;
+        case DC_SAMPLE_DEPTH:
+            current_sample->depth = value.depth;
+        break;
+        case DC_SAMPLE_TEMPERATURE:
+            current_sample->temperature = value.temperature;
+        break;
+    }
+
+}
+
+void Dive::new_sample()
+{
+    if(current_sample != NULL) {
+        samples.push_back(current_sample);
+    }
+    current_sample = new Sample;
+}
+
 
 void Dive::set_fingerprint(const unsigned char* fdata, unsigned int fsize)
 {
@@ -46,9 +89,8 @@ void Dive::get_list_field(dc_parser_t* parser, dc_field_type_t length_type, dc_f
 
     field->resize(count);
 
-    TData* data = field->data();
     for(unsigned int i = 0; i < count; i++) {
-        get_field(parser, data_type, &data[i], i);
+        get_field(parser, data_type, field->itemPtr(i), i);
     }
 
 }

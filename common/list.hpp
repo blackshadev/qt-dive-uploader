@@ -1,5 +1,6 @@
 #include "list.h"
 #include <cstring>
+#include <stdexcept>
 
 template <class TData>
 List<TData>::List() {
@@ -35,6 +36,22 @@ void List<TData>::resize(unsigned int new_length) {
 template <class TData>
 TData* List<TData>::data() {
     return m_data;
+}
+
+template <class TData>
+TData List<TData>::item(int idx) {
+    if(idx < 0 || idx > this->m_length) {
+        throw std::invalid_argument("Given index out of bound");
+    }
+    return m_data[idx];
+}
+
+template <class TData>
+TData* List<TData>::itemPtr(int idx) {
+    if(idx < 0 || idx > this->m_length) {
+        throw std::invalid_argument("Given index out of bound");
+    }
+    return &m_data[idx];
 }
 
 template <class TData>

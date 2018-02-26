@@ -61,11 +61,61 @@ DiveWriter::~DiveWriter()
 
 }
 
-void DiveWriter::setFileName(QString path)
+void DiveWriter::set_filename(QString path)
 {
     file.setFileName(path);
 }
 
+void DiveWriter::write_tank(QJsonArray* tanksArray, Dive *dive)
+{
+
+    dc_tank_t* tank;
+    dc_gasmix_t* gas;
+
+    int gasMixCount = dive->gasMixures.length();
+
+    for(int i = 0; i < dive->tankPressures.length(); i++)
+    {
+        QJsonObject tankObj;
+        QJsonObject presObj;
+
+        gas = dive->gasMixures.itemPtr(gasMixCount > i ? i : 0);
+        tank = dive->tankPressures.itemPtr(i);
+
+        tankObj["volume"] = tank->volume;
+        tankObj["oxygen"] = gas->oxygen * 100;
+
+        presObj["begin"] = tank->beginpressure;
+        presObj["end"] = tank->endpressure;
+
+        switch(tank->type) {
+            case DC_TANKVOLUME_IMPERIAL:
+                presObj["type"] = "psi";
+            break;
+            case DC_TANKVOLUME_METRIC:
+                presObj["type"] = "bar";
+            break;
+            default:
+                presObj["type"] = "bar";
+            break;
+        }
+
+        tankObj["pressure"] = presObj;
+        tanksArray->append(tankObj);
+    }
+
+}
+
+void DiveWriter::write_samples(QJsonArray *tanksArray, Dive *dive)
+{
+    for(auto sample : dive->samples) {
+        QJsonObject obj;
+        obj["Time"] = sample->time;
+        obj["Depth"] = sample->depth;
+        obj["Temperature"] = sample->temperature;
+        tanksArray->append(obj);
+    }
+}
 
 void DiveWriter::write(Dive* dive)
 {
@@ -92,8 +142,16 @@ void DiveWriter::write(Dive* dive)
     json["MinTemperature"] = dive->minTemperature;
     json["MaxTemperature"] = dive->maxTemperature;
 
-    jsonDives.append(json);
+    QJsonArray tankArr;
+    write_tank(&tankArr, dive);
 
+    json["Tanks"] = tankArr;
+
+    QJsonArray sampleArr;
+    write_samples(&sampleArr, dive);
+    json["Samples"] = sampleArr;
+
+    jsonDives.append(json);
 }
 
 void DiveWriter::open() {
