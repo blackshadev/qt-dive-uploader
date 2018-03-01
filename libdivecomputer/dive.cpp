@@ -1,11 +1,29 @@
 #include "dive.h"
 
+const char* Event::invalid_event_type_name = "unknown";
+const char* Event::event_type_names[EVENT_TYPE_COUNT] = {
+    "none", "deco", "rbt", "ascent", "ceiling", "workload", "transmitter",
+    "violation", "bookmark", "surface", "safety stop", "gaschange",
+    "safety stop (voluntary)", "safety stop (mandatory)", "deepstop",
+    "ceiling (safety stop)", "floor", "divetime", "maxdepth",
+    "OLF", "PO2", "airtime", "rgbm", "heading", "tissue level warning",
+    "gaschange2"
+};
+
+Event::Event(unsigned int t, int v)
+{
+    type = t;
+    value = v;
+    type_name = t < EVENT_TYPE_COUNT ? Event::event_type_names[t] : Event::invalid_event_type_name;
+}
+
 Dive::Dive()
 {
     current_sample = NULL;
 }
 
-Dive::~Dive() {
+Dive::~Dive()
+{
     for(auto sample : samples) {
         delete sample;
     }
@@ -53,6 +71,37 @@ void Dive::process_sample(dc_sample_type_t type, dc_sample_value_t value)
         case DC_SAMPLE_TEMPERATURE:
             current_sample->temperature = value.temperature;
         break;
+        case DC_SAMPLE_BEARING:
+            current_sample->bearing = (int)value.bearing;
+        break;
+        case DC_SAMPLE_CNS:
+            current_sample->cns = value.cns;
+        break;
+        case DC_SAMPLE_GASMIX:
+            current_sample->gasmix = (int)value.gasmix;
+        break;
+        case DC_SAMPLE_HEARTBEAT:
+            current_sample->heartbeat = (int)value.heartbeat;
+        break;
+        case DC_SAMPLE_PPO2:
+            current_sample->ppo2 = value.ppo2;
+        break;
+        case DC_SAMPLE_PRESSURE:
+            tank_event_t t;
+            t.tank = (int)value.pressure.tank;
+            t.pressure = value.pressure.value;
+            current_sample->pressures.push_back(t);
+        break;
+        case DC_SAMPLE_RBT:
+            current_sample->rbt = (int)value.rbt;
+        break;
+        case DC_SAMPLE_SETPOINT:
+            current_sample->setpoint = value.setpoint;
+        break;
+        case DC_SAMPLE_EVENT:
+            Event e(value.event.type, (int)value.event.value);
+            current_sample->events.push_back(e);
+        break;
     }
 
 }
@@ -72,18 +121,22 @@ void Dive::set_fingerprint(const unsigned char* fdata, unsigned int fsize)
 }
 
 template <typename T>
-dc_status_t Dive::get_optional_field(dc_parser_t* parser, dc_field_type_t type,  optional_t<T>* field, unsigned int flag) {
+dc_status_t Dive::get_optional_field(dc_parser_t* parser, dc_field_type_t type,  optional_t<T>* field, unsigned int flag)
+{
     auto st = get_field(parser, type, &field->value, flag);
     field->has_value = st == DC_STATUS_SUCCESS;
     return st;
 }
 
 template <typename T>
-dc_status_t Dive::get_field(dc_parser_t* parser, dc_field_type_t type, T* field, unsigned int flag) {
+dc_status_t Dive::get_field(dc_parser_t* parser, dc_field_type_t type, T* field, unsigned int flag)
+{
     return dc_parser_get_field(parser, type, flag, field);
 }
+
 template <typename TData>
-void Dive::get_list_field(dc_parser_t* parser, dc_field_type_t length_type, dc_field_type_t data_type, List<TData>* field) {
+void Dive::get_list_field(dc_parser_t* parser, dc_field_type_t length_type, dc_field_type_t data_type, List<TData>* field)
+{
     unsigned int count;
     get_field(parser, length_type, &count);
 

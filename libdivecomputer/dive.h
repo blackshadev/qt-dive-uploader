@@ -1,16 +1,42 @@
 #ifndef DIVE_H
 #define DIVE_H
+#define EVENT_TYPE_COUNT 26
 #include <libdivecomputer/parser.h>
 #include <libdivecomputer/device.h>
 #include <libdivecomputer/descriptor.h>
 #include "../common/list.h"
 #include "../common/optional.h"
 
+struct tank_event_t {
+    unsigned int tank;
+    double pressure;
+};
+
+class Event {
+public:
+    static const char* invalid_event_type_name;
+    static const char* event_type_names[26];
+    Event(unsigned int type, int value);
+    unsigned int type;
+    int value;
+    const char* type_name;
+};
+
 class Sample {
 public:
     int time;
+    optional_t<int> bearing;
+    optional_t<int> gasmix;
+    optional_t<int> heartbeat;
+    optional_t<int> rbt;
     optional_t<double> depth;
     optional_t<double> temperature;
+    optional_t<double> cns;
+    optional_t<double> setpoint;
+    optional_t<double> ppo2;
+    std::vector<Event> events;
+    std::vector<tank_event_t> pressures;
+
 };
 
 class Dive

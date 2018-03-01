@@ -106,14 +106,43 @@ void DiveWriter::write_tank(QJsonArray* tanksArray, Dive *dive)
 
 }
 
-void DiveWriter::write_samples(QJsonArray *tanksArray, Dive *dive)
+void DiveWriter::write_samples(QJsonArray *sampleArray, Dive *dive)
 {
     for(auto sample : dive->samples) {
         QJsonObject obj;
         obj["Time"] = sample->time;
-        obj["Depth"] = sample->depth;
-        obj["Temperature"] = sample->temperature;
-        tanksArray->append(obj);
+        optional_write(&obj, "Depth", sample->depth);
+        optional_write(&obj, "Temperature", sample->temperature);
+        optional_write(&obj, "CNS", sample->cns);
+        optional_write(&obj, "SetPoint", sample->setpoint);
+        optional_write(&obj, "PPO2", sample->ppo2);
+        optional_write(&obj, "Gasmix", sample->gasmix);
+        optional_write(&obj, "Heartbeat", sample->heartbeat);
+        optional_write(&obj, "RBT", sample->rbt);
+
+        if(sample->events.size()) {
+            QJsonArray eventArr;
+            for(auto evt : sample->events) {
+                QJsonObject evObj;
+                evObj["type"] = evt.type_name;
+                evObj["value"] = (int)evt.value;
+                eventArr.append(evObj);
+            }
+            obj["Events"] = eventArr;
+        }
+
+        if(sample->pressures.size()) {
+            QJsonArray pressArr;
+            for(auto press : sample->pressures) {
+                QJsonObject presObj;
+                presObj["tank"] = (int)press.tank;
+                presObj["pressure"] = press.pressure;
+                pressArr.append(presObj);
+            }
+            obj["Pressure"] = pressArr;
+        }
+
+        sampleArray->append(obj);
     }
 }
 
