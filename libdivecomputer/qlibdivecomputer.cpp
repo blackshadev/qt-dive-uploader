@@ -98,9 +98,8 @@ void QLibDiveComputer::create_writer() {
         free_writer();
     }
 
-    m_writer = new DiveWriter();
-    m_writer->set_filename(m_path);
-    m_writer->open();
+    m_writer = new DiveWriterFile(m_path);
+    m_writer->begin();
 }
 
 void QLibDiveComputer::free_writer() {
@@ -138,7 +137,7 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     });
 
     m_context->connect(m_context, &DCDownloadContext::finished, this, [=]() {
-        m_writer->close();
+        m_writer->end();
         emit done();
     });
 

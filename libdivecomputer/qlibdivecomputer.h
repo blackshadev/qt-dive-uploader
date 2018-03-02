@@ -6,7 +6,7 @@
 #include <QObject>
 #include "dcdownloadcontext.h"
 #include "dccomputerlist.h"
-#include "divewriter.h"
+#include "writer/divewriter.h"
 
 class QLibDiveComputer: public QObject
 {

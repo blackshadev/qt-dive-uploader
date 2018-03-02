@@ -1,6 +1,5 @@
 #include "divewriter.h"
 
-
 // source: https://renenyffenegger.ch/notes/development/Base64/Encoding-and-decoding-base-64-with-cpp
 static const std::string base64_chars =
              "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -49,24 +48,20 @@ std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
 }
 
 
-DiveWriter::DiveWriter()
-{
-}
-
-DiveWriter::~DiveWriter()
-{
-    if(file.isOpen()) {
-        close();
-    }
-
-}
-
-void DiveWriter::set_filename(QString path)
+DiveWriterFile::DiveWriterFile(QString path)
 {
     file.setFileName(path);
 }
 
-void DiveWriter::write_tank(QJsonArray* tanksArray, Dive *dive)
+DiveWriterFile::~DiveWriterFile()
+{
+    if(file.isOpen()) {
+        end();
+    }
+
+}
+
+void DiveWriterFile::write_tank(QJsonArray* tanksArray, Dive *dive)
 {
 
     dc_tank_t* tank;
@@ -106,7 +101,7 @@ void DiveWriter::write_tank(QJsonArray* tanksArray, Dive *dive)
 
 }
 
-void DiveWriter::write_samples(QJsonArray *sampleArray, Dive *dive)
+void DiveWriterFile::write_samples(QJsonArray *sampleArray, Dive *dive)
 {
     for(auto sample : dive->samples) {
         QJsonObject obj;
@@ -146,7 +141,7 @@ void DiveWriter::write_samples(QJsonArray *sampleArray, Dive *dive)
     }
 }
 
-void DiveWriter::write(Dive* dive)
+void DiveWriterFile::write(Dive* dive)
 {
 
     QJsonObject json;
@@ -183,7 +178,7 @@ void DiveWriter::write(Dive* dive)
     jsonDives.append(json);
 }
 
-void DiveWriter::open() {
+void DiveWriterFile::begin() {
     if(file.isOpen()) {
         throw std::runtime_error("File was already opened");
     }
@@ -192,19 +187,16 @@ void DiveWriter::open() {
     }
 }
 
-void DiveWriter::end() {
+void DiveWriterFile::end() {
+    if(!file.isOpen()) {
+        throw std::runtime_error("File was not yet opened");
+    }
 
     jsonObject["dives"] = jsonDives;
 
     QJsonDocument saveDoc(jsonObject);
     file.write(saveDoc.toJson());
-}
 
-
-void DiveWriter::close() {
-    if(!file.isOpen()) {
-        throw std::runtime_error("File was not yet opened");
-    }
-    end();
     file.close();
 }
+
