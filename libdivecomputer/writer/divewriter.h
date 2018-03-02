@@ -8,28 +8,21 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-struct DiveWriter {
+class DiveWriter {
+public:
+    static std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
+    DiveWriter();
+    virtual ~DiveWriter() = 0;
+
+    virtual void set_device_descriptor(dc_descriptor_t* descr);
+    virtual void set_device_info(uint model, uint serial, uint firmware);
+    virtual void set_device_clock(uint devtime, uint systime) ;
     virtual void begin() = 0;
     virtual void end() = 0;
     virtual void write(Dive* d) = 0;
-};
-
-
-class DiveWriterFile : public DiveWriter
-{
-public:
-    DiveWriterFile(QString path);
-    ~DiveWriterFile();
-    void write(Dive* d) override;
-    void begin() override;
-    void end() override;
-    static void write_tank(QJsonArray* tanksArray, Dive* dive);
-    static void write_samples(QJsonArray* tanksArray, Dive* dive);
-
+    void (*onDone)() = NULL;
 protected:
-    QFile file;
-    QJsonObject jsonObject;
-    QJsonArray jsonDives;
+    virtual void done();
 };
 
 #endif // DIVEWRITER_H

@@ -6,7 +6,7 @@
 #include <libdivecomputer/device.h>
 #include <libdivecomputer/descriptor.h>
 #include <QSerialPortInfo>
-
+#include "writer/filewriter.h"
 
 QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 {
@@ -98,8 +98,10 @@ void QLibDiveComputer::create_writer() {
         free_writer();
     }
 
-    m_writer = new DiveWriterFile(m_path);
-    m_writer->begin();
+    m_writer = new FileDiveWriter(m_path);
+    m_writer->onDone = []() {
+        qInfo("Done?");
+    };
 }
 
 void QLibDiveComputer::free_writer() {
@@ -116,7 +118,12 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->setPortName(port_name);
     m_context->setDescriptor(descriptor);
     m_context->setLogLevel(m_loglevel);
-    m_context->connect(m_context, SIGNAL(started()), this, SIGNAL(start()));
+
+    m_context->connect(m_context, &DCDownloadContext::started, this, [=]() {
+        m_writer->begin();
+        m_writer->set_device_descriptor(descriptor);
+        emit start();
+    });
     m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(progress(uint,uint)));
 
     m_context->connect(m_context, &DCDownloadContext::error, this, [=](QString msg) {
@@ -125,10 +132,10 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->connect(m_context, SIGNAL(log(QString, QString)), this, SIGNAL(log(QString,QString)));
 
     m_context->connect(m_context, &DCDownloadContext::deviceInfo, this, [=](uint model, uint serial, uint firmware) {
-        qInfo("model: %u; serial: %u; firmware: %u", model, serial, firmware);
+        m_writer->set_device_info(model, serial, firmware);
     });
     m_context->connect(m_context, &DCDownloadContext::clock, this, [=](uint devtime, uint systime) {
-        qInfo("devtime: %u; systime: %u", devtime, systime);
+        m_writer->set_device_clock(devtime, systime);
     });
 
     m_context->connect(m_context, &DCDownloadContext::dive, this, [=](Dive* dive) {
