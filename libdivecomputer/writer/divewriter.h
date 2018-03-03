@@ -11,6 +11,8 @@
 class DiveWriter {
 public:
     static std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
+    static std::string format_datetime(dc_datetime_t* dt);
+
     DiveWriter();
     virtual ~DiveWriter() = 0;
 

@@ -16,11 +16,14 @@ FileDiveWriter::~FileDiveWriter()
 
 
 void FileDiveWriter::set_device_descriptor(dc_descriptor_t *descr) {
-
+    jsonComputer["vendor"] = dc_descriptor_get_vendor(descr);
+    jsonComputer["product"] = dc_descriptor_get_product(descr);
 }
 
 void FileDiveWriter::set_device_info(uint model, uint serial, uint firmware) {
-
+    jsonComputer["model"] = (int)model;
+    jsonComputer["serial"] = (int)serial;
+    jsonComputer["firmware"] = (int)firmware;
 }
 
 void FileDiveWriter::write_tank(QJsonArray* tanksArray, Dive *dive)
@@ -107,20 +110,8 @@ void FileDiveWriter::write(Dive* dive)
 {
 
     QJsonObject json;
-    char dt[25];
-    std::sprintf(
-        dt,
-        "%04d-%02d-%02dT%02d:%02d:%02d+%02d:%02d",
-        dive->datetime.year,
-        dive->datetime.month,
-        dive->datetime.day,
-        dive->datetime.hour,
-        dive->datetime.minute,
-        dive->datetime.second,
-        dive->datetime.timezone / 3600,
-        dive->datetime.timezone % 3600
-    );
-    json["Datetime"] = dt;
+
+    json["Datetime"] = QString::fromStdString(format_datetime(&dive->datetime));
     json["Divetime"] = (int)dive->divetime;
 
     json["Fingerprint"] = QString::fromStdString(base64_encode(dive->fingerprint.data(), dive->fingerprint.length()));
@@ -154,7 +145,14 @@ void FileDiveWriter::end() {
         throw std::runtime_error("File was not yet opened");
     }
 
-    jsonObject["dives"] = jsonDives;
+    dc_datetime_t dt_now;
+    dc_datetime_localtime(&dt_now, dc_datetime_now());
+    QJsonObject jsonObject;
+
+    jsonObject["ReadTime"] = QString::fromStdString(format_datetime(&dt_now));
+    jsonObject["Dives"] = jsonDives;
+    jsonObject["Computer"] = jsonComputer;
+
 
     QJsonDocument saveDoc(jsonObject);
     file.write(saveDoc.toJson());

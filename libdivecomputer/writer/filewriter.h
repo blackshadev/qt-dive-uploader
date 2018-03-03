@@ -19,8 +19,8 @@ class FileDiveWriter : public DiveWriter
 
 protected:
     QFile file;
-    QJsonObject jsonObject;
     QJsonArray jsonDives;
+    QJsonObject jsonComputer;
 };
 
 #endif // FILEWRITER_H
