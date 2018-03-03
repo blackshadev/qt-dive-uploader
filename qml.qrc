@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>DownloadView.qml</file>
         <file>LogView.qml</file>
+        <file>LoginView.qml</file>
+        <file>MainView.qml</file>
     </qresource>
 </RCC>
