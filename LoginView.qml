@@ -33,15 +33,27 @@ RowLayout {
             Layout.fillWidth: true
         }
 
+        Label {
+            Layout.columnSpan: 2
+            id: errorLbl
+            color: "red"
+        }
+
         Button {
             id: loginBtn
             Layout.columnSpan: 2
             Layout.alignment: Qt.AlignRight
             text: "Login"
             onClicked: {
-                stackView.pop();
+                littledivelog.login(email.text, password.text);
             }
         }
 
+    }
+    Connections {
+        target: littledivelog
+        onError: {
+            errorLbl.text = msg;
+        }
     }
 }

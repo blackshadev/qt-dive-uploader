@@ -9,6 +9,7 @@
 #include "libdivecomputer/qlibdivecomputer.h"
 #include "libdivecomputer/dccomputerlist.h"
 #include "sessionstore.h"
+#include "littledivelog/littledivelog.h"
 
 int main(int argc, char *argv[])
 {
@@ -27,12 +28,14 @@ int main(int argc, char *argv[])
     SessionStore sess("./session.json");
     sess.load();
 
+    LittleDiveLog* log = new LittleDiveLog();
     QLibDiveComputer* dc = new QLibDiveComputer();
     dc->m_path = sess.m_data.getPath();
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("session", &sess.m_data);
     ctxt->setContextProperty("libdivecomputer", dc);
+    ctxt->setContextProperty("littledivelog", log);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

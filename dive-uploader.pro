@@ -1,4 +1,4 @@
-QT += qml quick serialport quickcontrols2
+QT += qml quick serialport quickcontrols2 network
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     libdivecomputer/dcdownloadcontext.cpp \
     libdivecomputer/dive.cpp \
     libdivecomputer/writer/divewriter.cpp \
-    libdivecomputer/writer/filewriter.cpp
+    libdivecomputer/writer/filewriter.cpp \
+    littledivelog/littledivelog.cpp
 
 HEADERS += \
     libdivecomputer/qlibdivecomputer.h \
@@ -32,7 +33,8 @@ HEADERS += \
     common/list.h \
     common/list.hpp \
     libdivecomputer/writer/divewriter.h \
-    libdivecomputer/writer/filewriter.h
+    libdivecomputer/writer/filewriter.h \
+    littledivelog/littledivelog.h
 
 
 RESOURCES += qml.qrc

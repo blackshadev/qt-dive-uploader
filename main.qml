@@ -35,4 +35,14 @@ ApplicationWindow {
     Component.onCompleted: {
         stackView.push(loginView)
     }
+
+    Connections {
+        target: littledivelog
+        onLoggedIn: {
+            stackView.pop();
+        }
+        onLoggedOut: {
+            stackView.push(loginView);
+        }
+    }
 }
