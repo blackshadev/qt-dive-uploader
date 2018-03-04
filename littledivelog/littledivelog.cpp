@@ -1,4 +1,5 @@
 #include "littledivelog.h"
+#include "../jsonrequest.h"
 
 LittleDiveLog::LittleDiveLog(QObject *parent) : QObject(parent)
 {
@@ -11,17 +12,27 @@ bool LittleDiveLog::isLoggedIn()
 
 void LittleDiveLog::login(QString email, QString password)
 {
-    auto url = QUrl("https://dive.littledev.nl/api/auth/refresh-token");
-    auto req = QNetworkRequest(url);
-    req.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+    JsonRequest req;
+    req.url = "https://dive.littledev.nl";
+    req.path = "api/auth/refresh-token";
+    req.method = RequestMethod::POST;
 
-    QJsonObject data;
-    data["email"] = email;
-    data["password"] = password;
-    QJsonDocument doc(data);
-    QByteArray bytes = doc.toJson();
+    req.data["email"] = email;
+    req.data["password"] = password;
 
-    auto reply = m_qnam.post(req, bytes);
+    connect(req, &QNetworkReply::completed, this, [=](JsonResponse resp) {
+        if(resp.parseError.error != QJsonParseError::NoError) {
+        } else {
+            auto obj = resp.data.object();
+            if(obj.contains("error")) {
+                emit error(obj["error"].toString());
+            } else {
+                qInfo(resp.data.toJson());
+            }
+        }
+    });
+
+    req.send();
 
     connect(reply, &QNetworkReply::finished, this, [=]() {
         auto retrDat = reply->readAll();
