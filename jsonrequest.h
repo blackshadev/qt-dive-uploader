@@ -31,6 +31,7 @@ class JsonRequest : public QObject
     Q_OBJECT
 public:
     explicit JsonRequest(QObject *parent = nullptr);
+    virtual ~JsonRequest();
     RequestMethod method;
     QJsonDocument data;
     QString path;

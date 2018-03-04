@@ -12,18 +12,18 @@ bool LittleDiveLog::isLoggedIn()
 
 void LittleDiveLog::login(QString email, QString password)
 {
-    JsonRequest req;
-    req.url = "https://dive.littledev.nl";
-    req.path = "api/auth/refresh-token";
-    req.method = RequestMethod::POST;
+    JsonRequest* req = new JsonRequest();
+    req->url = "https://dive.littledev.nl";
+    req->path = "api/auth/refresh-token";
+    req->method = RequestMethod::POST;
 
     QJsonObject data;
     data["email"] = email;
     data["password"] = password;
 
-    req.data.setObject(data);
+    req->data.setObject(data);
 
-    connect(&req, &JsonRequest::complete, this, [=](JsonResponse resp) {
+    connect(req, &JsonRequest::complete, this, [=](JsonResponse resp) {
         if(resp.parseError.error != QJsonParseError::NoError) {
             emit error("Invalid response from server");
         } else {
@@ -34,8 +34,10 @@ void LittleDiveLog::login(QString email, QString password)
                 qInfo(resp.data.toJson());
             }
         }
+
+        delete req;
     });
 
-    req.send();
+    req->send();
 
 }

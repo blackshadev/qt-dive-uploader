@@ -3,9 +3,19 @@
 JsonRequest::JsonRequest(QObject *parent) : QObject(parent)
 {
     m_state = RequestState::None;
+    m_reply = NULL;
 }
 
-void JsonRequest::send() {
+JsonRequest::~JsonRequest()
+{
+    if(m_reply != NULL) {
+        m_reply->deleteLater();
+        m_reply = NULL;
+    }
+}
+
+void JsonRequest::send()
+{
     if(m_state != RequestState::None) {
         throw std::runtime_error("Request already send");
     }
@@ -29,7 +39,6 @@ void JsonRequest::send() {
         break;
     }
 
-
     QNetworkRequest req(QUrl::fromUserInput(url + "/" + path));
     req.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
 
@@ -42,9 +51,9 @@ void JsonRequest::send() {
     connect(m_reply, &QNetworkReply::finished, this, &JsonRequest::read_reply);
 }
 
-void JsonRequest::read_reply() {
+void JsonRequest::read_reply()
+{
     m_state = RequestState::Reading;
-    m_reply->deleteLater();
     auto replyData = m_reply->readAll();
 
     JsonResponse resp;
