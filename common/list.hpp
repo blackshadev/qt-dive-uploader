@@ -39,7 +39,7 @@ TData* List<TData>::data() {
 }
 
 template <class TData>
-TData List<TData>::item(int idx) {
+TData List<TData>::item(unsigned int idx) {
     if(idx < 0 || idx > this->m_length) {
         throw std::invalid_argument("Given index out of bound");
     }
@@ -47,7 +47,7 @@ TData List<TData>::item(int idx) {
 }
 
 template <class TData>
-TData* List<TData>::itemPtr(int idx) {
+TData* List<TData>::itemPtr(unsigned int idx) {
     if(idx < 0 || idx > this->m_length) {
         throw std::invalid_argument("Given index out of bound");
     }

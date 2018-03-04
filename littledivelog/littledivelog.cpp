@@ -17,11 +17,15 @@ void LittleDiveLog::login(QString email, QString password)
     req.path = "api/auth/refresh-token";
     req.method = RequestMethod::POST;
 
-    req.data["email"] = email;
-    req.data["password"] = password;
+    QJsonObject data;
+    data["email"] = email;
+    data["password"] = password;
 
-    connect(req, &QNetworkReply::completed, this, [=](JsonResponse resp) {
+    req.data.setObject(data);
+
+    connect(&req, &JsonRequest::complete, this, [=](JsonResponse resp) {
         if(resp.parseError.error != QJsonParseError::NoError) {
+            emit error("Invalid response from server");
         } else {
             auto obj = resp.data.object();
             if(obj.contains("error")) {
@@ -33,18 +37,5 @@ void LittleDiveLog::login(QString email, QString password)
     });
 
     req.send();
-
-    connect(reply, &QNetworkReply::finished, this, [=]() {
-        auto retrDat = reply->readAll();
-
-        QJsonDocument readDoc = QJsonDocument::fromJson(retrDat);
-        auto retrObj = readDoc.object();
-
-        if(retrObj.contains("error")) {
-            emit error(retrObj["error"].toString());
-        }
-
-        reply->deleteLater();
-    });
 
 }

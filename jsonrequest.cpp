@@ -2,6 +2,7 @@
 
 JsonRequest::JsonRequest(QObject *parent) : QObject(parent)
 {
+    m_state = RequestState::None;
 }
 
 void JsonRequest::send() {

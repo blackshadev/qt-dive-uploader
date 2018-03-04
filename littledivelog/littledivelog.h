@@ -4,13 +4,6 @@
 #include <QObject>
 #include <QtNetwork>
 
-enum HttpVerb {
-    GET = 0,
-    POST,
-    PUT,
-    DELETE
-};
-
 class LittleDiveLog : public QObject
 {
     Q_OBJECT
@@ -26,7 +19,6 @@ signals:
 public slots:
 protected:
     QString m_token;
-    QNetworkAccessManager m_qnam;
 };
 
 #endif // LITTLEDIVELOG_H
