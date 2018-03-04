@@ -39,7 +39,7 @@ void JsonRequest::send()
         break;
     }
 
-    QNetworkRequest req(QUrl::fromUserInput(url + "/" + path));
+    QNetworkRequest req(QUrl::fromUserInput(url));
     req.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
 
     QByteArray jsonBytes;
@@ -58,7 +58,7 @@ void JsonRequest::read_reply()
 
     JsonResponse resp;
     resp.statuscode = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    resp.data.fromJson(replyData, &resp.parseError);
+    resp.data = QJsonDocument::fromJson(replyData, &resp.parseError);
     m_state = RequestState::Completed;
     emit complete(resp);
 }
