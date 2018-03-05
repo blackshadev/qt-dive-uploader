@@ -11,6 +11,7 @@ class LittleDiveLog : public QObject
 public:
     explicit LittleDiveLog(QObject *parent = nullptr);
     Q_INVOKABLE void login(QString username, QString password);
+    Q_INVOKABLE void logout();
     bool isLoggedIn();
 signals:
     void error(QString msg);
@@ -18,7 +19,8 @@ signals:
     void loggedOut();
 public slots:
 protected:
-    QString m_token;
+    QString m_refresh_token;
+    QString m_access_token;
 };
 
 #endif // LITTLEDIVELOG_H
