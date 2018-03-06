@@ -36,6 +36,7 @@ public:
     QJsonDocument data;
     QString path;
     QString url;
+    QString jwt;
     Q_INVOKABLE void send();
 signals:
     void complete(JsonResponse resp);

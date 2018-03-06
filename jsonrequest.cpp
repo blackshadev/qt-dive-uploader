@@ -41,6 +41,10 @@ void JsonRequest::send()
 
     QNetworkRequest req(QUrl::fromUserInput(url));
     req.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+    if(!jwt.isEmpty()) {
+        QString authHeader = "Basic " + jwt;
+        req.setRawHeader("Authorization", authHeader.toLocal8Bit());
+    }
 
     QByteArray jsonBytes;
     if(!data.isEmpty()) {
