@@ -1,5 +1,15 @@
 #include "jsonrequest.h"
 
+QString JsonResponse::errorString() {
+    if(parseError.error != parseError.NoError) {
+        return parseError.errorString();
+    } else if(data.object().contains("error")) {
+        return data.object()["error"].toString();
+    }
+
+    return "";
+}
+
 JsonRequest::JsonRequest(QObject *parent) : QObject(parent)
 {
     m_state = RequestState::None;
@@ -42,7 +52,7 @@ void JsonRequest::send()
     QNetworkRequest req(QUrl::fromUserInput(url));
     req.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     if(!jwt.isEmpty()) {
-        QString authHeader = "Basic " + jwt;
+        QString authHeader = "Bearer " + jwt;
         req.setRawHeader("Authorization", authHeader.toLocal8Bit());
     }
 

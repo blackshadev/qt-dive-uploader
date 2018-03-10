@@ -5,6 +5,7 @@
 #include <QtNetwork>
 #include "../jsonrequest.h"
 #include <functional>
+#include "./userinfo.h"
 
 enum TokenType {
     NONE,
@@ -16,22 +17,28 @@ class LittleDiveLog : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QVariant isLoggedIn READ isLoggedIn CONSTANT)
+    Q_PROPERTY(UserInfo* userInfo MEMBER m_user_info NOTIFY userInfo)
+
 public:
     explicit LittleDiveLog(QObject *parent = nullptr);
+    virtual ~LittleDiveLog();
     Q_INVOKABLE void login(QString username, QString password);
     Q_INVOKABLE void logout();
     bool isLoggedIn();
 signals:
     void error(QString msg);
+    void userInfo();
     void loggedIn();
     void loggedOut();
 public slots:
 protected:
+    void get_user_data();
     void get_access_token(std::function<void()> callback);
-    void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(JsonResponse)> callback );
+    void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(JsonResponse)> callback, bool retry = true);
     void raw_request(RequestMethod method, QString path, TokenType tokenType, QJsonObject* data, std::function<void(JsonResponse)> callback );
     QString m_refresh_token;
     QString m_access_token;
+    UserInfo* m_user_info = NULL;
 };
 
 #endif // LITTLEDIVELOG_H

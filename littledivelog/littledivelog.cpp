@@ -5,6 +5,13 @@ LittleDiveLog::LittleDiveLog(QObject *parent) : QObject(parent)
 {
 }
 
+LittleDiveLog::~LittleDiveLog()
+{
+    if(m_user_info != NULL) {
+        delete m_user_info;
+    }
+}
+
 bool LittleDiveLog::isLoggedIn()
 {
     return m_refresh_token.length() > 0;
@@ -32,6 +39,7 @@ void LittleDiveLog::login(QString email, QString password)
             } else {
                 m_refresh_token = obj["jwt"].toString();
                 emit loggedIn();
+                get_user_data();
             }
         }
 
@@ -41,11 +49,35 @@ void LittleDiveLog::login(QString email, QString password)
     req->send();
 }
 
+void LittleDiveLog::get_user_data()
+{
+    request(
+        RequestMethod::GET,
+        "/user/profile",
+        NULL,
+        [=](JsonResponse resp) {
+            auto obj = resp.data.object();
+            m_user_info = new UserInfo(this);
+
+            m_user_info->m_user_id = obj["user_id"].toInt();
+            m_user_info->m_name = obj["name"].toString();
+            m_user_info->m_email = obj["email"].toString();
+            m_user_info->m_inserted = QDateTime::fromString(obj["inserted"].toString());
+            m_user_info->m_dive_count = obj["dive_count"].toInt();
+            m_user_info->m_computer_count = obj["computer_count"].toInt();
+            m_user_info->m_buddy_count = obj["buddy_count"].toInt();
+            m_user_info->m_tag_count = obj["tag_count"].toInt();
+
+            emit userInfo();
+        }
+    );
+}
+
 void LittleDiveLog::get_access_token(std::function<void()> callback)
 {
     raw_request(
         RequestMethod::GET,
-        "access-token",
+        "/auth/access-token",
         TokenType::REFRESH,
         NULL,
         [=](JsonResponse resp) {
@@ -69,7 +101,7 @@ void LittleDiveLog::get_access_token(std::function<void()> callback)
 void LittleDiveLog::raw_request(RequestMethod method, QString path, TokenType tokenType, QJsonObject *data, std::function<void(JsonResponse)> callback)
 {
     JsonRequest* req = new JsonRequest();
-    req->url = "https://dive.littledev.nl/api/" + path;
+    req->url = "https://dive.littledev.nl/api" + path;
     req->method = method;
 
     switch(tokenType) {
@@ -97,7 +129,7 @@ void LittleDiveLog::raw_request(RequestMethod method, QString path, TokenType to
     req->send();
 }
 
-void LittleDiveLog::request(RequestMethod method, QString path, QJsonObject *data, std::function<void(JsonResponse)> callback)
+void LittleDiveLog::request(RequestMethod method, QString path, QJsonObject *data, std::function<void(JsonResponse)> callback, bool retry)
 {
     if(!isLoggedIn()) {
         emit error("Cannot execute request. Not yet logged in.");
@@ -106,9 +138,21 @@ void LittleDiveLog::request(RequestMethod method, QString path, QJsonObject *dat
     if(m_access_token.isEmpty()) {
         get_access_token(
             [=]() {
-                request(method, path, data, callback);
+                // Perform actual request but no retries
+                request(method, path, data, callback, false);
             }
         );
+    } else {
+        raw_request(method, path, TokenType::ACCESS, data, [=](JsonResponse resp) {
+            if(retry == true && resp.statuscode == 401) {
+                // 401, retry request after get_access_token
+                m_access_token.clear();
+                request(method, path, data, callback, false);
+            } else {
+                // Done, callback
+                callback(resp);
+            }
+        });
     }
 }
 
@@ -118,13 +162,11 @@ void LittleDiveLog::logout() {
         return;
     }
 
-    JsonRequest* req = new JsonRequest();
-    req->url = "https://dive.littledev.nl/api/auth/refresh-token/" + m_refresh_token;
-    req->method = RequestMethod::DELETE;
+    request(RequestMethod::DELETE, "auth/refresh-token/" + m_refresh_token, NULL, [=](JsonResponse resp) {
+        emit loggedOut();
+        if(resp.statuscode != 200) {
+            emit error(resp.errorString());
+        }
+    }, false);
 
-    connect(req, &JsonRequest::complete, this, [=](JsonResponse resp) {
-
-    });
-
-    req->send();
 }

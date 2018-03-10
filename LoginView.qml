@@ -54,6 +54,7 @@ RowLayout {
         target: littledivelog
         onError: {
             errorLbl.text = msg;
+            console.error(msg);
         }
     }
 }
