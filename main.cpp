@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     LittleDiveLog* log = new LittleDiveLog();
     QLibDiveComputer* dc = new QLibDiveComputer();
     dc->m_path = sess.m_data.getPath();
+    log->set_refresh_token(sess.m_data.getRefreshToken());
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("session", &sess.m_data);

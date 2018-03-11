@@ -14,7 +14,7 @@ LittleDiveLog::~LittleDiveLog()
 
 bool LittleDiveLog::isLoggedIn()
 {
-    return m_refresh_token.length() > 0;
+    return m_refresh_token.isNull();
 }
 
 void LittleDiveLog::login(QString email, QString password)
@@ -37,8 +37,8 @@ void LittleDiveLog::login(QString email, QString password)
             if(obj.contains("error")) {
                 emit error(obj["error"].toString());
             } else {
-                m_refresh_token = obj["jwt"].toString();
-                emit loggedIn();
+                set_refresh_token(obj["jwt"].toString());
+                emit loggedStateChanged(isLoggedIn());
                 get_user_data();
             }
         }
@@ -47,6 +47,17 @@ void LittleDiveLog::login(QString email, QString password)
     });
 
     req->send();
+}
+
+void LittleDiveLog::set_refresh_token(QString tok)
+{
+    m_refresh_token = tok;
+    emit refreshTokenChanged(tok);
+}
+
+QString LittleDiveLog::get_refresh_token()
+{
+    return m_refresh_token;
 }
 
 void LittleDiveLog::get_user_data()
@@ -68,7 +79,7 @@ void LittleDiveLog::get_user_data()
             m_user_info->m_buddy_count = obj["buddy_count"].toInt();
             m_user_info->m_tag_count = obj["tag_count"].toInt();
 
-            emit userInfo();
+            emit userInfoChanged(m_user_info);
         }
     );
 }
@@ -84,9 +95,9 @@ void LittleDiveLog::get_access_token(std::function<void()> callback)
             auto obj = resp.data.object();
             if(resp.statuscode == 401) {
                 emit error("Invalid refresh token");
-                m_access_token.clear();
-                m_refresh_token.clear();
-                emit loggedOut();
+                m_access_token = QString();
+                set_refresh_token(NULL);
+                emit loggedStateChanged(isLoggedIn());
             } else if(!obj.contains("jwt")) {
                 throw std::runtime_error("Expected webservice to return jwt");
             } else {
@@ -135,7 +146,7 @@ void LittleDiveLog::request(RequestMethod method, QString path, QJsonObject *dat
         emit error("Cannot execute request. Not yet logged in.");
         return;
     }
-    if(m_access_token.isEmpty()) {
+    if(m_access_token.isNull()) {
         get_access_token(
             [=]() {
                 // Perform actual request but no retries
@@ -163,7 +174,8 @@ void LittleDiveLog::logout() {
     }
 
     request(RequestMethod::DELETE, "auth/refresh-token/" + m_refresh_token, NULL, [=](JsonResponse resp) {
-        emit loggedOut();
+        set_refresh_token(NULL);
+        emit loggedStateChanged(isLoggedIn());
         if(resp.statuscode != 200) {
             emit error(resp.errorString());
         }

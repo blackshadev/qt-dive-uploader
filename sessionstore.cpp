@@ -32,6 +32,15 @@ QString SessionData::getPath() {
     return m_path;
 }
 
+QString SessionData::getRefreshToken() {
+    return m_refresh_token;
+}
+
+void SessionData::setRefreshToken(QString tok) {
+    m_refresh_token = tok;
+    emit refreshTokenChanged(tok);
+}
+
 void SessionData::read(const QJsonObject &json)
 {
     if(json.contains("path") && json["path"].isString()) {
@@ -46,6 +55,10 @@ void SessionData::read(const QJsonObject &json)
         m_portname = json["portname"].toString();
     }
 
+    if(json.contains("refreshToken") && json["refreshToken"].isString()) {
+        m_refresh_token = json["refreshToken"].toString();
+    }
+
 }
 
 void SessionData::write(QJsonObject &json)
@@ -53,6 +66,7 @@ void SessionData::write(QJsonObject &json)
     json["path"] = m_path;
     json["computer"] = m_computer;
     json["portname"] = m_portname;
+    json["refreshToken"] = m_refresh_token;
 }
 
 // -- SessionStore --

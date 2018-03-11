@@ -38,11 +38,14 @@ ApplicationWindow {
 
     Connections {
         target: littledivelog
-        onLoggedIn: {
-            stackView.pop();
-        }
-        onLoggedOut: {
-            stackView.push(loginView);
+        onLoggedStateChanged: {
+            if(isLoggedIn) {
+                session.refreshToken = null;
+                stackView.pop();
+            } else {
+                session.refreshToken = littledivelog.refreshToken;
+                stackView.push(loginView);
+            }
         }
     }
 }

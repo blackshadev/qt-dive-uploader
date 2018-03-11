@@ -16,8 +16,9 @@ enum TokenType {
 class LittleDiveLog : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QVariant isLoggedIn READ isLoggedIn CONSTANT)
-    Q_PROPERTY(UserInfo* userInfo MEMBER m_user_info NOTIFY userInfo)
+    Q_PROPERTY(QVariant isLoggedIn READ isLoggedIn NOTIFY loggedStateChanged)
+    Q_PROPERTY(UserInfo* userInfo MEMBER m_user_info NOTIFY userInfoChanged)
+    Q_PROPERTY(QString refreshToken READ get_refresh_token NOTIFY refreshTokenChanged)
 
 public:
     explicit LittleDiveLog(QObject *parent = nullptr);
@@ -25,11 +26,13 @@ public:
     Q_INVOKABLE void login(QString username, QString password);
     Q_INVOKABLE void logout();
     bool isLoggedIn();
+    QString get_refresh_token();
+    void set_refresh_token(QString tok);
 signals:
     void error(QString msg);
-    void userInfo();
-    void loggedIn();
-    void loggedOut();
+    void loggedStateChanged(bool isLoggedIn);
+    void userInfoChanged(UserInfo* ui);
+    void refreshTokenChanged(QString tok);
 public slots:
 protected:
     void get_user_data();

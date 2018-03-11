@@ -12,6 +12,10 @@ ColumnLayout {
         }
 
         TabButton {
+            text: qsTr("Account")
+        }
+
+        TabButton {
             text: qsTr("Log")
         }
     }
@@ -22,6 +26,7 @@ ColumnLayout {
         currentIndex: tabBar.currentIndex
 
         DownloadView {}
+        AccountView {}
         LogView {
             id: logView
         }

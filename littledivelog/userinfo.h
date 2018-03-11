@@ -15,8 +15,8 @@ class UserInfo : public QObject
     Q_PROPERTY(int buddyCount MEMBER m_buddy_count CONSTANT)
     Q_PROPERTY(int tagCount MEMBER m_tag_count CONSTANT)
 public:
-    explicit UserInfo(QObject *parent = nullptr);
-
+    explicit UserInfo(QObject *parent = 0);
+    virtual ~UserInfo();
     int m_user_id;
     QString m_name;
     QString m_email;
@@ -29,4 +29,7 @@ signals:
 
 public slots:
 };
+
+Q_DECLARE_METATYPE(UserInfo*)
+
 #endif // USERINFO_H

@@ -4,3 +4,8 @@ UserInfo::UserInfo(QObject *parent) : QObject(parent)
 {
 
 }
+
+UserInfo::~UserInfo()
+{
+
+}
