@@ -43,7 +43,7 @@ Item {
                     text: "User since"
                 }
                 Label {
-                    text: littledivelog.userInfo.inserted
+                    text: littledivelog.userInfo.inserted.toString("dd-MM-YYYY HH:mm:ss")
                 }
 
                 Label {

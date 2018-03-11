@@ -14,7 +14,7 @@ LittleDiveLog::~LittleDiveLog()
 
 bool LittleDiveLog::isLoggedIn()
 {
-    return !m_refresh_token.isNull();
+    return !m_refresh_token.isEmpty();
 }
 
 void LittleDiveLog::login(QString email, QString password)
@@ -53,6 +53,9 @@ void LittleDiveLog::set_refresh_token(QString tok)
 {
     m_refresh_token = tok;
     emit refreshTokenChanged(tok);
+    if(!tok.isEmpty()) {
+        get_user_data();
+    }
 }
 
 QString LittleDiveLog::get_refresh_token()
@@ -70,10 +73,13 @@ void LittleDiveLog::get_user_data()
             auto obj = resp.data.object();
             m_user_info = new UserInfo(this);
 
+            auto dts = obj["inserted"].toString().left(19);
+            auto dt = QDateTime::fromString(dts, "yyyy-MM-dd HH:mm:ss");
+
             m_user_info->m_user_id = obj["user_id"].toInt();
             m_user_info->m_name = obj["name"].toString();
             m_user_info->m_email = obj["email"].toString();
-            m_user_info->m_inserted = QDateTime::fromString(obj["inserted"].toString());
+            m_user_info->m_inserted = dt;
             m_user_info->m_dive_count = obj["dive_count"].toInt();
             m_user_info->m_computer_count = obj["computer_count"].toInt();
             m_user_info->m_buddy_count = obj["buddy_count"].toInt();

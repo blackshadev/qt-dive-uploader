@@ -8,42 +8,56 @@ ApplicationWindow {
     visible: true
     property int margin: 21
     property int labelColumnWidth: 120
+    property int initialWidth: 450
+    property int initialHeight: 250
 
-    width: mainView.implicitWidth + 2 * margin
-    height: mainView.implicitHeight + 2 * margin
-    minimumWidth: mainView.Layout.minimumWidth + 2 * margin
-    minimumHeight: mainView.Layout.minimumHeight + 2 * margin
+    property int _width: mainViewComp.Ready ? mainView.Layout.minimumWidth + 2 * margin : initialWidth
+    property int _height: mainViewComp.Ready ? mainView.Layout.minimumHeight + 2 * margin : initialHeight
+
+    id: app
+    width: _width
+    height: _height
+    minimumWidth: _width
+    minimumHeight: _height
     title: "Dive Uploader"
 
 
-    MainView {
-        id: mainView
-    }
-
-    LoginView {
-        id: loginView
-    }
-
     StackView {
         id: stackView
-        initialItem: mainView
+        initialItem: mainViewComp
         anchors.fill: parent
         anchors.margins: margin
+
+        Component {
+            id: mainViewComp
+            MainView {
+                id: mainView
+            }
+        }
+
+        Component {
+            id: loginViewComp
+            LoginView {
+                id: loginView
+            }
+        }
+
 
     }
 
     Component.onCompleted: {
-        stackView.push(loginView)
+        if(!littledivelog.isLoggedIn) {
+            stackView.push(loginViewComp);
+        }
     }
 
     Connections {
         target: littledivelog
         onLoggedStateChanged: {
             if(isLoggedIn) {
-                session.refreshToken = null;
                 stackView.pop();
             } else {
-                stackView.push(loginView);
+                stackView.push(loginViewComp);
             }
         }
         onRefreshTokenChanged: {
