@@ -43,35 +43,35 @@ Item {
                     text: "User since"
                 }
                 Label {
-                    text: "..."
+                    text: littledivelog.userInfo.inserted
                 }
 
                 Label {
                     text: "Dive Count"
                 }
                 Label {
-                    text: "..."
+                    text: littledivelog.userInfo.diveCount
                 }
 
                 Label {
                     text: "Computer Count"
                 }
                 Label {
-                    text: "..."
+                    text: littledivelog.userInfo.computerCount
                 }
 
                 Label {
                     text: "Buddy Count"
                 }
                 Label {
-                    text: "..."
+                    text: littledivelog.userInfo.buddyCount
                 }
 
                 Label {
                     text: "Tag Count"
                 }
                 Label {
-                    text: "..."
+                    text: littledivelog.userInfo.tagCount
                 }
             }
         }

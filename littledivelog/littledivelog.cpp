@@ -14,7 +14,7 @@ LittleDiveLog::~LittleDiveLog()
 
 bool LittleDiveLog::isLoggedIn()
 {
-    return m_refresh_token.isNull();
+    return !m_refresh_token.isNull();
 }
 
 void LittleDiveLog::login(QString email, QString password)

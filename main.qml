@@ -43,9 +43,11 @@ ApplicationWindow {
                 session.refreshToken = null;
                 stackView.pop();
             } else {
-                session.refreshToken = littledivelog.refreshToken;
                 stackView.push(loginView);
             }
+        }
+        onRefreshTokenChanged: {
+            session.refreshToken = tok;
         }
     }
 }
