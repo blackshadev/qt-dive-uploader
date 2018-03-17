@@ -45,8 +45,32 @@ DCComputerList* QLibDiveComputer::get_devices()
     return list;
 }
 
+QString QLibDiveComputer::get_writeTypeAsString()
+{
+    auto meta = WriteType::staticMetaObject;
+    auto idx = meta.indexOfEnumerator("writetype");
+    auto data = meta.enumerator(idx);
+
+    auto key = data.key((int)m_writetype);
+    return QString(key);
+}
+
+void QLibDiveComputer::set_writeTypeAsString(QString str, WriteType::writetype t)
+{
+    if(!str.isEmpty()) {
+        auto meta = WriteType::staticMetaObject;
+        auto idx = meta.indexOfEnumerator("writetype");
+        auto data = meta.enumerator(idx);
+
+        t = (WriteType::writetype) data.keyToValue(str.toLocal8Bit().data());
+    }
+
+    m_writetype = t;
+    emit writeTypeChanged(t);
+}
+
+
 QStringList QLibDiveComputer::get_loglevels() {
-    qInfo("Get loglevels");
     auto meta = LogLevel::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);

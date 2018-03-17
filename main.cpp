@@ -31,6 +31,14 @@ int main(int argc, char *argv[])
 
     LittleDiveLog* log = new LittleDiveLog();
     QLibDiveComputer* dc = new QLibDiveComputer();
+
+    dc->set_writeTypeAsString(sess.m_data.getWriteType(), WriteType::File);
+
+    dc->connect(dc, &QLibDiveComputer::writeTypeChanged, [&sess, dc](WriteType::writetype t) {
+        sess.m_data.setWriteType(dc->get_writeTypeAsString());
+
+    });
+
     dc->m_path = sess.m_data.getPath();
     log->set_refresh_token(sess.m_data.getRefreshToken());
 

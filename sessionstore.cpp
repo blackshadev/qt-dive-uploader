@@ -22,6 +22,16 @@ QString SessionData::getPortname() {
     return m_portname;
 }
 
+QString SessionData::getWriteType()
+{
+    return m_write_type;
+}
+
+void SessionData::setWriteType(QString write_type)
+{
+    m_write_type = write_type;
+    emit writeTypeChanged(write_type);
+}
 
 void SessionData::setPath(QString path) {
     m_path = path;

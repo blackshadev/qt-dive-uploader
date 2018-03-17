@@ -17,7 +17,6 @@ class SessionData : public QObject
     Q_PROPERTY(QString refreshToken READ getRefreshToken WRITE setRefreshToken NOTIFY refreshTokenChanged)
     Q_PROPERTY(QString writeType READ getWriteType WRITE setWriteType NOTIFY writeTypeChanged)
 
-
 public:
     explicit SessionData(QObject* parent = NULL);
 

@@ -59,6 +59,9 @@ public:
     DCComputerList* m_available_devices;
     QString m_path;
 
+    QString get_writeTypeAsString();
+    void set_writeTypeAsString(QString str, WriteType::writetype fallback = WriteType::File);
+
     Q_INVOKABLE void start_download(QString port_name, int comp_index);
 
 signals:
@@ -71,6 +74,7 @@ signals:
     void done();
     void error(QString msg);
     void log(QString lvl, QString msg);
+
 protected slots:
 protected:
     QString get_loglevel();
@@ -79,7 +83,7 @@ protected:
     WriteType::writetype get_writeType();
 private:
     dc_loglevel_t m_loglevel = DC_LOGLEVEL_ERROR;
-    WriteType::writetype m_writetype = WriteType::writetype::File;
+    WriteType::writetype m_writetype = WriteType::File;
     DCComputerList* get_devices();
     QStringList* get_ports();
     QStringList get_loglevels();
