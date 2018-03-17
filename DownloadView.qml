@@ -115,10 +115,10 @@ GridLayout {
         RadioButton {
             text: "File"
             id: fileRadio
-            checked: littledivelog.writeType === WriteTypes.File
+            checked: libdivecomputer.writeType === WriteTypes.File
             onCheckedChanged: {
                 if(fileRadio.checked) {
-                    littledivelog.writeType = WriteTypes.File;
+                    libdivecomputer.writeType = WriteTypes.File;
                 }
             }
         }
@@ -126,10 +126,10 @@ GridLayout {
         RadioButton {
             text: "LittleLog"
             id: llRadio
-            checked: littledivelog.writeType === WriteTypes.LittleLog
+            checked: libdivecomputer.writeType === WriteTypes.LittleLog
             onCheckedChanged: {
                 if(llRadio.checked) {
-                    littledivelog.writeType = WriteTypes.LittleLog;
+                    libdivecomputer.writeType = WriteTypes.LittleLog;
                 }
             }
         }

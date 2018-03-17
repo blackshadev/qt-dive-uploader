@@ -59,6 +59,10 @@ void SessionData::read(const QJsonObject &json)
         m_refresh_token = json["refreshToken"].toString();
     }
 
+    if(json.contains("writeType") && json["writeType"].isString()) {
+        m_write_type = json["writeType"].toString();
+    }
+
 }
 
 void SessionData::write(QJsonObject &json)
@@ -67,6 +71,7 @@ void SessionData::write(QJsonObject &json)
     json["computer"] = m_computer;
     json["portname"] = m_portname;
     json["refreshToken"] = m_refresh_token;
+    json["writeType"] = m_write_type;
 }
 
 // -- SessionStore --
