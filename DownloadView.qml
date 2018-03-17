@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.0
 import SortFilterProxyModel 0.1
 import DCComputer 0.1
+import Libdivecomputer 0.1
 
 
 GridLayout {
@@ -101,6 +102,38 @@ GridLayout {
 
     }
 
+    Label {
+        text: "Output Type"
+        Layout.minimumWidth: labelColumnWidth
+        Layout.maximumWidth: labelColumnWidth
+    }
+
+    RowLayout {
+        id: outputType
+        Layout.fillWidth: true
+
+        RadioButton {
+            text: "File"
+            id: fileRadio
+            checked: littledivelog.writeType === WriteTypes.File
+            onCheckedChanged: {
+                if(fileRadio.checked) {
+                    littledivelog.writeType = WriteTypes.File;
+                }
+            }
+        }
+
+        RadioButton {
+            text: "LittleLog"
+            id: llRadio
+            checked: littledivelog.writeType === WriteTypes.LittleLog
+            onCheckedChanged: {
+                if(llRadio.checked) {
+                    littledivelog.writeType = WriteTypes.LittleLog;
+                }
+            }
+        }
+    }
 
     Label {
         text: "Output file"
@@ -117,6 +150,7 @@ GridLayout {
             id: filePath
             text: session.path
             readOnly: true
+            enabled: fileRadio.checked
         }
 
         Button {
@@ -124,14 +158,22 @@ GridLayout {
             onClicked: {
                 fileDialog.open();
             }
+
+            enabled: fileRadio.checked
         }
     }
 
+
     ProgressBar {
-        id: downloadProgress
+        id: readProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
+    }
 
+    ProgressBar {
+        id: writeProgress
+        Layout.columnSpan: 2
+        Layout.fillWidth: true
     }
 
     Button {
@@ -170,10 +212,14 @@ GridLayout {
 
     Connections {
         target: libdivecomputer
-        onProgress: {
-            console.log("progress: " + current + " / " + total);
-            downloadProgress.value = current / total;
+        onReadProgress: {
+            readProgress.value = current / total;
         }
+
+        onWriteProgress: {
+            writeProgress.value = current / total;
+        }
+
         onStart: {
             startButton.enabled = false;
         }

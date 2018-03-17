@@ -8,18 +8,21 @@
 #include "dccomputerlist.h"
 #include "writer/divewriter.h"
 
-class QLibDiveComputer: public QObject
-{
 
+class WriteType : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QString version MEMBER m_version CONSTANT)
-    Q_PROPERTY(DCComputerList* devices MEMBER m_available_devices CONSTANT)
-    Q_PROPERTY(QVariant ports READ get_ports_as_qvariant CONSTANT)
-    Q_PROPERTY(QStringList loglevels READ get_loglevels CONSTANT)
-    Q_PROPERTY(QString loglevel READ get_loglevel WRITE set_loglevel NOTIFY loglevelChanged)
-    Q_PROPERTY(QString path MEMBER m_path NOTIFY pathChanged)
+public:
+    enum writetype {
+        File,
+        LittleLog
+    };
+    Q_ENUMS(writetype)
+
+};
 
 
+class LogLevel: public QObject {
+    Q_OBJECT
 public:
     enum loglevel {
         NONE = DC_LOGLEVEL_NONE,
@@ -31,6 +34,22 @@ public:
     };
     Q_ENUMS(loglevel)
 
+};
+Q_DECLARE_METATYPE(LogLevel*)
+
+class QLibDiveComputer: public QObject
+{
+
+    Q_OBJECT
+    Q_PROPERTY(QString version MEMBER m_version CONSTANT)
+    Q_PROPERTY(DCComputerList* devices MEMBER m_available_devices CONSTANT)
+    Q_PROPERTY(QVariant ports READ get_ports_as_qvariant CONSTANT)
+    Q_PROPERTY(QStringList loglevels READ get_loglevels CONSTANT)
+    Q_PROPERTY(QString loglevel READ get_loglevel WRITE set_loglevel NOTIFY loglevelChanged)
+    Q_PROPERTY(WriteType::writetype writeType READ get_writeType WRITE set_writeType NOTIFY writeTypeChanged)
+    Q_PROPERTY(QString path MEMBER m_path NOTIFY pathChanged)
+
+public:
 
     explicit QLibDiveComputer(QObject* parent = 0);
     ~QLibDiveComputer();
@@ -43,9 +62,11 @@ public:
     Q_INVOKABLE void start_download(QString port_name, int comp_index);
 
 signals:
+    void writeTypeChanged(WriteType::writetype t);
     void loglevelChanged();
     void pathChanged();
-    void progress(uint current, uint total);
+    void readProgress(uint current, uint total);
+    void writeProgress(uint current, uint total);
     void start();
     void done();
     void error(QString msg);
@@ -54,8 +75,11 @@ protected slots:
 protected:
     QString get_loglevel();
     void set_loglevel(QString lvl);
+    void set_writeType(WriteType::writetype t);
+    WriteType::writetype get_writeType();
 private:
     dc_loglevel_t m_loglevel = DC_LOGLEVEL_ERROR;
+    WriteType::writetype m_writetype = WriteType::writetype::File;
     DCComputerList* get_devices();
     QStringList* get_ports();
     QStringList get_loglevels();

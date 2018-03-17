@@ -33,7 +33,6 @@ ColumnLayout {
         }
     }
 
-
     TextArea {
         anchors.top: loglevelSelector.bottom;
         anchors.bottom: parent.bottom;

@@ -64,15 +64,40 @@ std::string DiveWriter::format_datetime(dc_datetime_t *dt) {
     return std::string(buff);
 }
 
-DiveWriter::DiveWriter() {}
-DiveWriter::~DiveWriter() {}
+DiveWriter::DiveWriter() : QObject(NULL) {}
 
 void DiveWriter::set_device_clock(uint devtime, uint systime) {}
 void DiveWriter::set_device_descriptor(dc_descriptor_t *descr) {}
 void DiveWriter::set_device_info(uint model, uint serial, uint firmware) {}
 
 void DiveWriter::done() {
-    if(onDone != NULL) {
-        onDone();
+    emit finished();
+}
+
+void DiveWriter::write(Dive *d)
+{
+    m_total += 1;
+    emit progress(m_current, m_total);
+}
+
+void DiveWriter::written(Dive *d)
+{
+    m_current += 1;
+    emit progress(m_current, m_total);
+
+    emit diveWritten(d);
+
+    if(m_ended == true && m_current == m_total) {
+        emit finished();
+    }
+}
+
+void DiveWriter::begin() {}
+
+void DiveWriter::end()
+{
+    m_ended = true;
+    if(m_current == m_total) {
+        emit finished();
     }
 }

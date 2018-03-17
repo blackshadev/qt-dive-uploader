@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Fusion");
     qmlRegisterType<DCComputerList>("DCComputer", 0, 1, "ComputerRoles");
     qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "loglevel");
+    qmlRegisterType<WriteType>("Libdivecomputer", 0, 1, "WriteTypes");
 
     QQmlApplicationEngine engine;
 

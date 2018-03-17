@@ -43,7 +43,7 @@ Item {
                     text: "User since"
                 }
                 Label {
-                    text: littledivelog.userInfo.inserted.toString("dd-MM-YYYY HH:mm:ss")
+                    text: littledivelog.userInfo.inserted.toLocaleString(Qt.locale("nl_NL"), "dd-MM-yyyy HH:mm:ss")
                 }
 
                 Label {

@@ -26,7 +26,7 @@ void FileDiveWriter::set_device_info(uint model, uint serial, uint firmware) {
     jsonComputer["firmware"] = (int)firmware;
 }
 
-void FileDiveWriter::write_tank(QJsonArray* tanksArray, Dive *dive)
+void FileDiveWriter::write_tank(QJsonArray &tanksArray, Dive *dive)
 {
 
     dc_tank_t* tank;
@@ -61,12 +61,12 @@ void FileDiveWriter::write_tank(QJsonArray* tanksArray, Dive *dive)
         }
 
         tankObj["pressure"] = presObj;
-        tanksArray->append(tankObj);
+        tanksArray.append(tankObj);
     }
 
 }
 
-void FileDiveWriter::write_samples(QJsonArray *sampleArray, Dive *dive)
+void FileDiveWriter::write_samples(QJsonArray &sampleArray, Dive *dive)
 {
     for(auto sample : dive->samples) {
         QJsonObject obj;
@@ -102,15 +102,12 @@ void FileDiveWriter::write_samples(QJsonArray *sampleArray, Dive *dive)
             obj["Pressure"] = pressArr;
         }
 
-        sampleArray->append(obj);
+        sampleArray.append(obj);
     }
 }
 
-void FileDiveWriter::write(Dive* dive)
+void FileDiveWriter::write_dive(QJsonObject &json, Dive *dive)
 {
-
-    QJsonObject json;
-
     json["Datetime"] = QString::fromStdString(format_datetime(&dive->datetime));
     json["Divetime"] = (int)dive->divetime;
 
@@ -120,18 +117,31 @@ void FileDiveWriter::write(Dive* dive)
     json["MaxTemperature"] = dive->maxTemperature;
 
     QJsonArray tankArr;
-    write_tank(&tankArr, dive);
+    write_tank(tankArr, dive);
 
     json["Tanks"] = tankArr;
 
     QJsonArray sampleArr;
-    write_samples(&sampleArr, dive);
+    write_samples(sampleArr, dive);
     json["Samples"] = sampleArr;
 
+}
+
+void FileDiveWriter::write(Dive* dive)
+{
+    DiveWriter::write(dive);
+
+    QJsonObject json;
+
+    write_dive(json, dive);
+
     jsonDives.append(json);
+
+    written(dive);
 }
 
 void FileDiveWriter::begin() {
+    DiveWriter::begin();
     if(file.isOpen()) {
         throw std::runtime_error("File was already opened");
     }
@@ -141,6 +151,7 @@ void FileDiveWriter::begin() {
 }
 
 void FileDiveWriter::end() {
+    DiveWriter::end();
     if(!file.isOpen()) {
         throw std::runtime_error("File was not yet opened");
     }

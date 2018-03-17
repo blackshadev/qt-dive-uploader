@@ -9,7 +9,7 @@ ApplicationWindow {
     property int margin: 21
     property int labelColumnWidth: 120
     property int initialWidth: 450
-    property int initialHeight: 250
+    property int initialHeight: 320
 
     property int _width: mainViewComp.Ready ? mainView.Layout.minimumWidth + 2 * margin : initialWidth
     property int _height: mainViewComp.Ready ? mainView.Layout.minimumHeight + 2 * margin : initialHeight
@@ -20,7 +20,6 @@ ApplicationWindow {
     minimumWidth: _width
     minimumHeight: _height
     title: "Dive Uploader"
-
 
     StackView {
         id: stackView

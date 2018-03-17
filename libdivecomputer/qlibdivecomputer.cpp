@@ -47,7 +47,7 @@ DCComputerList* QLibDiveComputer::get_devices()
 
 QStringList QLibDiveComputer::get_loglevels() {
     qInfo("Get loglevels");
-    auto meta = QLibDiveComputer::staticMetaObject;
+    auto meta = LogLevel::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);
 
@@ -60,7 +60,7 @@ QStringList QLibDiveComputer::get_loglevels() {
 }
 
 QString QLibDiveComputer::get_loglevel() {
-    auto meta = QLibDiveComputer::staticMetaObject;
+    auto meta = LogLevel::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);
 
@@ -69,13 +69,26 @@ QString QLibDiveComputer::get_loglevel() {
 }
 
 void QLibDiveComputer::set_loglevel(QString lvl) {
-    auto meta = QLibDiveComputer::staticMetaObject;
+    auto meta = LogLevel::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);
 
     dc_loglevel_t loglevel = (dc_loglevel_t) data.keyToValue(lvl.toLocal8Bit().data());
     m_loglevel = loglevel;
     emit loglevelChanged();
+}
+
+WriteType::writetype QLibDiveComputer::get_writeType() {
+    return m_writetype;
+}
+
+void QLibDiveComputer::set_writeType(WriteType::writetype w) {
+    bool isChanged = w != m_writetype;
+    m_writetype = w;
+
+    if(isChanged) {
+        emit writeTypeChanged(w);
+    }
 }
 
 
@@ -99,9 +112,14 @@ void QLibDiveComputer::create_writer() {
     }
 
     m_writer = new FileDiveWriter(m_path);
-    m_writer->onDone = []() {
-        qInfo("Done?");
-    };
+
+    connect(m_writer, SIGNAL(progress(uint,uint)), this, SIGNAL(writeProgress(uint,uint)));
+    connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {
+        delete d;
+    });
+    connect(m_writer, &DiveWriter::finished, [=]() {
+        emit done();
+    });
 }
 
 void QLibDiveComputer::free_writer() {
@@ -124,7 +142,7 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
         m_writer->set_device_descriptor(descriptor);
         emit start();
     });
-    m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(progress(uint,uint)));
+    m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(readProgress(uint,uint)));
 
     m_context->connect(m_context, &DCDownloadContext::error, this, [=](QString msg) {
         emit error(QString(msg));
@@ -140,12 +158,10 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
 
     m_context->connect(m_context, &DCDownloadContext::dive, this, [=](Dive* dive) {
         m_writer->write(dive);
-        delete dive;
     });
 
     m_context->connect(m_context, &DCDownloadContext::finished, this, [=]() {
         m_writer->end();
-        emit done();
     });
 
 }
