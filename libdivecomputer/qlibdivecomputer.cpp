@@ -7,6 +7,8 @@
 #include <libdivecomputer/descriptor.h>
 #include <QSerialPortInfo>
 #include "writer/filewriter.h"
+#include "writer/littlelogwriter.h"
+
 
 QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 {
@@ -115,6 +117,11 @@ void QLibDiveComputer::set_writeType(WriteType::writetype w) {
     }
 }
 
+void QLibDiveComputer::bind_littledivelog(LittleDiveLog *log)
+{
+    m_log = log;
+}
+
 
 void QLibDiveComputer::start_download(QString port_name, int comp_idx) {
 
@@ -135,14 +142,24 @@ void QLibDiveComputer::create_writer() {
         free_writer();
     }
 
-    m_writer = new FileDiveWriter(m_path);
+    switch(m_writetype) {
+        case WriteType::File:
+            m_writer = new FileDiveWriter(m_path);
+        break;
+        case WriteType::LittleLog:
+            m_writer = new LittleLogWriter(m_log);
+        break;
+        default:
+            emit error("No such write type");
+            return;
+        break;
 
+    }
+
+    connect(m_writer, SIGNAL(finished()), this, SIGNAL(done()));
     connect(m_writer, SIGNAL(progress(uint,uint)), this, SIGNAL(writeProgress(uint,uint)));
     connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {
         delete d;
-    });
-    connect(m_writer, &DiveWriter::finished, [=]() {
-        emit done();
     });
 }
 

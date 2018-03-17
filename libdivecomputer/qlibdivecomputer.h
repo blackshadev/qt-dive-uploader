@@ -7,7 +7,7 @@
 #include "dcdownloadcontext.h"
 #include "dccomputerlist.h"
 #include "writer/divewriter.h"
-
+#include "../littledivelog/littledivelog.h"
 
 class WriteType : public QObject {
     Q_OBJECT
@@ -62,6 +62,8 @@ public:
     QString get_writeTypeAsString();
     void set_writeTypeAsString(QString str, WriteType::writetype fallback = WriteType::File);
 
+    void bind_littledivelog(LittleDiveLog* log);
+
     Q_INVOKABLE void start_download(QString port_name, int comp_index);
 
 signals:
@@ -77,6 +79,7 @@ signals:
 
 protected slots:
 protected:
+    LittleDiveLog* m_log = NULL;
     QString get_loglevel();
     void set_loglevel(QString lvl);
     void set_writeType(WriteType::writetype t);

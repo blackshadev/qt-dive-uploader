@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
     LittleDiveLog* log = new LittleDiveLog();
     QLibDiveComputer* dc = new QLibDiveComputer();
+    dc->bind_littledivelog(log);
 
     dc->set_writeTypeAsString(sess.m_data.getWriteType(), WriteType::File);
 
