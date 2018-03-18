@@ -64,32 +64,60 @@ std::string DiveWriter::format_datetime(dc_datetime_t *dt) {
     return std::string(buff);
 }
 
-DiveWriter::DiveWriter() : QObject(NULL) {}
+DiveWriter::DiveWriter() : QThread(NULL) {}
 
 void DiveWriter::set_device_clock(uint devtime, uint systime) {}
 void DiveWriter::set_device_descriptor(dc_descriptor_t *descr) {}
 void DiveWriter::set_device_info(uint model, uint serial, uint firmware) {}
 
-void DiveWriter::done() {
-    emit finished();
+
+void DiveWriter::add(Dive *d)
+{
+    m_lock.lock();
+
+    m_total += 1;
+    m_queue.enqueue(d);
+    emit progress(m_current, m_total);
+
+    m_lock.unlock();
+
+    m_wait_cond.wakeOne();
 }
 
-void DiveWriter::write(Dive *d)
-{
-    m_total += 1;
-    emit progress(m_current, m_total);
+void DiveWriter::run() {
+
+    bool empty = false;
+    forever {
+        m_lock.lock();
+        while(m_busy || m_queue.isEmpty() && !m_ended) {
+            m_wait_cond.wait(&m_lock);
+        }
+        if(m_ended && m_queue.isEmpty() ) {
+            m_lock.unlock();
+            break;
+        }
+
+        Dive* d = m_queue.dequeue();
+        m_busy = true;
+
+        m_lock.unlock();
+
+        write(d);
+    }
 }
 
 void DiveWriter::written(Dive *d)
 {
+
+    m_lock.lock();
     m_current += 1;
+    m_busy = false;
+
     emit progress(m_current, m_total);
-
     emit diveWritten(d);
+    m_lock.unlock();
 
-    if(m_ended == true && m_current == m_total) {
-        emit finished();
-    }
+    m_wait_cond.wakeOne();
 }
 
 void DiveWriter::begin() {}
@@ -97,7 +125,5 @@ void DiveWriter::begin() {}
 void DiveWriter::end()
 {
     m_ended = true;
-    if(m_current == m_total) {
-        emit finished();
-    }
+    m_wait_cond.wakeOne();
 }

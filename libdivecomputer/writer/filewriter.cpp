@@ -26,7 +26,6 @@ void FileDiveWriter::set_device_info(uint model, uint serial, uint firmware) {
 
 void FileDiveWriter::write(Dive* dive)
 {
-    DiveWriter::write(dive);
 
     QJsonObject json;
 
@@ -48,7 +47,6 @@ void FileDiveWriter::begin() {
 }
 
 void FileDiveWriter::end() {
-    DiveWriter::end();
     if(!file.isOpen()) {
         throw std::runtime_error("File was not yet opened");
     }
@@ -69,6 +67,5 @@ void FileDiveWriter::end() {
     file.write(saveDoc.toJson());
 
     file.close();
-
-    done();
+    DiveWriter::end();
 }

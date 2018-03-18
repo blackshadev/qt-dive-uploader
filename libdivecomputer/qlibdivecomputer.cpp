@@ -198,7 +198,7 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     });
 
     m_context->connect(m_context, &DCDownloadContext::dive, this, [=](Dive* dive) {
-        m_writer->write(dive);
+        m_writer->add(dive);
     });
 
     m_context->connect(m_context, &DCDownloadContext::finished, this, [=]() {

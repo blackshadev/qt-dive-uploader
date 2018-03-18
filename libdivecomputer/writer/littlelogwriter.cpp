@@ -32,5 +32,5 @@ void LittleLogWriter::end()
 
 void LittleLogWriter::write(Dive *d)
 {
-    DiveWriter::write(d);
+
 }
