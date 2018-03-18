@@ -120,7 +120,9 @@ void DiveWriter::written(Dive *d)
     m_wait_cond.wakeOne();
 }
 
-void DiveWriter::begin() {}
+void DiveWriter::start() {
+    QThread::start();
+}
 
 void DiveWriter::end()
 {

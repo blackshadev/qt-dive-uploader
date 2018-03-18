@@ -1,12 +1,12 @@
 #ifndef LITTLELOGWRITER_H
 #define LITTLELOGWRITER_H
 #include "./divewriter.h"
-#include "./filewriter.h"
+#include "./jsondivewriter.h"
 #include "../littledivelog/littledivelog.h"
 #include <QQueue>
 #include <QMutex>
 
-class LittleLogWriter : public DiveWriter
+class LittleLogWriter : public JsonDiveWriter
 {
 public:
     LittleLogWriter(LittleDiveLog* log);
@@ -16,8 +16,8 @@ public:
     void set_device_descriptor(dc_descriptor_t* descr) override;
     void set_device_info(uint model, uint serial, uint firmware) override;
 
-    void begin() override;
-    void end() override;
+    virtual void start();
+    virtual void end();
     void write(Dive *d) override;
 protected:
     LittleDiveLog* m_littledivelog;

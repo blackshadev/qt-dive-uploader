@@ -19,9 +19,9 @@ void LittleLogWriter::set_device_descriptor(dc_descriptor_t *descr)
 }
 
 
-void LittleLogWriter::begin()
+void LittleLogWriter::start()
 {
-    DiveWriter::begin();
+    JsonDiveWriter::start();
 }
 
 void LittleLogWriter::end()

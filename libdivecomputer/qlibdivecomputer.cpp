@@ -179,8 +179,8 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->setLogLevel(m_loglevel);
 
     m_context->connect(m_context, &DCDownloadContext::started, this, [=]() {
-        m_writer->begin();
         m_writer->set_device_descriptor(descriptor);
+        m_writer->start();
         emit start();
     });
     m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(readProgress(uint,uint)));

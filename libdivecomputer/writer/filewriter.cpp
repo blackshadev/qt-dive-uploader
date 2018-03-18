@@ -36,14 +36,14 @@ void FileDiveWriter::write(Dive* dive)
     written(dive);
 }
 
-void FileDiveWriter::begin() {
-    DiveWriter::begin();
+void FileDiveWriter::start() {
     if(file.isOpen()) {
         throw std::runtime_error("File was already opened");
     }
     if (!file.open(QIODevice::WriteOnly)) {
         throw std::runtime_error("Couldn't open save file.");
     }
+    JsonDiveWriter::start();
 }
 
 void FileDiveWriter::end() {
@@ -67,5 +67,5 @@ void FileDiveWriter::end() {
     file.write(saveDoc.toJson());
 
     file.close();
-    DiveWriter::end();
+    JsonDiveWriter::end();
 }

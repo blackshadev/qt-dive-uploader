@@ -23,9 +23,9 @@ public:
     virtual void set_device_descriptor(dc_descriptor_t* descr);
     virtual void set_device_info(uint model, uint serial, uint firmware);
     virtual void set_device_clock(uint devtime, uint systime) ;
-    virtual void begin();
-    virtual void end();
     virtual void add(Dive* d);
+    virtual void start();
+    virtual void end();
 signals:
     void diveWritten(Dive* d);
     void progress(uint m_current, uint m_total);
