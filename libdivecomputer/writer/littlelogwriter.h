@@ -3,7 +3,8 @@
 #include "./divewriter.h"
 #include "./filewriter.h"
 #include "../littledivelog/littledivelog.h"
-
+#include <QQueue>
+#include <QMutex>
 
 class LittleLogWriter : public DiveWriter
 {
@@ -20,6 +21,8 @@ public:
     void write(Dive *d) override;
 protected:
     LittleDiveLog* m_littledivelog;
+    QQueue<Dive*> m_queue;
+    QMutex m_lock;
 };
 
 #endif // LITTLELOGWRITER_H

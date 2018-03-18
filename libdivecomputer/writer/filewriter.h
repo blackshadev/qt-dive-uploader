@@ -1,10 +1,16 @@
 #ifndef FILEWRITER_H
 #define FILEWRITER_H
-#include "./divewriter.h"
+#include "./jsondivewriter.h"
 
+struct t_computer {
+    dc_descriptor_t* descr;
+    uint serial;
+    uint firmware;
+};
 
-class FileDiveWriter : public DiveWriter
-{public:
+class FileDiveWriter : public JsonDiveWriter
+{
+public:
     FileDiveWriter(QString path);
     ~FileDiveWriter();
     void begin();
@@ -14,14 +20,10 @@ class FileDiveWriter : public DiveWriter
     void set_device_info(uint model, uint serial, uint firmware) override;
     void set_device_descriptor(dc_descriptor_t *descr) override;
 
-    static void write_dive(QJsonObject &target, Dive* dive);
-    static void write_tank(QJsonArray &tanksArray, Dive* dive);
-    static void write_samples(QJsonArray &tanksArray, Dive* dive);
-
 protected:
+    t_computer computer;
     QFile file;
     QJsonArray jsonDives;
-    QJsonObject jsonComputer;
 };
 
 #endif // FILEWRITER_H
