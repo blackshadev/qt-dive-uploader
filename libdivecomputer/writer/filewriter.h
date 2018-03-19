@@ -2,12 +2,6 @@
 #define FILEWRITER_H
 #include "./jsondivewriter.h"
 
-struct t_computer {
-    dc_descriptor_t* descr;
-    uint serial;
-    uint firmware;
-};
-
 class FileDiveWriter : public JsonDiveWriter
 {
 public:

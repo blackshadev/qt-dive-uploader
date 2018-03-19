@@ -12,7 +12,6 @@ public:
     LittleLogWriter(LittleDiveLog* log);
     ~LittleLogWriter() override;
 
-
     void set_device_descriptor(dc_descriptor_t* descr) override;
     void set_device_info(uint model, uint serial, uint firmware) override;
 
@@ -20,6 +19,7 @@ public:
     virtual void end();
     void write(Dive *d) override;
 protected:
+    t_computer m_computer;
     LittleDiveLog* m_littledivelog;
     QQueue<Dive*> m_queue;
     QMutex m_lock;

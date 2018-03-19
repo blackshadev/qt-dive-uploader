@@ -2,6 +2,13 @@
 #define JSONDIVEWRITER_H
 #include "./divewriter.h"
 
+
+struct t_computer {
+    dc_descriptor_t* descr;
+    uint serial;
+    uint firmware;
+};
+
 class JsonDiveWriter : public DiveWriter
 {
 public:
