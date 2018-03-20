@@ -29,8 +29,10 @@ public:
 signals:
     void diveWritten(Dive* d);
     void progress(uint m_current, uint m_total);
+    void error(QString msg);
 protected:
     bool m_ended = false;
+    bool m_error = false;
     bool m_busy = false;
     uint m_total = 0;
     uint m_current = 0;

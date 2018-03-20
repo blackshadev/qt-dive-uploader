@@ -18,7 +18,10 @@ public:
     virtual void start();
     virtual void end();
     void write(Dive *d) override;
+signals:
+    void computerPosted(int computerId);
 protected:
+    int m_computer_id = -1;
     t_computer m_computer;
     LittleDiveLog* m_littledivelog;
     QQueue<Dive*> m_queue;

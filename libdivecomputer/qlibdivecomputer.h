@@ -92,7 +92,7 @@ private:
     QStringList get_loglevels();
     DCDownloadContext* m_context;
     DiveWriter* m_writer;
-    void create_writer();
+    void create_writer(dc_descriptor_t* descriptor);
     void free_writer();
     void create_context(char* port_name, dc_descriptor_t* descriptor);
     void free_context();

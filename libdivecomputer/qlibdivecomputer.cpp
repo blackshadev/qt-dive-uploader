@@ -129,7 +129,7 @@ void QLibDiveComputer::start_download(QString port_name, int comp_idx) {
 
     try {
         create_context(port_name.toLatin1().data(), computer->descriptor);
-        create_writer();
+        create_writer(computer->descriptor);
         m_context->start();
 
     } catch(std::exception &err) {
@@ -137,7 +137,7 @@ void QLibDiveComputer::start_download(QString port_name, int comp_idx) {
     }
 }
 
-void QLibDiveComputer::create_writer() {
+void QLibDiveComputer::create_writer(dc_descriptor_t* descr) {
     if(m_writer != NULL) {
         free_writer();
     }
@@ -156,8 +156,11 @@ void QLibDiveComputer::create_writer() {
 
     }
 
+    m_writer->set_device_descriptor(descr);
+
     connect(m_writer, SIGNAL(finished()), this, SIGNAL(done()));
     connect(m_writer, SIGNAL(progress(uint,uint)), this, SIGNAL(writeProgress(uint,uint)));
+    connect(m_writer, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
     connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {
         delete d;
     });
@@ -179,19 +182,16 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->setLogLevel(m_loglevel);
 
     m_context->connect(m_context, &DCDownloadContext::started, this, [=]() {
-        m_writer->set_device_descriptor(descriptor);
-        m_writer->start();
         emit start();
     });
     m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(readProgress(uint,uint)));
 
-    m_context->connect(m_context, &DCDownloadContext::error, this, [=](QString msg) {
-        emit error(QString(msg));
-    });
+    m_context->connect(m_context, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
     m_context->connect(m_context, SIGNAL(log(QString, QString)), this, SIGNAL(log(QString,QString)));
 
     m_context->connect(m_context, &DCDownloadContext::deviceInfo, this, [=](uint model, uint serial, uint firmware) {
         m_writer->set_device_info(model, serial, firmware);
+        m_writer->start();
     });
     m_context->connect(m_context, &DCDownloadContext::clock, this, [=](uint devtime, uint systime) {
         m_writer->set_device_clock(devtime, systime);

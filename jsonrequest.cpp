@@ -10,6 +10,10 @@ QString JsonResponse::errorString() {
     return "";
 }
 
+bool JsonResponse::hasError() {
+    return parseError.error != parseError.NoError || statuscode != 200;
+}
+
 JsonRequest::JsonRequest(QObject *parent) : QObject(parent)
 {
     m_state = RequestState::None;

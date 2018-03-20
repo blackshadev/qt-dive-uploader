@@ -104,10 +104,10 @@ void JsonDiveWriter::write_dive(QJsonObject &json, Dive *dive)
 
 void JsonDiveWriter::write_computer(QJsonObject &json, dc_descriptor_t *device, uint serial)
 {
-    json["serial"] =  QString::number(serial);
+    json["serial"] =  (int)(serial);
     json["vendor"] = QString(dc_descriptor_get_vendor(device));
-    json["model"] = QString::number(dc_descriptor_get_model(device));
-    json["type"] = QString::number(dc_descriptor_get_type(device));
+    json["model"] = (int)(dc_descriptor_get_model(device));
+    json["type"] = (int)(dc_descriptor_get_type(device));
     json["name"] = QString(dc_descriptor_get_product(device));
 
 

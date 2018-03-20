@@ -1,4 +1,5 @@
 #include "littlelogwriter.h"
+#include <functional>
 
 LittleLogWriter::LittleLogWriter(LittleDiveLog* log)
 {
@@ -25,14 +26,25 @@ void LittleLogWriter::start()
     // set to busy to prevent dives from writing
     m_busy = true;
 
-    QObject computer;
+    QJsonObject computer;
 
+    JsonDiveWriter::write_computer(computer, m_computer.descr, m_computer.serial);
 
     m_littledivelog->request(
         RequestMethod::POST,
         "/computer",
-        JsonDiveWriter::write_computer(computer, m_computer.descr, m_computer.serial),
+        &computer,
         [=](JsonResponse resp) {
+            if(resp.hasError()) {
+                emit error(resp.errorString());
+                m_lock.lock();
+                m_error = true;
+                m_lock.unlock();
+                m_wait_cond.wakeOne();
+                return;
+            }
+            auto obj = resp.data.object();
+            m_computer_id = obj["computer_id"].toInt();
             m_lock.lock();
             m_busy = false;
             m_lock.unlock();
@@ -52,4 +64,5 @@ void LittleLogWriter::end()
 void LittleLogWriter::write(Dive *d)
 {
 
+    written(d);
 }

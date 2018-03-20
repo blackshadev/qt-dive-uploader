@@ -89,10 +89,10 @@ void DiveWriter::run() {
     bool empty = false;
     forever {
         m_lock.lock();
-        while(m_busy || m_queue.isEmpty() && !m_ended) {
+        while(!m_error && (m_busy || m_queue.isEmpty() && !m_ended)) {
             m_wait_cond.wait(&m_lock);
         }
-        if(m_ended && m_queue.isEmpty() ) {
+        if(m_error || m_ended && m_queue.isEmpty() ) {
             m_lock.unlock();
             break;
         }

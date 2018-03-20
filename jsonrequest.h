@@ -24,6 +24,7 @@ struct JsonResponse {
     int statuscode;
     QJsonDocument data;
     QJsonParseError parseError;
+    bool hasError();
     QString errorString();
 };
 

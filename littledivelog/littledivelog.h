@@ -28,6 +28,7 @@ public:
     bool isLoggedIn();
     QString get_refresh_token();
     void set_refresh_token(QString tok);
+    void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(JsonResponse)> callback, bool retry = true);
 signals:
     void error(QString msg);
     void loggedStateChanged(bool isLoggedIn);
@@ -37,7 +38,6 @@ public slots:
 protected:
     void get_user_data();
     void get_access_token(std::function<void()> callback);
-    void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(JsonResponse)> callback, bool retry = true);
     void raw_request(RequestMethod method, QString path, TokenType tokenType, QJsonObject* data, std::function<void(JsonResponse)> callback );
     QString m_refresh_token;
     QString m_access_token;
