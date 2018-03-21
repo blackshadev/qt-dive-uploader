@@ -63,6 +63,23 @@ void LittleLogWriter::end()
 
 void LittleLogWriter::write(Dive *d)
 {
+    QJsonObject data;
 
-    written(d);
+    JsonDiveWriter::write_dive(data, d);
+    data["ComputerId"] = m_computer_id;
+
+    m_littledivelog->request(
+        RequestMethod::POST,
+        "/dive",
+        &data,
+        [=](JsonResponse resp) {
+            if(resp.hasError()) {
+                emit error(resp.errorString());
+                m_error = true;
+                written(d);
+                return;
+            }
+            written(d);
+        }
+    );
 }

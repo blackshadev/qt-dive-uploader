@@ -84,31 +84,42 @@ void DiveWriter::add(Dive *d)
     m_wait_cond.wakeOne();
 }
 
+int iX = 0;
+
 void DiveWriter::run() {
 
     bool empty = false;
     forever {
+        qInfo("Lock");
         m_lock.lock();
         while(!m_error && (m_busy || m_queue.isEmpty() && !m_ended)) {
+            qInfo(">Wait %d, %d", iX, m_busy);
             m_wait_cond.wait(&m_lock);
+            qInfo("<Wait %d", iX++);
         }
         if(m_error || m_ended && m_queue.isEmpty() ) {
+            qInfo("Unlock end");
             m_lock.unlock();
             break;
         }
 
+        qInfo("Dequeue");
         Dive* d = m_queue.dequeue();
         m_busy = true;
 
+        qInfo("unlock");
         m_lock.unlock();
 
+        qInfo(">write");
         write(d);
+        qInfo("<write");
     }
+    qInfo("ended");
 }
 
 void DiveWriter::written(Dive *d)
 {
-
+    qInfo("written Lock");
     m_lock.lock();
     m_current += 1;
     m_busy = false;

@@ -1,5 +1,7 @@
 #include "jsonrequest.h"
 
+int counter = 0;
+
 QString JsonResponse::errorString() {
     if(parseError.error != parseError.NoError) {
         return parseError.errorString();
@@ -18,10 +20,13 @@ JsonRequest::JsonRequest(QObject *parent) : QObject(parent)
 {
     m_state = RequestState::None;
     m_reply = NULL;
+    m_iX = counter++;
+    qInfo("Create %d", m_iX);;
 }
 
 JsonRequest::~JsonRequest()
 {
+    qInfo("Delete %d", m_iX);
     if(m_reply != NULL) {
         m_reply->deleteLater();
         m_reply = NULL;
@@ -65,12 +70,15 @@ void JsonRequest::send()
         jsonBytes = data.toJson();
     }
 
+    qInfo("Send %d", m_iX);
     m_reply = m_qnam.sendCustomRequest(req, verb, jsonBytes);
     connect(m_reply, &QNetworkReply::finished, this, &JsonRequest::read_reply);
+    connect(m_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), this, &JsonRequest::read_error);
 }
 
 void JsonRequest::read_reply()
 {
+    qInfo("Read %d", m_iX);
     m_state = RequestState::Reading;
     auto replyData = m_reply->readAll();
 
@@ -79,4 +87,9 @@ void JsonRequest::read_reply()
     resp.data = QJsonDocument::fromJson(replyData, &resp.parseError);
     m_state = RequestState::Completed;
     emit complete(resp);
+}
+
+void JsonRequest::read_error(QNetworkReply::NetworkError err)
+{
+    qWarning("Got network err: " + err);
 }

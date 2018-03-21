@@ -110,5 +110,4 @@ void JsonDiveWriter::write_computer(QJsonObject &json, dc_descriptor_t *device, 
     json["type"] = (int)(dc_descriptor_get_type(device));
     json["name"] = QString(dc_descriptor_get_product(device));
 
-
 }

@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QtNetwork>
 #include <QJsonDocument>
+#include <QNetworkReply>
 
 enum RequestState {
     None,
@@ -46,7 +47,9 @@ protected:
     QNetworkAccessManager m_qnam;
     QNetworkReply* m_reply;
     void read_reply();
+    void read_error(QNetworkReply::NetworkError err);
     RequestState m_state;
+    int m_iX;
 };
 
 #endif // JSONREQUEST_H
