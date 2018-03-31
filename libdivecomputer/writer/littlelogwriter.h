@@ -15,9 +15,9 @@ public:
     void set_device_descriptor(dc_descriptor_t* descr) override;
     void set_device_info(uint model, uint serial, uint firmware) override;
 
-    virtual void start();
-    virtual void end();
-    void write(Dive *d) override;
+    virtual void do_start();
+    virtual void do_end();
+    void do_work(Dive *d) override;
 signals:
     void computerPosted(int computerId);
 protected:

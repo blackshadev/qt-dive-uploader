@@ -59,8 +59,8 @@ void JsonDiveWriter::write_samples(QJsonArray &sampleArray, Dive *dive)
             QJsonArray eventArr;
             for(auto evt : sample->events) {
                 QJsonObject evObj;
-                evObj["type"] = evt.type_name;
-                evObj["value"] = (int)evt.value;
+                evObj["Type"] = evt.type_name;
+                evObj["Value"] = (int)evt.value;
                 eventArr.append(evObj);
             }
             obj["Events"] = eventArr;
@@ -70,8 +70,8 @@ void JsonDiveWriter::write_samples(QJsonArray &sampleArray, Dive *dive)
             QJsonArray pressArr;
             for(auto press : sample->pressures) {
                 QJsonObject presObj;
-                presObj["tank"] = (int)press.tank;
-                presObj["pressure"] = press.pressure;
+                presObj["Tank"] = (int)press.tank;
+                presObj["Pressure"] = press.pressure;
                 pressArr.append(presObj);
             }
             obj["Pressure"] = pressArr;
@@ -83,22 +83,22 @@ void JsonDiveWriter::write_samples(QJsonArray &sampleArray, Dive *dive)
 
 void JsonDiveWriter::write_dive(QJsonObject &json, Dive *dive)
 {
-    json["Datetime"] = QString::fromStdString(format_datetime(&dive->datetime));
-    json["Divetime"] = (int)dive->divetime;
+    json["date"] = QString::fromStdString(format_datetime(&dive->datetime));
+    json["divetime"] = (int)dive->divetime;
 
-    json["Fingerprint"] = QString::fromStdString(base64_encode(dive->fingerprint.data(), dive->fingerprint.length()));
-    json["MaxDepth"] = dive->maxDepth;
-    json["MinTemperature"] = dive->minTemperature;
-    json["MaxTemperature"] = dive->maxTemperature;
+    json["fingerprint"] = QString::fromStdString(base64_encode(dive->fingerprint.data(), dive->fingerprint.length()));
+    json["max_depth"] = dive->maxDepth;
+    json["min_temperature"] = dive->minTemperature;
+    json["max_temperature"] = dive->maxTemperature;
 
     QJsonArray tankArr;
     write_tank(tankArr, dive);
 
-    json["Tanks"] = tankArr;
+    json["tanks"] = tankArr;
 
     QJsonArray sampleArr;
     write_samples(sampleArr, dive);
-    json["Samples"] = sampleArr;
+    json["samples"] = sampleArr;
 
 }
 

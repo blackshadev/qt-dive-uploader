@@ -7,10 +7,10 @@ class FileDiveWriter : public JsonDiveWriter
 public:
     FileDiveWriter(QString path);
     ~FileDiveWriter();
-    virtual void start();
-    virtual void end();
+    virtual void do_start();
+    virtual void do_end();
 
-    void write(Dive* d) override;
+    void do_work(Dive* d) override;
     void set_device_info(uint model, uint serial, uint firmware) override;
     void set_device_descriptor(dc_descriptor_t *descr) override;
 

@@ -158,7 +158,7 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr) {
 
     m_writer->set_device_descriptor(descr);
 
-    connect(m_writer, SIGNAL(finished()), this, SIGNAL(done()));
+    connect(m_writer, SIGNAL(done()), this, SIGNAL(done()));
     connect(m_writer, SIGNAL(progress(uint,uint)), this, SIGNAL(writeProgress(uint,uint)));
     connect(m_writer, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
     connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {

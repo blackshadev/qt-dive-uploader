@@ -21,11 +21,8 @@ void LittleLogWriter::set_device_descriptor(dc_descriptor_t *descr)
 }
 
 
-void LittleLogWriter::start()
+void LittleLogWriter::do_start()
 {
-    // set to busy to prevent dives from writing
-    m_busy = true;
-
     QJsonObject computer;
 
     JsonDiveWriter::write_computer(computer, m_computer.descr, m_computer.serial);
@@ -37,36 +34,29 @@ void LittleLogWriter::start()
         [=](JsonResponse resp) {
             if(resp.hasError()) {
                 emit error(resp.errorString());
-                m_lock.lock();
-                m_error = true;
-                m_lock.unlock();
-                m_wait_cond.wakeOne();
                 return;
             }
             auto obj = resp.data.object();
             m_computer_id = obj["computer_id"].toInt();
-            m_lock.lock();
-            m_busy = false;
-            m_lock.unlock();
-            m_wait_cond.wakeOne();
+
+            JsonDiveWriter::do_start();
         }
     );
 
-    JsonDiveWriter::start();
 }
 
-void LittleLogWriter::end()
+void LittleLogWriter::do_end()
 {
-    DiveWriter::end();
+    JsonDiveWriter::do_end();
 }
 
 
-void LittleLogWriter::write(Dive *d)
+void LittleLogWriter::do_work(Dive *d)
 {
     QJsonObject data;
 
     JsonDiveWriter::write_dive(data, d);
-    data["ComputerId"] = m_computer_id;
+    data["computer_id"] = m_computer_id;
 
     m_littledivelog->request(
         RequestMethod::POST,
@@ -76,10 +66,10 @@ void LittleLogWriter::write(Dive *d)
             if(resp.hasError()) {
                 emit error(resp.errorString());
                 m_error = true;
-                written(d);
+                work_done(d);
                 return;
             }
-            written(d);
+            work_done(d);
         }
     );
 }

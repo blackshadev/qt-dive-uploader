@@ -143,7 +143,6 @@ void LittleDiveLog::raw_request(RequestMethod method, QString path, TokenType to
         delete req;
     });
 
-    qInfo("SendReq");
     req->send();
 }
 

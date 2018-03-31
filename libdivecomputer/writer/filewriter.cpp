@@ -24,7 +24,7 @@ void FileDiveWriter::set_device_info(uint model, uint serial, uint firmware) {
     computer.serial = serial;
 }
 
-void FileDiveWriter::write(Dive* dive)
+void FileDiveWriter::do_work(Dive* dive)
 {
 
     QJsonObject json;
@@ -33,20 +33,20 @@ void FileDiveWriter::write(Dive* dive)
 
     jsonDives.append(json);
 
-    written(dive);
+    work_done(dive);
 }
 
-void FileDiveWriter::start() {
+void FileDiveWriter::do_start() {
     if(file.isOpen()) {
         throw std::runtime_error("File was already opened");
     }
     if (!file.open(QIODevice::WriteOnly)) {
         throw std::runtime_error("Couldn't open save file.");
     }
-    JsonDiveWriter::start();
+    JsonDiveWriter::do_start();
 }
 
-void FileDiveWriter::end() {
+void FileDiveWriter::do_end() {
     if(!file.isOpen()) {
         throw std::runtime_error("File was not yet opened");
     }
@@ -67,5 +67,5 @@ void FileDiveWriter::end() {
     file.write(saveDoc.toJson());
 
     file.close();
-    JsonDiveWriter::end();
+    JsonDiveWriter::do_end();
 }

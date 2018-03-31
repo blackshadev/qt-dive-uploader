@@ -24,24 +24,28 @@ public:
     virtual void set_device_info(uint model, uint serial, uint firmware);
     virtual void set_device_clock(uint devtime, uint systime) ;
     virtual void add(Dive* d);
-    virtual void start();
-    virtual void end();
+    void start();
+    void end();
 signals:
+    void dive(Dive* d);
     void diveWritten(Dive* d);
     void progress(uint m_current, uint m_total);
     void error(QString msg);
+    void done();
+    void starting();
 protected:
-    bool m_ended = false;
     bool m_error = false;
-    bool m_busy = false;
     uint m_total = 0;
     uint m_current = 0;
-    QWaitCondition m_wait_cond;
-    //QMutex m_lock_wait;
-    QMutex m_lock;
+    bool m_busy = false;
+    bool m_ended = false;
     QQueue<Dive*> m_queue;
-    virtual void write(Dive* d) = 0;
-    virtual void written(Dive* d);
+    QMutex m_lock;
+    virtual void check_more_work();
+    virtual void do_work(Dive* d) = 0;
+    virtual void work_done(Dive* d);
+    virtual void do_start();
+    virtual void do_end();
     void run() override;
 
 };
