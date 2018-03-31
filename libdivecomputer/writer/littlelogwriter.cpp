@@ -27,6 +27,10 @@ void LittleLogWriter::do_start()
 
     JsonDiveWriter::write_computer(computer, m_computer.descr, m_computer.serial);
 
+    m_lock.lock();
+    m_busy = true;
+    m_lock.unlock();
+
     m_littledivelog->request(
         RequestMethod::POST,
         "/computer",
@@ -39,7 +43,12 @@ void LittleLogWriter::do_start()
             auto obj = resp.data.object();
             m_computer_id = obj["computer_id"].toInt();
 
+            m_lock.lock();
+            m_busy = false;
+            m_lock.unlock();
+
             JsonDiveWriter::do_start();
+            check_more_work();
         }
     );
 

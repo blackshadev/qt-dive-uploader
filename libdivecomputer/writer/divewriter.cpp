@@ -87,8 +87,8 @@ int iX = 0;
 
 void DiveWriter::run()
 {
-    do_start();
     exec();
+    do_start();
 }
 
 void DiveWriter::check_more_work()
