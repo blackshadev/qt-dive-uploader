@@ -28,7 +28,9 @@ public:
     bool isLoggedIn();
     QString get_refresh_token();
     void set_refresh_token(QString tok);
-    void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(JsonResponse)> callback, bool retry = true);
+    void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(JsonResponse)> callback, bool retry = true, QObject* parent = NULL);
+    UserInfo* m_user_info = NULL;
+    void fetch_user_data();
 signals:
     void error(QString msg);
     void loggedStateChanged(bool isLoggedIn);
@@ -36,12 +38,11 @@ signals:
     void refreshTokenChanged(QString tok);
 public slots:
 protected:
-    void get_user_data();
-    void get_access_token(std::function<void()> callback);
-    void raw_request(RequestMethod method, QString path, TokenType tokenType, QJsonObject* data, std::function<void(JsonResponse)> callback );
+    void fetch_user_computers(std::function<void()> callback);
+    void get_access_token(std::function<void()> callback, QObject* parent = NULL);
+    void raw_request(RequestMethod method, QString path, TokenType tokenType, QJsonObject* data, std::function<void(JsonResponse)> callback, QObject* parent = NULL);
     QString m_refresh_token;
     QString m_access_token;
-    UserInfo* m_user_info = NULL;
 };
 
 #endif // LITTLEDIVELOG_H

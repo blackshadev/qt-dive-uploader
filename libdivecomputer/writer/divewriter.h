@@ -15,7 +15,6 @@
 class DiveWriter: public QThread {
     Q_OBJECT
 public:
-    static std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
     static std::string format_datetime(dc_datetime_t* dt);
 
     DiveWriter();
@@ -31,21 +30,24 @@ signals:
     void diveWritten(Dive* d);
     void progress(uint m_current, uint m_total);
     void error(QString msg);
-    void done();
+    void ready();
     void starting();
+    void done();
 protected:
     bool m_error = false;
     uint m_total = 0;
     uint m_current = 0;
     bool m_busy = false;
     bool m_ended = false;
+    bool m_ready = false;
     QQueue<Dive*> m_queue;
     QMutex m_lock;
     virtual void check_more_work();
     virtual void do_work(Dive* d) = 0;
     virtual void work_done(Dive* d);
-    virtual void do_start();
-    virtual void do_end();
+    virtual void do_start() = 0;
+    virtual void do_end() = 0;
+    void _teardown();
     void run() override;
 
 };

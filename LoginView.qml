@@ -39,22 +39,27 @@ RowLayout {
             color: "red"
         }
 
-        Button {
-            id: loginBtn
-//            Layout.alignment: Qt.AlignRight
-            text: "Login"
-            onClicked: {
-                littledivelog.login(email.text, password.text);
+        RowLayout {
+            Layout.columnSpan: 2
+            Layout.alignment: Qt.AlignRight
+
+            Button {
+                text: "Offline"
+                onClicked: {
+                    stackView.pop();
+                }
+            }
+
+            Button {
+                id: loginBtn
+                text: "Login"
+                onClicked: {
+                    littledivelog.login(email.text, password.text);
+                }
             }
         }
 
-        Button {
-//            Layout.alignment: Qt.AlignRight
-            text: "Offline"
-            onClicked: {
-                stackView.pop();
-            }
-        }
+
 
     }
     Connections {

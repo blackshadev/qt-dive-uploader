@@ -44,6 +44,10 @@ void DCDownloadContext::free_context() {
     m_context = NULL;
 }
 
+void DCDownloadContext::setFingerprint(const unsigned char* data, unsigned int len) {
+    dc_device_set_fingerprint(m_device, data, len);
+}
+
 void DCDownloadContext::setDescriptor(dc_descriptor_t *descriptor) {
     m_descriptor = descriptor;
 }
@@ -102,6 +106,7 @@ void DCDownloadContext::do_work() {
             {
                 dc_event_devinfo_t* devinfo = (dc_event_devinfo_t*)data;
                 emit ctx->deviceInfo(devinfo->model, devinfo->serial, devinfo->firmware);
+
             }
             break;
 

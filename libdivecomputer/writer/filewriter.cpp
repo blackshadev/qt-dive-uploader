@@ -35,18 +35,25 @@ void FileDiveWriter::do_work(Dive* dive)
 }
 
 void FileDiveWriter::do_start() {
+    emit starting();
     if(file.isOpen()) {
         throw std::runtime_error("File was already opened");
     }
     if (!file.open(QIODevice::WriteOnly)) {
         throw std::runtime_error("Couldn't open save file.");
     }
-    JsonDiveWriter::do_start();
+
+    m_lock.lock();
+    m_ready = true;
+    m_lock.unlock();
+    emit ready();
 }
 
 void FileDiveWriter::do_end() {
     if(!file.isOpen()) {
-        throw std::runtime_error("File was not yet opened");
+        qWarning("File was not yet opened");
+        _teardown();
+        return;
     }
 
     dc_datetime_t dt_now;
@@ -65,5 +72,5 @@ void FileDiveWriter::do_end() {
     file.write(saveDoc.toJson());
 
     file.close();
-    JsonDiveWriter::do_end();
+    _teardown();
 }

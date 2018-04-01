@@ -80,6 +80,13 @@ Item {
                 Label {
                     text: littledivelog.userInfo.tagCount
                 }
+
+                Button {
+                    text: "Logout"
+                    onClicked: {
+                        littledivelog.logout();
+                    }
+                }
             }
         }
     }

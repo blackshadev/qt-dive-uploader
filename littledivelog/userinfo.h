@@ -3,6 +3,11 @@
 #include <QObject>
 #include <QDateTime>
 
+struct t_user_computer {
+    int id;
+    std::vector<unsigned char> fingerprint;
+};
+
 class UserInfo : public QObject
 {
     Q_OBJECT
@@ -25,9 +30,10 @@ public:
     int m_computer_count;
     int m_buddy_count;
     int m_tag_count;
-signals:
-
-public slots:
+    t_user_computer* get_computer(uint serial);
+    void add_computer(QJsonObject comp);
+protected:
+    std::map<uint, t_user_computer*> m_computers;
 };
 
 Q_DECLARE_METATYPE(UserInfo*)

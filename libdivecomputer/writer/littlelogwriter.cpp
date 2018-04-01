@@ -23,13 +23,10 @@ void LittleLogWriter::set_device_descriptor(dc_descriptor_t *descr)
 
 void LittleLogWriter::do_start()
 {
+    emit starting();
     QJsonObject computer;
 
     JsonDiveWriter::write_computer(computer, m_computer.descr, m_computer.serial);
-
-    m_lock.lock();
-    m_busy = true;
-    m_lock.unlock();
 
     m_littledivelog->request(
         RequestMethod::POST,
@@ -44,10 +41,10 @@ void LittleLogWriter::do_start()
             m_computer_id = obj["computer_id"].toInt();
 
             m_lock.lock();
-            m_busy = false;
+            m_ready = true;
             m_lock.unlock();
 
-            JsonDiveWriter::do_start();
+            emit ready();
             check_more_work();
         }
     );
@@ -56,7 +53,7 @@ void LittleLogWriter::do_start()
 
 void LittleLogWriter::do_end()
 {
-    JsonDiveWriter::do_end();
+    _teardown();
 }
 
 
@@ -79,6 +76,7 @@ void LittleLogWriter::do_work(Dive *d)
                 return;
             }
             work_done(d);
-        }
+        },
+        this
     );
 }

@@ -19,7 +19,7 @@ public:
     void setPortName(const char* port);
     void setLogLevel(dc_loglevel_t err = DC_LOGLEVEL_ERROR);
     void setDescriptor(dc_descriptor_t* descriptor);
-    void setFingerprint(char data[4]);
+    void setFingerprint(const unsigned char* data, unsigned int size);
 signals:
     void log(QString loglevel, QString msg);
     void deviceInfo(uint model, uint serial, uint firmware);

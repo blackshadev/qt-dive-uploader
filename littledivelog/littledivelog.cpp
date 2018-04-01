@@ -39,7 +39,7 @@ void LittleDiveLog::login(QString email, QString password)
             } else {
                 set_refresh_token(obj["jwt"].toString());
                 emit loggedStateChanged(isLoggedIn());
-                get_user_data();
+                fetch_user_data();
             }
         }
 
@@ -54,7 +54,7 @@ void LittleDiveLog::set_refresh_token(QString tok)
     m_refresh_token = tok;
     emit refreshTokenChanged(tok);
     if(!tok.isEmpty()) {
-        get_user_data();
+        fetch_user_data();
     }
 }
 
@@ -63,7 +63,7 @@ QString LittleDiveLog::get_refresh_token()
     return m_refresh_token;
 }
 
-void LittleDiveLog::get_user_data()
+void LittleDiveLog::fetch_user_data()
 {
     request(
         RequestMethod::GET,
@@ -71,7 +71,9 @@ void LittleDiveLog::get_user_data()
         NULL,
         [=](JsonResponse resp) {
             auto obj = resp.data.object();
-            m_user_info = new UserInfo(this);
+            if(m_user_info == NULL) {
+                m_user_info = new UserInfo(this);
+            }
 
             auto dts = obj["inserted"].toString().left(19);
             auto dt = QDateTime::fromString(dts, "yyyy-MM-dd HH:mm:ss");
@@ -85,12 +87,35 @@ void LittleDiveLog::get_user_data()
             m_user_info->m_buddy_count = obj["buddy_count"].toInt();
             m_user_info->m_tag_count = obj["tag_count"].toInt();
 
-            emit userInfoChanged(m_user_info);
+            fetch_user_computers([=]() {
+                emit userInfoChanged(m_user_info);
+            });
+
         }
     );
 }
 
-void LittleDiveLog::get_access_token(std::function<void()> callback)
+void LittleDiveLog::fetch_user_computers(std::function<void()> callback) {
+
+    request(
+        RequestMethod::GET,
+        "/computer",
+        NULL,
+        [=](JsonResponse resp) {
+            auto arr = resp.data.array();
+
+            for(auto val : arr) {
+                auto obj = val.toObject();
+                m_user_info->add_computer(obj);
+            }
+
+            callback();
+        }
+    );
+
+}
+
+void LittleDiveLog::get_access_token(std::function<void()> callback, QObject* parent)
 {
     raw_request(
         RequestMethod::GET,
@@ -111,13 +136,20 @@ void LittleDiveLog::get_access_token(std::function<void()> callback)
                 callback();
             }
 
-        }
+        },
+        parent
     );
 }
 
-void LittleDiveLog::raw_request(RequestMethod method, QString path, TokenType tokenType, QJsonObject *data, std::function<void(JsonResponse)> callback)
-{
-    JsonRequest* req = new JsonRequest();
+void LittleDiveLog::raw_request(
+        RequestMethod method,
+        QString path,
+        TokenType tokenType,
+        QJsonObject *data,
+        std::function<void(JsonResponse)> callback,
+        QObject* parent
+) {
+    JsonRequest* req = new JsonRequest(parent);
     req->url = "https://dive.littledev.nl/api" + path;
     req->method = method;
 
@@ -146,8 +178,14 @@ void LittleDiveLog::raw_request(RequestMethod method, QString path, TokenType to
     req->send();
 }
 
-void LittleDiveLog::request(RequestMethod method, QString path, QJsonObject *data, std::function<void(JsonResponse)> callback, bool retry)
-{
+void LittleDiveLog::request(
+        RequestMethod method,
+        QString path,
+        QJsonObject *data,
+        std::function<void(JsonResponse)> callback,
+        bool retry,
+        QObject* parent
+) {
     if(!isLoggedIn()) {
         emit error("Cannot execute request. Not yet logged in.");
         return;
@@ -157,19 +195,20 @@ void LittleDiveLog::request(RequestMethod method, QString path, QJsonObject *dat
             [=]() {
                 // Perform actual request but no retries
                 request(method, path, data, callback, false);
-            }
+            },
+            parent
         );
     } else {
         raw_request(method, path, TokenType::ACCESS, data, [=](JsonResponse resp) {
             if(retry == true && resp.statuscode == 401) {
                 // 401, retry request after get_access_token
                 m_access_token.clear();
-                request(method, path, data, callback, false);
+                request(method, path, data, callback, false, parent);
             } else {
                 // Done, callback
                 callback(resp);
             }
-        });
+        }, parent);
     }
 }
 
@@ -179,12 +218,13 @@ void LittleDiveLog::logout() {
         return;
     }
 
-    request(RequestMethod::DELETE, "auth/refresh-token/" + m_refresh_token, NULL, [=](JsonResponse resp) {
+    raw_request(RequestMethod::DELETE, "/auth/refresh-token/", TokenType::REFRESH, NULL, [=](JsonResponse resp) {
         set_refresh_token(NULL);
+        m_access_token.clear();
         emit loggedStateChanged(isLoggedIn());
         if(resp.statuscode != 200) {
             emit error(resp.errorString());
         }
-    }, false);
+    });
 
 }

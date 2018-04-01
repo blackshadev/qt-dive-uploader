@@ -1,5 +1,5 @@
 #include "jsondivewriter.h"
-
+#include "../../common/base64.h"
 
 void JsonDiveWriter::write_tank(QJsonArray &tanksArray, Dive *dive)
 {
@@ -86,7 +86,7 @@ void JsonDiveWriter::write_dive(QJsonObject &json, Dive *dive)
     json["date"] = QString::fromStdString(format_datetime(&dive->datetime));
     json["divetime"] = (int)dive->divetime;
 
-    json["fingerprint"] = QString::fromStdString(base64_encode(dive->fingerprint.data(), dive->fingerprint.length()));
+    json["fingerprint"] = base64_encode(dive->fingerprint.data(), dive->fingerprint.length());
     json["max_depth"] = dive->maxDepth;
     json["min_temperature"] = dive->minTemperature;
     json["max_temperature"] = dive->maxTemperature;

@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     jsonrequest.cpp \
     littledivelog/userinfo.cpp \
     libdivecomputer/writer/littlelogwriter.cpp \
-    libdivecomputer/writer/jsondivewriter.cpp
+    libdivecomputer/writer/jsondivewriter.cpp \
+    common/base64.cpp
 
 HEADERS += \
     libdivecomputer/qlibdivecomputer.h \
@@ -42,7 +43,8 @@ HEADERS += \
     jsonrequest.h \
     littledivelog/userinfo.h \
     libdivecomputer/writer/littlelogwriter.h \
-    libdivecomputer/writer/jsondivewriter.h
+    libdivecomputer/writer/jsondivewriter.h \
+    common/base64.h
 
 
 RESOURCES += qml.qrc
