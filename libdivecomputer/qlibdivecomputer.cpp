@@ -195,8 +195,10 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
     m_context->connect(m_context, &DCDownloadContext::deviceInfo, this, [=](uint model, uint serial, uint firmware) {
         if(m_log->m_user_info != NULL) {
             auto comp_data = m_log->m_user_info->get_computer(serial);
-            const unsigned char* fingerprint_data = (const unsigned char*)comp_data->fingerprint.data();
-            m_context->setFingerprint(fingerprint_data, (unsigned int)comp_data->fingerprint.size());
+            if(comp_data != NULL) {
+                auto fingerprint_data = (const unsigned char*)comp_data->fingerprint.data();
+                m_context->setFingerprint(fingerprint_data, (unsigned int)comp_data->fingerprint.size());
+            }
         }
         m_writer->set_device_info(model, serial, firmware);
         m_writer->start();

@@ -30,5 +30,6 @@ void UserInfo::add_computer(QJsonObject obj)
 
 t_user_computer* UserInfo::get_computer(uint serial)
 {
-    return m_computers[serial];
+    auto data = m_computers.find(serial);
+    return data == m_computers.end() ? NULL : data->second;
 }
