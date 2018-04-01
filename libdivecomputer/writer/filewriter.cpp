@@ -1,5 +1,5 @@
 #include "filewriter.h"
-
+#include <QTimer>;
 
 FileDiveWriter::FileDiveWriter(QString path)
 {
@@ -11,9 +11,7 @@ FileDiveWriter::~FileDiveWriter()
     if(file.isOpen()) {
         end();
     }
-
 }
-
 
 void FileDiveWriter::set_device_descriptor(dc_descriptor_t *descr) {
     computer.descr = descr;
@@ -55,12 +53,12 @@ void FileDiveWriter::do_end() {
     dc_datetime_localtime(&dt_now, dc_datetime_now());
     QJsonObject jsonObject;
 
-    jsonObject["ReadTime"] = QString::fromStdString(format_datetime(&dt_now));
-    jsonObject["Dives"] = jsonDives;
+    jsonObject["readtime"] = QString::fromStdString(format_datetime(&dt_now));
+    jsonObject["dives"] = jsonDives;
 
     QJsonObject comp;
     write_computer(comp, computer.descr, computer.serial);
-    jsonObject["Computer"] = comp;
+    jsonObject["computer"] = comp;
 
 
     QJsonDocument saveDoc(jsonObject);

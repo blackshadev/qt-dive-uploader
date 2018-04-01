@@ -3,7 +3,9 @@
 int counter = 0;
 
 QString JsonResponse::errorString() {
-    if(parseError.error != parseError.NoError) {
+    if(!m_error.isEmpty()) {
+        return m_error;
+    } else if(parseError.error != parseError.NoError) {
         return parseError.errorString();
     } else if(data.object().contains("error")) {
         return data.object()["error"].toString();
@@ -13,7 +15,7 @@ QString JsonResponse::errorString() {
 }
 
 bool JsonResponse::hasError() {
-    return parseError.error != parseError.NoError || statuscode != 200;
+    return !m_error.isEmpty() || parseError.error != parseError.NoError || statuscode != 200;
 }
 
 JsonRequest::JsonRequest(QObject *parent) : QObject(parent)
@@ -33,6 +35,7 @@ JsonRequest::~JsonRequest()
 
 void JsonRequest::send()
 {
+
     if(m_state != RequestState::None) {
         throw std::runtime_error("Request already send");
     }
@@ -85,7 +88,11 @@ void JsonRequest::read_reply()
     emit complete(resp);
 }
 
-void JsonRequest::read_error(QNetworkReply::NetworkError err)
+void JsonRequest::read_error()
 {
-    qWarning("Got network err: " + err);
+    JsonResponse resp;
+    resp.m_error = m_reply->errorString();
+    resp.statuscode = -1;
+    qWarning(("Got network err: " + m_reply->errorString()).toLocal8Bit().data());
+    emit complete(resp);
 }

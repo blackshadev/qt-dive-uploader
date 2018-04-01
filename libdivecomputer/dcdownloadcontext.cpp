@@ -81,7 +81,6 @@ void DCDownloadContext::do_work() {
     if(m_device != NULL) {
         throw std::invalid_argument("Device already created. DownloadContext already running?");
     }
-
     if(m_context == NULL) {
         throw std::invalid_argument("Context not initialized. Constructor not called or destructor was already called");
     }
@@ -92,7 +91,6 @@ void DCDownloadContext::do_work() {
         throw std::invalid_argument("No device selected");
     }
 
-    qInfo("Open device with %s", m_port_name);
     dc_device_open(&m_device, m_context, m_descriptor, m_port_name);
 
     int all_events = DC_EVENT_WAITING|DC_EVENT_CLOCK|DC_EVENT_PROGRESS|DC_EVENT_DEVINFO|DC_EVENT_VENDOR;

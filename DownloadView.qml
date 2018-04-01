@@ -127,6 +127,7 @@ GridLayout {
             text: "LittleLog"
             id: llRadio
             checked: libdivecomputer.writeType === WriteTypes.LittleLog
+            enabled: littledivelog.userInfo !== null
             onCheckedChanged: {
                 if(llRadio.checked) {
                     libdivecomputer.writeType = WriteTypes.LittleLog;
@@ -182,6 +183,9 @@ GridLayout {
         Layout.alignment: Qt.AlignRight
         text: "Start"
         onClicked: {
+
+            writeProgress.value = 0;
+            readProgress.value = 0;
 
             var idx = computerSelection.model.index(computerSelection.currentIndex, 0);
             libdivecomputer.start_download(

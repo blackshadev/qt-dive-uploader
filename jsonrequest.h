@@ -25,9 +25,11 @@ struct JsonResponse {
     int statuscode;
     QJsonDocument data;
     QJsonParseError parseError;
+    QString m_error;
     bool hasError();
     QString errorString();
 };
+Q_DECLARE_METATYPE(JsonResponse)
 
 class JsonRequest : public QObject
 {
@@ -47,7 +49,7 @@ protected:
     QNetworkAccessManager m_qnam;
     QNetworkReply* m_reply;
     void read_reply();
-    void read_error(QNetworkReply::NetworkError err);
+    void read_error();
     RequestState m_state;
     int m_iX;
 };

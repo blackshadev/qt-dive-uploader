@@ -15,6 +15,13 @@ Item {
             Label {
                 text: "Not logged In"
             }
+
+            Button {
+                text: "Login"
+                onClicked: {
+                    stackView.push(loginViewComp);
+                }
+            }
         }
     }
 

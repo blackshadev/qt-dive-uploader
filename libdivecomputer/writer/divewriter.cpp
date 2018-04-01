@@ -65,7 +65,7 @@ std::string DiveWriter::format_datetime(dc_datetime_t *dt) {
 }
 
 DiveWriter::DiveWriter() : QThread(NULL) {
-    connect(this, &DiveWriter::dive, this, [this](Dive* d) { this->do_work(d); } );
+
 }
 
 void DiveWriter::set_device_clock(uint devtime, uint systime) {}
@@ -87,8 +87,9 @@ int iX = 0;
 
 void DiveWriter::run()
 {
-    exec();
+    connect(this, &DiveWriter::dive, this, [this](Dive* d) { this->do_work(d); } );
     do_start();
+    exec();
 }
 
 void DiveWriter::check_more_work()

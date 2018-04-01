@@ -99,7 +99,7 @@ void LittleDiveLog::get_access_token(std::function<void()> callback)
         NULL,
         [=](JsonResponse resp) {
             auto obj = resp.data.object();
-            if(resp.statuscode == 401) {
+            if(resp.statuscode == 401 || resp.hasError()) {
                 emit error("Invalid refresh token");
                 m_access_token = QString();
                 set_refresh_token(NULL);

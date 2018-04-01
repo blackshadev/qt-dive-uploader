@@ -41,11 +41,18 @@ RowLayout {
 
         Button {
             id: loginBtn
-            Layout.columnSpan: 2
-            Layout.alignment: Qt.AlignRight
+//            Layout.alignment: Qt.AlignRight
             text: "Login"
             onClicked: {
                 littledivelog.login(email.text, password.text);
+            }
+        }
+
+        Button {
+//            Layout.alignment: Qt.AlignRight
+            text: "Offline"
+            onClicked: {
+                stackView.pop();
             }
         }
 
@@ -54,7 +61,6 @@ RowLayout {
         target: littledivelog
         onError: {
             errorLbl.text = msg;
-            console.error(msg);
         }
     }
 }

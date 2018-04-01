@@ -23,6 +23,7 @@ QLibDiveComputer::~QLibDiveComputer()
     delete m_available_devices;
     delete m_available_portnames;
     free_context();
+    free_writer();
     m_version.clear();
 }
 
@@ -168,6 +169,8 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr) {
 
 void QLibDiveComputer::free_writer() {
     if(m_writer != NULL) {
+        m_writer->wait();
+        m_writer->disconnect();
         delete m_writer;
         m_writer = NULL;
     }
@@ -209,6 +212,7 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
 
 void QLibDiveComputer::free_context() {
     if(m_context != NULL) {
+        m_context->wait();
         m_context->disconnect();
         delete m_context;
         m_context = NULL;
