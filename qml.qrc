@@ -6,5 +6,6 @@
         <file>LoginView.qml</file>
         <file>MainView.qml</file>
         <file>AccountView.qml</file>
+        <file>GridComponent.qml</file>
     </qresource>
 </RCC>
