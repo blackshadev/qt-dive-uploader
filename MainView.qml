@@ -5,6 +5,7 @@ import QtQuick.Controls 2.3
 ColumnLayout {
 
     TabBar  {
+        z: 50
         id: tabBar
         Layout.fillWidth: true
         TabButton {
