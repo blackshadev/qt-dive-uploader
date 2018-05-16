@@ -178,8 +178,15 @@ GridLayout {
     }
 
     Button {
+        text: "test Grid"
+        onClicked: {
+            // todo open SelectionWindow
+        }
+    }
+
+    Button {
         id: startButton
-        Layout.columnSpan: 2
+        Layout.columnSpan: 1
         Layout.alignment: Qt.AlignRight
         text: "Start"
         onClicked: {

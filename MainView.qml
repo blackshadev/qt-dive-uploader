@@ -20,9 +20,6 @@ ColumnLayout {
             text: qsTr("Log")
         }
 
-        TabButton {
-            text: qsTr("Grid")
-        }
     }
 
     StackLayout {
@@ -35,7 +32,6 @@ ColumnLayout {
         LogView {
             id: logView
         }
-        GridComponent {}
     }
 
 }
