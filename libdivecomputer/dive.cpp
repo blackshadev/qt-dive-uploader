@@ -1,4 +1,5 @@
 #include "dive.h"
+#include "../common/datetime.h"
 
 const char* Event::invalid_event_type_name = "unknown";
 const char* Event::event_type_names[EVENT_TYPE_COUNT] = {
@@ -27,6 +28,11 @@ Dive::~Dive()
     for(auto sample : samples) {
         delete sample;
     }
+}
+
+std::string Dive::formatted_datetime() const
+{
+    return format_datetime((dc_datetime_t&)datetime);
 }
 
 void Dive::parse(dc_parser_t* parser)

@@ -15,8 +15,6 @@
 class DiveWriter: public QThread {
     Q_OBJECT
 public:
-    static std::string format_datetime(dc_datetime_t* dt);
-
     DiveWriter();
 
     virtual void set_device_descriptor(dc_descriptor_t* descr);

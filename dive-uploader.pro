@@ -25,7 +25,9 @@ SOURCES += main.cpp \
     littledivelog/userinfo.cpp \
     libdivecomputer/writer/littlelogwriter.cpp \
     libdivecomputer/writer/jsondivewriter.cpp \
-    common/base64.cpp
+    common/base64.cpp \
+    libdivecomputer/qdivemodel.cpp \
+    common/datetime.cpp
 
 HEADERS += \
     libdivecomputer/qlibdivecomputer.h \
@@ -44,7 +46,9 @@ HEADERS += \
     littledivelog/userinfo.h \
     libdivecomputer/writer/littlelogwriter.h \
     libdivecomputer/writer/jsondivewriter.h \
-    common/base64.h
+    common/base64.h \
+    libdivecomputer/qdivemodel.h \
+    common/datetime.h
 
 
 RESOURCES += qml.qrc

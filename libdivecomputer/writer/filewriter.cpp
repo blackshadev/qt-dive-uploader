@@ -1,4 +1,5 @@
 #include "filewriter.h"
+#include "../common/datetime.h"
 #include <QTimer>;
 
 FileDiveWriter::FileDiveWriter(QString path)
@@ -60,7 +61,7 @@ void FileDiveWriter::do_end() {
     dc_datetime_localtime(&dt_now, dc_datetime_now());
     QJsonObject jsonObject;
 
-    jsonObject["readtime"] = QString::fromStdString(format_datetime(&dt_now));
+    jsonObject["readtime"] = QString::fromStdString(format_datetime(dt_now));
     jsonObject["dives"] = jsonDives;
 
     QJsonObject comp;
