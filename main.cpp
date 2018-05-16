@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
 
     dc->connect(dc, &QLibDiveComputer::writeTypeChanged, [&sess, dc](WriteType::writetype t) {
         sess.m_data.setWriteType(dc->get_writeTypeAsString());
-
     });
 
     dc->m_path = sess.m_data.getPath();

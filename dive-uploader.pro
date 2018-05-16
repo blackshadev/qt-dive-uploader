@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     libdivecomputer/writer/jsondivewriter.cpp \
     common/base64.cpp \
     libdivecomputer/qdivemodel.cpp \
-    common/datetime.cpp
+    common/datetime.cpp \
+    libdivecomputer/writer/selectionwriter.cpp
 
 HEADERS += \
     libdivecomputer/qlibdivecomputer.h \
@@ -48,7 +49,8 @@ HEADERS += \
     libdivecomputer/writer/jsondivewriter.h \
     common/base64.h \
     libdivecomputer/qdivemodel.h \
-    common/datetime.h
+    common/datetime.h \
+    libdivecomputer/writer/selectionwriter.h
 
 
 RESOURCES += qml.qrc

@@ -20,6 +20,7 @@ ColumnLayout {
             text: qsTr("Log")
         }
 
+
     }
 
     StackLayout {

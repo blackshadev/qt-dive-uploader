@@ -6,6 +6,7 @@
 #include <QObject>
 #include "dcdownloadcontext.h"
 #include "dccomputerlist.h"
+#include "qdivemodel.h"
 #include "writer/divewriter.h"
 #include "../littledivelog/littledivelog.h"
 
@@ -76,6 +77,7 @@ signals:
     void done();
     void error(QString msg);
     void log(QString lvl, QString msg);
+    void selectDives(QList<Dive> dives);
 
 protected slots:
 protected:
