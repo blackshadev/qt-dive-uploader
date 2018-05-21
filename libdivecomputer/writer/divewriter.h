@@ -31,6 +31,9 @@ signals:
     void ready();
     void starting();
     void done();
+    void selectDives(QList<Dive> dives);
+public slots:
+    virtual void selectionDone(QList<Dive> dives);
 protected:
     bool m_error = false;
     uint m_total = 0;

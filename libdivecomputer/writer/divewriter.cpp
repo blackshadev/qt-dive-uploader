@@ -20,6 +20,11 @@ void DiveWriter::add(Dive *d)
 
 int iX = 0;
 
+void DiveWriter::selectionDone(QList<Dive> dives)
+{
+ // todo
+}
+
 void DiveWriter::run()
 {
     connect(this, &DiveWriter::dive, this, [this](Dive* d) { this->do_work(d); } );

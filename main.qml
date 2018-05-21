@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import QtQuick.Window 2.3
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import SortFilterProxyModel 0.1
@@ -50,6 +51,13 @@ ApplicationWindow {
         }
     }
 
+    SelectionWindow {
+        width: 640
+        height: 480
+        visible: false
+        id: selectionwindow
+    }
+
     Connections {
         target: littledivelog
         onLoggedStateChanged: {
@@ -61,6 +69,14 @@ ApplicationWindow {
         }
         onRefreshTokenChanged: {
             session.refreshToken = tok;
+        }
+    }
+
+    Connections {
+        target: libdivecomputer
+        onSelectDives: {
+            selectionwindow.visible = true;
+            selectionwindow.data = dives;
         }
     }
 }

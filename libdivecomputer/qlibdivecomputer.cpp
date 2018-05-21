@@ -9,7 +9,6 @@
 #include "writer/filewriter.h"
 #include "writer/littlelogwriter.h"
 
-
 QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 {
     m_context = NULL;
@@ -165,6 +164,7 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr) {
     connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {
         delete d;
     });
+    connect(m_writer, SIGNAL(SelectionWriter::select(QList<Dive>)), this, SIGNAL(selectDives(QList<Dive>)));
 }
 
 void QLibDiveComputer::free_writer() {
