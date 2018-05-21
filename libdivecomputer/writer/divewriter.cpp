@@ -18,8 +18,6 @@ void DiveWriter::add(Dive *d)
     check_more_work();
 }
 
-int iX = 0;
-
 void DiveWriter::selectionDone(QList<Dive> dives)
 {
  // todo
@@ -72,7 +70,13 @@ void DiveWriter::work_done(Dive *d)
     check_more_work();
 }
 
-void DiveWriter::start() {
+void DiveWriter::set_selection(bool flag)
+{
+    m_select = flag;
+}
+
+void DiveWriter::start()
+{
     do_start();
     QThread::start();
 }
