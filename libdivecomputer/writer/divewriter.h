@@ -21,6 +21,7 @@ public:
     virtual void set_device_info(uint model, uint serial, uint firmware);
     virtual void set_device_clock(uint devtime, uint systime) ;
     virtual void add(Dive* d);
+    virtual bool is_ready();
     void set_selection(bool flag);
     void start();
     void end();
@@ -29,7 +30,7 @@ signals:
     void diveWritten(Dive* d);
     void progress(uint m_current, uint m_total);
     void error(QString msg);
-    void ready();
+    void started();
     void starting();
     void done();
 public slots:
@@ -40,8 +41,9 @@ protected:
     uint m_current = 0;
     bool m_busy = false;
     bool m_ended = false;
-    bool m_ready = false;
+    bool m_started = false;
     bool m_select = false;
+    bool m_selected = false;
     QQueue<Dive*> m_queue;
     QMutex m_lock;
     virtual void check_more_work();

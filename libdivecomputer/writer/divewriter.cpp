@@ -21,12 +21,17 @@ void DiveWriter::add(Dive *d)
 void DiveWriter::selectionDone(QList<Dive> dives)
 {
  // todo
+    m_selected = true;
 }
 
 void DiveWriter::run()
 {
     connect(this, &DiveWriter::dive, this, [this](Dive* d) { this->do_work(d); } );
     exec();
+}
+
+bool DiveWriter::is_ready() {
+    return (!m_select || m_selected) && m_started;
 }
 
 void DiveWriter::check_more_work()
@@ -37,7 +42,7 @@ void DiveWriter::check_more_work()
         return;
     }
 
-    if(m_busy || !m_ready) {
+    if(m_busy || !m_started) {
         return; // still busy
     }
 

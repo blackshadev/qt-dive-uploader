@@ -49,6 +49,7 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(QString loglevel READ get_loglevel WRITE set_loglevel NOTIFY loglevelChanged)
     Q_PROPERTY(WriteType::writetype writeType READ get_writeType WRITE set_writeType NOTIFY writeTypeChanged)
     Q_PROPERTY(QString path MEMBER m_path NOTIFY pathChanged)
+    Q_PROPERTY(bool selectDives MEMBER m_select_dives NOTIFY selectDivesChanged)
 
 public:
 
@@ -59,6 +60,7 @@ public:
     QStringList* m_available_portnames;
     DCComputerList* m_available_devices;
     QString m_path;
+    bool m_select_dives = true;
 
     QString get_writeTypeAsString();
     void set_writeTypeAsString(QString str, WriteType::writetype fallback = WriteType::File);
@@ -71,6 +73,7 @@ signals:
     void writeTypeChanged(WriteType::writetype t);
     void loglevelChanged();
     void pathChanged();
+    void selectDivesChanged(bool val);
     void readProgress(uint current, uint total);
     void writeProgress(uint current, uint total);
     void start();

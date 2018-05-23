@@ -45,9 +45,10 @@ void FileDiveWriter::do_start() {
     }
 
     m_lock.lock();
-    m_ready = true;
+    m_started = true;
     m_lock.unlock();
-    emit ready();
+
+    emit started();
 }
 
 void FileDiveWriter::do_end() {
