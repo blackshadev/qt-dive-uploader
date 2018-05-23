@@ -6,6 +6,11 @@ QDiveModel::QDiveModel(QObject *parent)
 
 }
 
+void QDiveModel::clear()
+{
+   m_dives.clear();
+}
+
 void QDiveModel::addDive(Dive &dive) {
     m_dives.append(dive);
 }

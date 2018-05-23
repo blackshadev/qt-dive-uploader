@@ -18,6 +18,7 @@ public:
     };
     QDiveModel(QObject *parent = 0);
 
+    void clear();
     void addDive(Dive &dive);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
