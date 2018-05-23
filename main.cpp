@@ -10,6 +10,7 @@
 #include "libdivecomputer/dccomputerlist.h"
 #include "sessionstore.h"
 #include "littledivelog/littledivelog.h"
+#include "libdivecomputer/qdivemodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DCComputerList>("DCComputer", 0, 1, "ComputerRoles");
     qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "loglevel");
     qmlRegisterType<WriteType>("Libdivecomputer", 0, 1, "WriteTypes");
+    qmlRegisterType<QDiveModel>("Libdivecomputer", 0, 1, "DiveModel");
 
     QQmlApplicationEngine engine;
 

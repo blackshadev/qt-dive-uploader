@@ -180,7 +180,7 @@ GridLayout {
     Button {
         text: "test Grid"
         onClicked: {
-            // todo open SelectionWindow
+            selectionwindow.visible = true
         }
     }
 

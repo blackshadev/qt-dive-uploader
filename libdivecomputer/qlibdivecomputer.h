@@ -9,6 +9,7 @@
 #include "qdivemodel.h"
 #include "writer/divewriter.h"
 #include "../littledivelog/littledivelog.h"
+#include "qdivemodel.h"
 
 class WriteType : public QObject {
     Q_OBJECT
@@ -80,7 +81,7 @@ signals:
     void done();
     void error(QString msg);
     void log(QString lvl, QString msg);
-    void selectDives(QList<Dive> dives);
+    void selectDives(QDiveModel* dives);
 
 protected slots:
 protected:

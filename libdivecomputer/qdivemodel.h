@@ -16,19 +16,26 @@ public:
         DiveTimeRole,
         DiveDepthRole
     };
+
+    Q_ENUMS(DiveRoles)
+
     QDiveModel(QObject *parent = 0);
 
-    void clear();
-    void addDive(Dive &dive);
-
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
-
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+
+
+
+public slots:
+    void clear();
+    void add(Dive* dive);
+    QVariant get(int index, int role = Qt::DisplayRole) const;
+    void setSelected(int row, bool selected);
 
     protected:
         QHash<int, QByteArray> roleNames() const;
     private:
-        QList<Dive> m_dives;
+        QList<Dive*> m_dives;
 
 };
 

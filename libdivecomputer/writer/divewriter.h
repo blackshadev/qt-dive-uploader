@@ -28,13 +28,14 @@ public:
 signals:
     void dive(Dive* d);
     void diveWritten(Dive* d);
+    void selectDives(QList<Dive*> dives);
     void progress(uint m_current, uint m_total);
     void error(QString msg);
     void started();
     void starting();
     void done();
 public slots:
-    virtual void selectionDone(QList<Dive> dives);
+    virtual void selectionDone(QList<Dive*> dives);
 protected:
     bool m_error = false;
     uint m_total = 0;

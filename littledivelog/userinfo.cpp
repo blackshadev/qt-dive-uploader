@@ -17,7 +17,6 @@ UserInfo::~UserInfo()
 
 void UserInfo::add_computer(QJsonObject obj)
 {
-    qInfo("here");
     auto comp = new t_user_computer;
     int comp_id = obj["computer_id"].toInt();
     uint serial = (uint)std::stoul(obj["serial"].toString().toStdString());
