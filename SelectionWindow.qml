@@ -11,9 +11,22 @@ Window {
         anchors.fill: parent
 
         RowLayout {
-            Text {
-                text: " test "
+
+            Button {
+                text: "Select all"
+                onClicked: {
+                    diveData.setSelectedAll(true);
+                }
             }
+
+            Button {
+                text: "Deselect all"
+                onClicked: {
+                    diveData.setSelectedAll(false);
+                }
+            }
+
+
         }
 
         ListView {
@@ -21,7 +34,9 @@ Window {
             id: listView
             flickableDirection: Flickable.VerticalFlick
             boundsBehavior: Flickable.StopAtBounds
-            anchors.fill: parent
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
             ScrollBar.vertical: ScrollBar {}
 
             model: diveData

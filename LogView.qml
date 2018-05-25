@@ -34,10 +34,9 @@ ColumnLayout {
     }
 
     TextArea {
-        anchors.top: loglevelSelector.bottom;
-        anchors.bottom: parent.bottom;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
         font.pointSize: 10
 
         readOnly: true

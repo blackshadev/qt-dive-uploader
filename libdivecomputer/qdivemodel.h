@@ -31,6 +31,7 @@ public slots:
     void add(Dive* dive);
     QVariant get(int index, int role = Qt::DisplayRole) const;
     void setSelected(int row, bool selected);
+    void setSelectedAll(bool selected);
 
     protected:
         QHash<int, QByteArray> roleNames() const;
