@@ -18,6 +18,7 @@ void QDiveModel::add(Dive* dive) {
 void QDiveModel::setSelected(int row, bool selected)
 {
     m_dives[row]->ignore = !selected;
+    emit dataChanged(createIndex(row, 0), createIndex(row, 0), QVector<int>( { SelectedRole } ));
 }
 
 void QDiveModel::setSelectedAll(bool selected)
@@ -26,7 +27,7 @@ void QDiveModel::setSelectedAll(bool selected)
         d->ignore = !selected;
     }
 
-    emit dataChanged(createIndex(0, 0), createIndex(m_dives.length(), 0), QVector<int>( { SelectedRole } ));
+    emit dataChanged(createIndex(0, 0), createIndex(m_dives.length() - 1, 0), QVector<int>( { SelectedRole } ));
 }
 
 int QDiveModel::rowCount(const QModelIndex & parent) const {

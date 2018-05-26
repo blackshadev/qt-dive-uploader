@@ -75,7 +75,7 @@ Item {
             target: libdivecomputer
             onSelectDives: {
                 selectionwindow.visible = true;
-                selectionwindow.diveData = dives;
+                selectionwindow.setDiveData(dives);
             }
         }
     }
