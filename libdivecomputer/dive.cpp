@@ -30,9 +30,14 @@ Dive::~Dive()
     }
 }
 
-std::string Dive::formatted_datetime() const
+std::string Dive::iso_datetime() const
 {
-    return format_datetime((dc_datetime_t&)datetime);
+    return format_datetime_iso((dc_datetime_t&)datetime);
+}
+
+std::string Dive::display_datetime() const
+{
+    return format_datetime_display((dc_datetime_t&)datetime);
 }
 
 void Dive::parse(dc_parser_t* parser)

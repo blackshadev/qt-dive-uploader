@@ -1,4 +1,5 @@
 #include "qdivemodel.h"
+#include <stdio.h>
 
 QDiveModel::QDiveModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -48,11 +49,22 @@ QVariant QDiveModel::data(const QModelIndex & index, int role) const {
         case SelectedRole:
             return QVariant(!dive->ignore);
         case DateRole:
-            return QVariant(dive->formatted_datetime().data());
-        case DiveTimeRole:
-            return QVariant(dive->divetime);
-        case DiveDepthRole:
-            return QVariant(dive->maxDepth);
+            return QVariant(dive->display_datetime().data());
+        case DiveTimeRole: {
+            char str[30];
+            int hours = dive->divetime / 3600;
+            int minutes = (dive->divetime - (hours * 3600) ) / 60;
+            int seconds = (dive->divetime - (hours * 3600) - (minutes * 60));
+
+            sprintf(str, "%d2:%d2:%d2", hours, minutes, seconds);
+            return QString::fromLocal8Bit(str);
+
+        }
+        case DiveDepthRole: {
+            char str[30];
+            sprintf(str, "%f.2 m", dive->maxDepth);
+            return QString::fromLocal8Bit(str);
+        }
         default:
             return QVariant();
 

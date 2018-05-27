@@ -3,13 +3,17 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.3
 import Libdivecomputer 0.1
-import "./ColumnHelper.js" as ColumnHelper
 
 Window {
     property DiveModel diveData
+    property variant columnWidths: ({
+        datetime: 150,
+        time: 150,
+        depth: 50
+    })
+
     function setDiveData(data) {
         diveData = data;
-        listView.columnWidths = ColumnHelper.calcColumnWidths(diveData, listView);
     }
 
     ColumnLayout {
@@ -37,7 +41,6 @@ Window {
         ListView {
 
             id: listView
-            property variant columnWidths: ({});
             flickableDirection: Flickable.VerticalFlick
             boundsBehavior: Flickable.StopAtBounds
             Layout.fillHeight: true
@@ -60,18 +63,21 @@ Window {
                     spacing: 10
 
                     Text {
-                        width: listView.columnWidths['datetime']
+                        width: columnWidths['datetime']
                         text: "Date"
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
-                        width: listView.columnWidths['time']
+                        width: columnWidths['time']
                         text: "DiveTime"
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
-                        width: listView.columnWidths['depth']
+                        width: columnWidths['depth']
                         text: "Depth"
+                        horizontalAlignment: Text.AlignLeft
                     }
                 }
             }
@@ -91,19 +97,22 @@ Window {
                     spacing: 10
 
                     Text {
-                        width: listView.columnWidths['datetime']
+                        width: columnWidths['datetime']
                         text: datetime
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
-                        width: listView.columnWidths['time']
+                        width: columnWidths['time']
                         text: time
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
 
-                        width: listView.columnWidths['depth']
+                        width: columnWidths['depth']
                         text: depth
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                 }

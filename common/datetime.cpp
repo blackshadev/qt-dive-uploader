@@ -1,7 +1,7 @@
 #include "datetime.h"
 
 
-std::string format_datetime(dc_datetime_t &dt) {
+std::string format_datetime_iso(dc_datetime_t &dt) {
     char buff[25];
     std::sprintf(
         buff,
@@ -14,6 +14,21 @@ std::string format_datetime(dc_datetime_t &dt) {
         dt.second,
         dt.timezone / 3600,
         dt.timezone % 3600
+    );
+    return std::string(buff);
+}
+
+std::string format_datetime_display(dc_datetime_t &dt) {
+    char buff[25];
+    std::sprintf(
+        buff,
+        "%04d-%02d-%02d %02d:%02d:%02d",
+        dt.year,
+        dt.month,
+        dt.day,
+        dt.hour + dt.timezone / 3600,
+        dt.minute + dt.timezone % 3600,
+        dt.second
     );
     return std::string(buff);
 }

@@ -62,7 +62,8 @@ public:
 
     Dive();
     ~Dive();
-    std::string formatted_datetime() const;
+    std::string iso_datetime() const;
+    std::string display_datetime() const;
     void parse(dc_parser_t* parser);
     void set_fingerprint(const unsigned char* fingerprint, unsigned int fsize);
     void process_sample(dc_sample_type_t type, dc_sample_value_t value);

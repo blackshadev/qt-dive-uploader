@@ -84,7 +84,7 @@ void JsonDiveWriter::write_samples(QJsonArray &sampleArray, Dive *dive)
 
 void JsonDiveWriter::write_dive(QJsonObject &json, Dive *dive)
 {
-    json["date"] = QString::fromStdString(format_datetime(dive->datetime));
+    json["date"] = QString::fromStdString(format_datetime_iso(dive->datetime));
     json["divetime"] = (int)dive->divetime;
 
     json["fingerprint"] = base64_encode(dive->fingerprint.data(), dive->fingerprint.length());
