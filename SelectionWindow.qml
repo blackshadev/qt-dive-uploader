@@ -6,11 +6,11 @@ import Libdivecomputer 0.1
 
 Window {
     property DiveModel diveData
-    property variant columnWidths: ({
-        datetime: 150,
-        time: 150,
-        depth: 50
-    })
+    property variant columnWidths: {
+        "datetime": 200,
+        "time": 100,
+        "depth": 100
+    }
 
     function setDiveData(data) {
         diveData = data;
@@ -18,24 +18,46 @@ Window {
 
     ColumnLayout {
         anchors.fill: parent
+        spacing: 0
 
-        RowLayout {
+        Rectangle {
 
-            Button {
-                text: "Select all"
-                onClicked: {
-                    diveData.setSelectedAll(true);
+            z: 3
+            color: "#ffffff"
+            Layout.fillWidth: true
+            height: 45
+
+            RowLayout {
+
+                Button {
+
+                    Layout.margins: 10
+                    text: "Select all"
+                    onClicked: {
+                        diveData.setSelectedAll(true);
+                    }
                 }
-            }
 
-            Button {
-                text: "Deselect all"
-                onClicked: {
-                    diveData.setSelectedAll(false);
+                Button {
+
+                    Layout.margins: 10
+                    text: "Deselect all"
+                    onClicked: {
+                        diveData.setSelectedAll(false);
+                    }
                 }
+
+                Button {
+
+                    Layout.margins: 10
+                    text: "Done"
+                    onClicked: {
+                        // todo
+                    }
+                }
+
+
             }
-
-
         }
 
         ListView {
@@ -52,7 +74,6 @@ Window {
 
             headerPositioning: ListView.OverlayHeader
             header: Rectangle {
-
                 width: parent.width
                 height: 32
 
@@ -63,22 +84,27 @@ Window {
                     spacing: 10
 
                     Text {
-                        width: columnWidths['datetime']
+                        Layout.preferredWidth: columnWidths['datetime']
                         text: "Date"
                         horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
-                        width: columnWidths['time']
+                        Layout.preferredWidth: columnWidths['time']
                         text: "DiveTime"
                         horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
-                        width: columnWidths['depth']
+                        Layout.preferredWidth: columnWidths['depth']
                         text: "Depth"
-                        horizontalAlignment: Text.AlignLeft
+                        horizontalAlignment: Text.AlignHCenter
                     }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
                 }
             }
 
@@ -94,25 +120,30 @@ Window {
 
 
                 contentItem: RowLayout {
+                    Layout.fillWidth: true
                     spacing: 10
 
                     Text {
-                        width: columnWidths['datetime']
+                        Layout.preferredWidth: columnWidths['datetime']
                         text: datetime
                         horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
-                        width: columnWidths['time']
+                        Layout.preferredWidth: columnWidths['time']
                         text: time
                         horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
 
-                        width: columnWidths['depth']
+                        Layout.preferredWidth: columnWidths['depth']
                         text: depth
-                        horizontalAlignment: Text.AlignLeft
+                        horizontalAlignment: Text.AlignRight
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
                     }
 
                 }

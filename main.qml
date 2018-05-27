@@ -81,7 +81,7 @@ Item {
     }
 
     SelectionWindow {
-        width: 640
+        width: 480
         height: 480
         visible: false
         id: selectionwindow

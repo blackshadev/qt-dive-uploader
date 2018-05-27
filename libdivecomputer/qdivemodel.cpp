@@ -53,16 +53,16 @@ QVariant QDiveModel::data(const QModelIndex & index, int role) const {
         case DiveTimeRole: {
             char str[30];
             int hours = dive->divetime / 3600;
-            int minutes = (dive->divetime - (hours * 3600) ) / 60;
-            int seconds = (dive->divetime - (hours * 3600) - (minutes * 60));
+            int minutes = dive->divetime / 60 % 60;
+            int seconds = dive->divetime % 60;
 
-            sprintf(str, "%d2:%d2:%d2", hours, minutes, seconds);
+            sprintf(str, "%02d:%02d:%02d", hours, minutes, seconds);
             return QString::fromLocal8Bit(str);
 
         }
         case DiveDepthRole: {
             char str[30];
-            sprintf(str, "%f.2 m", dive->maxDepth);
+            sprintf(str, "%.2f m", dive->maxDepth);
             return QString::fromLocal8Bit(str);
         }
         default:
