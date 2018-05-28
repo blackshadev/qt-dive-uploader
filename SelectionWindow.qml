@@ -6,14 +6,16 @@ import Libdivecomputer 0.1
 
 Window {
     property DiveModel diveData
+    property variant curWriter;
     property variant columnWidths: {
         "datetime": 200,
         "time": 100,
         "depth": 100
     }
 
-    function setDiveData(data) {
+    function setDiveData(writer, data) {
         diveData = data;
+        curWriter = writer;
     }
 
     ColumnLayout {
@@ -51,8 +53,10 @@ Window {
 
                     Layout.margins: 10
                     text: "Done"
+                    enabled: curWriter !== undefined
                     onClicked: {
-                        // todo
+                        curWriter.selectionDone();
+                        visible = false;
                     }
                 }
 

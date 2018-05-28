@@ -61,7 +61,7 @@ public:
     QStringList* m_available_portnames;
     DCComputerList* m_available_devices;
     QString m_path;
-    bool m_select_dives = true;
+    bool m_select_dives = false;
 
     QString get_writeTypeAsString();
     void set_writeTypeAsString(QString str, WriteType::writetype fallback = WriteType::File);

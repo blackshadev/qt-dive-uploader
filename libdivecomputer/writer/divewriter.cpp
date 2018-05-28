@@ -18,9 +18,9 @@ void DiveWriter::add(Dive *d)
     check_more_work();
 }
 
-void DiveWriter::selectionDone(QList<Dive*> dives)
+void DiveWriter::selectionDone()
 {
- // todo
+    // todo
     m_selected = true;
     check_more_work();
 }
@@ -43,6 +43,7 @@ void DiveWriter::check_more_work()
         return;
     }
 
+    again:
     if(m_busy || !is_ready()) {
         return; // still busy
     }
@@ -50,6 +51,14 @@ void DiveWriter::check_more_work()
     m_lock.lock();
     if(m_queue.length() > 0) {
         Dive *d = m_queue.dequeue();
+        if(d->ignore) {
+            m_current++;
+            emit progress(m_current, m_total);
+            m_lock.unlock();
+
+            goto again;
+        }
+
         m_busy = true;
         m_lock.unlock();
 
@@ -69,9 +78,9 @@ void DiveWriter::work_done(Dive *d)
     m_lock.lock();
     m_current += 1;
     m_busy = false;
+    emit progress(m_current, m_total);
     m_lock.unlock();
 
-    emit progress(m_current, m_total);
     emit diveWritten(d);
     check_more_work();
 }

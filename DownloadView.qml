@@ -137,6 +137,21 @@ GridLayout {
     }
 
     Label {
+        text: "Select Dives"
+        Layout.minimumWidth: labelColumnWidth
+        Layout.maximumWidth: labelColumnWidth
+    }
+
+    CheckBox {
+
+        checked: libdivecomputer.selectDives
+        onClicked: {
+            libdivecomputer.selectDives = checked;
+        }
+
+    }
+
+    Label {
         text: "Output file"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
@@ -177,16 +192,10 @@ GridLayout {
         Layout.fillWidth: true
     }
 
-    Button {
-        text: "test Grid"
-        onClicked: {
-            selectionwindow.visible = true
-        }
-    }
 
     Button {
         id: startButton
-        Layout.columnSpan: 1
+        Layout.columnSpan: 2
         Layout.alignment: Qt.AlignRight
         text: "Start"
         onClicked: {
