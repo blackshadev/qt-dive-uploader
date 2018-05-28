@@ -28,7 +28,7 @@ public:
 signals:
     void dive(Dive* d);
     void diveWritten(Dive* d);
-    void selectDives(QList<Dive*> dives);
+    void selectDives(DiveWriter* writer, QList<Dive*> dives);
     void progress(uint m_current, uint m_total);
     void error(QString msg);
     void started();

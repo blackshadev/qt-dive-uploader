@@ -163,13 +163,13 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr) {
     connect(m_writer, SIGNAL(done()), this, SIGNAL(done()));
     connect(m_writer, SIGNAL(progress(uint,uint)), this, SIGNAL(writeProgress(uint,uint)));
     connect(m_writer, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
-    connect(m_writer, &DiveWriter::selectDives, [&](QList<Dive*> dives) {
+    connect(m_writer, &DiveWriter::selectDives, [&](DiveWriter* writer, QList<Dive*> dives) {
         auto model = new QDiveModel();
         for(auto d : dives) {
             model->add(d);
         }
 
-        emit selectDives(model);
+        emit selectDives(writer, model);
     });
     connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {
         delete d;

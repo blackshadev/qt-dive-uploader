@@ -81,21 +81,23 @@ Window {
                 color: "#cccccc"
                 RowLayout {
                     anchors.fill: parent
-                    spacing: 10
 
                     Text {
+                        Layout.margins: 4
                         Layout.preferredWidth: columnWidths['datetime']
                         text: "Date"
                         horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
+                        Layout.margins: 4
                         Layout.preferredWidth: columnWidths['time']
                         text: "DiveTime"
                         horizontalAlignment: Text.AlignLeft
                     }
 
                     Text {
+                        Layout.margins: 4
                         Layout.preferredWidth: columnWidths['depth']
                         text: "Depth"
                         horizontalAlignment: Text.AlignHCenter
@@ -121,7 +123,6 @@ Window {
 
                 contentItem: RowLayout {
                     Layout.fillWidth: true
-                    spacing: 10
 
                     Text {
                         Layout.preferredWidth: columnWidths['datetime']
@@ -136,7 +137,6 @@ Window {
                     }
 
                     Text {
-
                         Layout.preferredWidth: columnWidths['depth']
                         text: depth
                         horizontalAlignment: Text.AlignRight

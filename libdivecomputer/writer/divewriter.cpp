@@ -94,7 +94,7 @@ void DiveWriter::end()
     m_lock.unlock();
 
     if(m_select && !m_selected) {
-        emit selectDives((QList<Dive*>)m_queue);
+        emit selectDives(this, (QList<Dive*>)m_queue);
     } else {
         check_more_work();
     }

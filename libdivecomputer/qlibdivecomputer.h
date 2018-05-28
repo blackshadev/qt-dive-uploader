@@ -81,7 +81,7 @@ signals:
     void done();
     void error(QString msg);
     void log(QString lvl, QString msg);
-    void selectDives(QDiveModel* dives);
+    void selectDives(DiveWriter* writer, QDiveModel* dives);
 
 protected slots:
 protected:
