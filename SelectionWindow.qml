@@ -5,7 +5,9 @@ import QtQuick.Window 2.3
 import Libdivecomputer 0.1
 
 Window {
+
     property DiveModel diveData
+    property bool done: false;
     property variant curWriter;
     property variant columnWidths: {
         "datetime": 200,
@@ -16,11 +18,12 @@ Window {
     function setDiveData(writer, data) {
         diveData = data;
         curWriter = writer;
+        done = false;
     }
 
     onVisibleChanged: {
-        if(diveData !== undefined && visible === false) {
-            console.log("cancel");
+
+        if(!done && diveData !== undefined && visible === false) {
             libdivecomputer.cancel();
         }
     }
@@ -63,7 +66,9 @@ Window {
                     enabled: curWriter !== undefined
                     onClicked: {
                         curWriter.selectionDone();
-                        visible = false;
+                        done = true;
+                        selectionwindow.visible = false;
+
                     }
                 }
 
