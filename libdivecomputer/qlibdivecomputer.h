@@ -69,6 +69,7 @@ public:
     void bind_littledivelog(LittleDiveLog* log);
 
     Q_INVOKABLE void start_download(QString port_name, int comp_index);
+    Q_INVOKABLE void cancel();
 
 signals:
     void writeTypeChanged(WriteType::writetype t);

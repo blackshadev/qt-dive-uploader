@@ -3,6 +3,8 @@
 DiveWriter::DiveWriter() : QThread(NULL) {
 }
 
+
+
 void DiveWriter::set_device_clock(uint devtime, uint systime) {}
 void DiveWriter::set_device_descriptor(dc_descriptor_t *descr) {}
 void DiveWriter::set_device_info(uint model, uint serial, uint firmware) {}

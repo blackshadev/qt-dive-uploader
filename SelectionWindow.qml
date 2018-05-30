@@ -18,6 +18,13 @@ Window {
         curWriter = writer;
     }
 
+    onVisibleChanged: {
+        if(diveData !== undefined && visible === false) {
+            console.log("cancel");
+            libdivecomputer.cancel();
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0

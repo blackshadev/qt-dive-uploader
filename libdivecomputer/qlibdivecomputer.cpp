@@ -123,6 +123,28 @@ void QLibDiveComputer::bind_littledivelog(LittleDiveLog *log)
 }
 
 
+void QLibDiveComputer::cancel() {
+    if(m_context != NULL) {
+        qInfo("Delete context");
+        // todo m_context->cancel()
+        m_context->wait();
+        delete m_context;
+        m_context = NULL;
+        qInfo("Deleted context");
+    }
+
+    if(m_writer != NULL) {
+        qInfo("Delete writer");
+        m_writer->exit(1);
+        m_writer->wait();
+
+        delete m_writer;
+        m_writer = NULL;
+        qInfo("Deleted writer");
+    }
+
+}
+
 void QLibDiveComputer::start_download(QString port_name, int comp_idx) {
 
     auto computer = m_available_devices->get(comp_idx);
