@@ -143,10 +143,12 @@ GridLayout {
     }
 
     CheckBox {
-
-        checked: libdivecomputer.selectDives
-        onClicked: {
-            libdivecomputer.selectDives = checked;
+        id: selectDives
+        Component.onCompleted: {
+            checked = session.selectDives;
+        }
+        onCheckStateChanged: {
+            session.selectDives = checked;
         }
 
     }
@@ -206,7 +208,8 @@ GridLayout {
             var idx = computerSelection.model.index(computerSelection.currentIndex, 0);
             libdivecomputer.start_download(
                 portSelection.currentText,
-                computerSelection.model.data(idx, ComputerRoles.IndexRole)
+                computerSelection.model.data(idx, ComputerRoles.IndexRole),
+                selectDives.checked
             );
 
         }

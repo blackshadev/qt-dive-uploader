@@ -68,7 +68,7 @@ public:
 
     void bind_littledivelog(LittleDiveLog* log);
 
-    Q_INVOKABLE void start_download(QString port_name, int comp_index);
+    Q_INVOKABLE void start_download(QString port_name, int comp_index, bool select = false);
     Q_INVOKABLE void cancel();
 
 signals:
@@ -99,7 +99,7 @@ private:
     QStringList get_loglevels();
     DCDownloadContext* m_context;
     DiveWriter* m_writer;
-    void create_writer(dc_descriptor_t* descriptor);
+    void create_writer(dc_descriptor_t* descriptor, bool select);
     void free_writer();
     void create_context(char* port_name, dc_descriptor_t* descriptor);
     void free_context();

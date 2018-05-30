@@ -16,6 +16,8 @@ class SessionData : public QObject
     Q_PROPERTY(QString portname READ getPortname WRITE setPortname NOTIFY portnameChanged)
     Q_PROPERTY(QString refreshToken READ getRefreshToken WRITE setRefreshToken NOTIFY refreshTokenChanged)
     Q_PROPERTY(QString writeType READ getWriteType WRITE setWriteType NOTIFY writeTypeChanged)
+    Q_PROPERTY(bool selectDives READ getSelectDives WRITE setSelectDives NOTIFY selectDivesChanged)
+
 
 public:
     explicit SessionData(QObject* parent = NULL);
@@ -35,6 +37,8 @@ public:
     QString getWriteType();
     void setWriteType(QString write_type);
 
+    bool getSelectDives();
+    void setSelectDives(bool selectDives);
 
     void read(const QJsonObject &json);
     void write(QJsonObject &json);
@@ -45,6 +49,7 @@ signals:
     void portnameChanged(QString);
     void refreshTokenChanged(QString);
     void writeTypeChanged(QString);
+    void selectDivesChanged(bool);
 
 protected :
     QString m_computer;
@@ -52,6 +57,7 @@ protected :
     QString m_portname;
     QString m_refresh_token;
     QString m_write_type;
+    bool m_select_dives;
 };
 
 

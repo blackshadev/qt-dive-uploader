@@ -125,33 +125,29 @@ void QLibDiveComputer::bind_littledivelog(LittleDiveLog *log)
 
 void QLibDiveComputer::cancel() {
     if(m_context != NULL) {
-        qInfo("Delete context");
-        // todo m_context->cancel()
+        m_context->quit();
         m_context->wait();
         delete m_context;
         m_context = NULL;
-        qInfo("Deleted context");
     }
 
     if(m_writer != NULL) {
-        qInfo("Delete writer");
-        m_writer->exit(1);
+        m_writer->quit();
         m_writer->wait();
 
         delete m_writer;
         m_writer = NULL;
-        qInfo("Deleted writer");
     }
 
 }
 
-void QLibDiveComputer::start_download(QString port_name, int comp_idx) {
+void QLibDiveComputer::start_download(QString port_name, int comp_idx, bool select_dives) {
 
     auto computer = m_available_devices->get(comp_idx);
 
     try {
         create_context(port_name.toLatin1().data(), computer->descriptor);
-        create_writer(computer->descriptor);
+        create_writer(computer->descriptor, select_dives);
         m_context->start();
 
     } catch(std::exception &err) {
@@ -159,7 +155,7 @@ void QLibDiveComputer::start_download(QString port_name, int comp_idx) {
     }
 }
 
-void QLibDiveComputer::create_writer(dc_descriptor_t* descr) {
+void QLibDiveComputer::create_writer(dc_descriptor_t* descr, bool select_dives) {
     if(m_writer != NULL) {
         free_writer();
     }
@@ -178,7 +174,7 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr) {
 
     }
 
-    m_writer->set_selection(m_select_dives);
+    m_writer->set_selection(select_dives);
 
     m_writer->set_device_descriptor(descr);
 

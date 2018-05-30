@@ -6,7 +6,7 @@ import SortFilterProxyModel 0.1
 import DCComputer 0.1
 import Libdivecomputer 0.1
 
-Item {
+ApplicationWindow {
 
     property int margin: 21
     property int labelColumnWidth: 120
@@ -14,71 +14,69 @@ Item {
     property int initialHeight: 320
     property int t: DiveModel.DiveDepthRole
 
-    ApplicationWindow {
-        visible: true
+    visible: true
 
-        property int _width: mainViewComp.Ready ? mainView.Layout.minimumWidth + 2 * margin : initialWidth
-        property int _height: mainViewComp.Ready ? mainView.Layout.minimumHeight + 2 * margin : initialHeight
+    property int _width: mainViewComp.Ready ? mainView.Layout.minimumWidth + 2 * margin : initialWidth
+    property int _height: mainViewComp.Ready ? mainView.Layout.minimumHeight + 2 * margin : initialHeight
 
-        id: app
-        width: _width
-        height: _height
-        minimumWidth: _width
-        minimumHeight: _height
-        title: "Dive Uploader"
+    id: app
+    width: _width
+    height: _height
+    minimumWidth: _width
+    minimumHeight: _height
+    title: "Dive Uploader"
 
-        StackView {
-            id: stackView
-            initialItem: mainViewComp
-            anchors.fill: parent
-            anchors.margins: margin
+    StackView {
+        id: stackView
+        initialItem: mainViewComp
+        anchors.fill: parent
+        anchors.margins: margin
 
-            Component {
-                id: mainViewComp
-                MainView {
-                    id: mainView
-                }
+        Component {
+            id: mainViewComp
+            MainView {
+                id: mainView
             }
-
-            Component {
-                id: loginViewComp
-                LoginView {
-                    id: loginView
-                }
-            }
-
-
         }
 
-        Component.onCompleted: {
-            if(!littledivelog.isLoggedIn) {
+        Component {
+            id: loginViewComp
+            LoginView {
+                id: loginView
+            }
+        }
+
+    }
+
+    Component.onCompleted: {
+        if(!littledivelog.isLoggedIn) {
+            stackView.push(loginViewComp);
+        }
+    }
+
+
+    Connections {
+        target: littledivelog
+        onLoggedStateChanged: {
+            if(isLoggedIn) {
+                stackView.pop();
+            } else {
                 stackView.push(loginViewComp);
             }
         }
-
-
-        Connections {
-            target: littledivelog
-            onLoggedStateChanged: {
-                if(isLoggedIn) {
-                    stackView.pop();
-                } else {
-                    stackView.push(loginViewComp);
-                }
-            }
-            onRefreshTokenChanged: {
-                session.refreshToken = tok;
-            }
-        }
-
-        Connections {
-            target: libdivecomputer
-            onSelectDives: {
-                selectionwindow.visible = true;
-                selectionwindow.setDiveData(writer, dives);
-            }
+        onRefreshTokenChanged: {
+            session.refreshToken = tok;
         }
     }
+
+    Connections {
+        target: libdivecomputer
+        onSelectDives: {
+            selectionwindow.visible = true;
+            selectionwindow.setDiveData(writer, dives);
+        }
+    }
+
 
     SelectionWindow {
         width: 480

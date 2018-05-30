@@ -33,6 +33,17 @@ void SessionData::setWriteType(QString write_type)
     emit writeTypeChanged(write_type);
 }
 
+bool SessionData::getSelectDives()
+{
+    return m_select_dives;
+}
+
+void SessionData::setSelectDives(bool selectDives)
+{
+    m_select_dives = selectDives;
+    emit selectDivesChanged(selectDives);
+}
+
 void SessionData::setPath(QString path) {
     m_path = path;
     emit pathChanged(path);
@@ -73,6 +84,11 @@ void SessionData::read(const QJsonObject &json)
         m_write_type = json["writeType"].toString();
     }
 
+
+    if(json.contains("selectDives") && json["selectDives"].isBool()) {
+        m_select_dives = json["selectDives"].toBool();
+    }
+
 }
 
 void SessionData::write(QJsonObject &json)
@@ -82,6 +98,7 @@ void SessionData::write(QJsonObject &json)
     json["portname"] = m_portname;
     json["refreshToken"] = m_refresh_token;
     json["writeType"] = m_write_type;
+    json["selectDives"] = m_select_dives;
 }
 
 // -- SessionStore --
