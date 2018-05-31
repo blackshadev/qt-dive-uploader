@@ -68,11 +68,8 @@ Window {
                         curWriter.selectionDone();
                         done = true;
                         selectionwindow.visible = false;
-
                     }
                 }
-
-
             }
         }
 
@@ -135,7 +132,6 @@ Window {
                 onClicked: {
                     diveData.setSelected(index, !selected);
                 }
-
 
                 contentItem: RowLayout {
                     Layout.fillWidth: true
