@@ -143,6 +143,11 @@ void QLibDiveComputer::cancel() {
 
 void QLibDiveComputer::start_download(QString port_name, int comp_idx, bool select_dives) {
 
+    if(m_writetype == WriteType::LittleLog && m_log->m_user_info == NULL) {
+        emit error("Not yet logged in. Either login or wait a second");
+        return;
+    }
+
     auto computer = m_available_devices->get(comp_idx);
 
     try {
