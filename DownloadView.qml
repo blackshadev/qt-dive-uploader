@@ -32,7 +32,6 @@ GridLayout {
             fileDialog.close();
         }
         onRejected: {
-            console.log("Canceled")
             fileDialog.close();
 
         }
@@ -200,6 +199,7 @@ GridLayout {
         Layout.columnSpan: 2
         Layout.alignment: Qt.AlignRight
         text: "Start"
+        enabled: libdivecomputer.isReady
         onClicked: {
 
             writeProgress.value = 0;

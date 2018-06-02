@@ -51,6 +51,8 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(WriteType::writetype writeType READ get_writeType WRITE set_writeType NOTIFY writeTypeChanged)
     Q_PROPERTY(QString path MEMBER m_path NOTIFY pathChanged)
     Q_PROPERTY(bool selectDives MEMBER m_select_dives NOTIFY selectDivesChanged)
+    Q_PROPERTY(bool isReady READ get_is_ready NOTIFY isReadyChanged)
+
 
 public:
 
@@ -63,6 +65,7 @@ public:
     QString m_path;
     bool m_select_dives = false;
 
+    bool get_is_ready();
     QString get_writeTypeAsString();
     void set_writeTypeAsString(QString str, WriteType::writetype fallback = WriteType::File);
 
@@ -83,6 +86,7 @@ signals:
     void error(QString msg);
     void log(QString lvl, QString msg);
     void selectDives(DiveWriter* writer, QDiveModel* dives);
+    void isReadyChanged();
 
 protected slots:
 protected:

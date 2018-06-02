@@ -16,6 +16,7 @@ QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
     m_available_devices = get_devices();
     m_available_portnames = get_ports();
     get_version();
+    connect(this, SIGNAL(pathChanged()), this, SIGNAL(isReadyChanged()));
 }
 QLibDiveComputer::~QLibDiveComputer()
 {
@@ -85,6 +86,17 @@ QStringList QLibDiveComputer::get_loglevels() {
     return list;
 }
 
+bool QLibDiveComputer::get_is_ready() {
+    switch(m_writetype) {
+        case WriteType::File:
+            return !m_path.isEmpty();
+        case WriteType::LittleLog:
+            return m_log != NULL && m_log->isLoggedIn() && m_log->m_user_info != NULL;
+        default:
+            return false;
+    }
+}
+
 QString QLibDiveComputer::get_loglevel() {
     auto meta = LogLevel::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
@@ -114,12 +126,15 @@ void QLibDiveComputer::set_writeType(WriteType::writetype w) {
 
     if(isChanged) {
         emit writeTypeChanged(w);
+        emit isReadyChanged();
     }
 }
 
 void QLibDiveComputer::bind_littledivelog(LittleDiveLog *log)
 {
     m_log = log;
+    connect(log, SIGNAL(userInfoChanged(UserInfo*)), this, SIGNAL(isReadyChanged()));
+    connect(log, SIGNAL(loggedStateChanged(bool)), this, SIGNAL(isReadyChanged()));
 }
 
 
