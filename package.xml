@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <Name>nl.littledev.dive.uploader</Name>
+    <DisplayName>Dive Uploader</DisplayName>
+    <Description>A Tool for downloading dives from a dive computer onto a file or dive.littledev.nl.</Description>
+    <Version>0.0.1</Version>
+    <ReleaseDate>2018-06-03</ReleaseDate>
+    <Licenses>
+        <License name="Beer Public License Agreement" file="license.txt" />
+    </Licenses>
+    <Default>true</Default>
+</Package>

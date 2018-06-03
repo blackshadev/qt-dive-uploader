@@ -81,4 +81,6 @@ else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../.
 else:unix: PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/libdivecomputer.a
 
 DISTFILES += \
-    qmldir
+    qmldir \
+    package.xml \
+    license.txt
