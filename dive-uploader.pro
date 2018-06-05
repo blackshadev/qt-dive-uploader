@@ -82,5 +82,4 @@ else:unix: PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/libdivecomputer.a
 
 DISTFILES += \
     qmldir \
-    package.xml \
     license.txt
