@@ -1,4 +1,5 @@
 #include <string>
+#include <QWindow>
 #include <QGuiApplication>
 #include <QQuickWindow>
 #include <QQmlApplicationEngine>
@@ -11,6 +12,7 @@
 #include "sessionstore.h"
 #include "littledivelog/littledivelog.h"
 #include "libdivecomputer/qdivemodel.h"
+#include "jsonrequest.h"
 
 int main(int argc, char *argv[])
 {
@@ -52,6 +54,11 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
+
+    app.connect(&app, &QGuiApplication::lastWindowClosed, &app, [=]() {
+        qInfo(" last win closed, %i", JsonRequest::pendingRequests->count());
+        JsonRequest::abortAllPendingRequest();
+    });
 
     int res = app.exec();
 

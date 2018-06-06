@@ -7,6 +7,7 @@ import DCComputer 0.1
 import Libdivecomputer 0.1
 
 ApplicationWindow {
+    objectName: "appWindow"
 
     property int margin: 21
     property int labelColumnWidth: 120
