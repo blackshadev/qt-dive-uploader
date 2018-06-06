@@ -20,6 +20,7 @@ void QDiveModel::setSelected(int row, bool selected)
 {
     m_dives[row]->ignore = !selected;
     emit dataChanged(createIndex(row, 0), createIndex(row, 0), QVector<int>( { SelectedRole } ));
+    emit selectedDivesChanged();
 }
 
 void QDiveModel::setSelectedAll(bool selected)
@@ -29,6 +30,16 @@ void QDiveModel::setSelectedAll(bool selected)
     }
 
     emit dataChanged(createIndex(0, 0), createIndex(m_dives.length() - 1, 0), QVector<int>( { SelectedRole } ));
+    emit selectedDivesChanged();
+}
+
+int QDiveModel::selectedDiveCount() const {
+    int count = 0;
+    for(auto d : m_dives) {
+        count += !d->ignore;
+    }
+
+    return count;
 }
 
 int QDiveModel::rowCount(const QModelIndex & parent) const {

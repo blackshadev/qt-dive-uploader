@@ -37,38 +37,47 @@ Window {
             z: 3
             color: "#ffffff"
             Layout.fillWidth: true
-            height: 45
+            height: 75
 
-            RowLayout {
+            ColumnLayout {
+                RowLayout {
+                    Layout.topMargin: 10
 
-                Button {
+                    Button {
 
-                    Layout.margins: 10
-                    text: "Select all"
-                    onClicked: {
-                        diveData.setSelectedAll(true);
+                        Layout.leftMargin: 10
+                        text: "Select all"
+                        onClicked: {
+                            diveData.setSelectedAll(true);
+                        }
+                    }
+
+                    Button {
+
+                        Layout.leftMargin: 10
+                        text: "Deselect all"
+                        onClicked: {
+                            diveData.setSelectedAll(false);
+                        }
+                    }
+
+                    Button {
+
+                        Layout.leftMargin: 10
+                        text: "Done"
+                        enabled: curWriter !== undefined
+                        onClicked: {
+                            curWriter.selectionDone();
+                            done = true;
+                            selectionwindow.visible = false;
+                        }
                     }
                 }
 
-                Button {
-
-                    Layout.margins: 10
-                    text: "Deselect all"
-                    onClicked: {
-                        diveData.setSelectedAll(false);
-                    }
-                }
-
-                Button {
-
-                    Layout.margins: 10
-                    text: "Done"
-                    enabled: curWriter !== undefined
-                    onClicked: {
-                        curWriter.selectionDone();
-                        done = true;
-                        selectionwindow.visible = false;
-                    }
+                Text {
+                    Layout.leftMargin: 10
+                    Layout.topMargin: 5
+                    text: diveData ? "Selected " + diveData.selectedDiveCount + " / " + diveData.rowCount() : "No dive data"
                 }
             }
         }
