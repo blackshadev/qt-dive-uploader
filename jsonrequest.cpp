@@ -17,6 +17,26 @@ bool JsonResponse::hasError() {
 }
 
 QSet<JsonRequest*>* JsonRequest::pendingRequests = NULL;
+bool JsonRequest::isStopped = false;
+
+void JsonRequest::abortAllPendingRequest() {
+    for(JsonRequest* req : JsonRequest::pendingRequests->values()) {
+        req->m_reply->abort();
+    }
+}
+
+void JsonRequest::stop() {
+    JsonRequest::isStopped = true;
+    JsonRequest::abortAllPendingRequest();
+    JsonRequest::cleanupStatics();
+}
+
+void JsonRequest::cleanupStatics() {
+    if(JsonRequest::isStopped && JsonRequest::pendingRequests != NULL && JsonRequest::pendingRequests->count() == 0) {
+        delete JsonRequest::pendingRequests;
+        JsonRequest::pendingRequests = NULL;
+    }
+}
 
 JsonRequest::JsonRequest(QObject *parent) : QObject(parent)
 {
@@ -34,15 +54,8 @@ JsonRequest::~JsonRequest()
         m_reply = NULL;
     }
 
-    if(JsonRequest::pendingRequests != NULL && JsonRequest::pendingRequests->count() == 0) {
-        qInfo("Delete pendingReqs");
-        delete JsonRequest::pendingRequests;
-        JsonRequest::pendingRequests = NULL;
-    } else if(JsonRequest::pendingRequests == NULL) {
-
-        qInfo("pending reqs already deleted");
-    } else if(JsonRequest::pendingRequests->count() != 0) {
-        qInfo("Pending req count on %i", JsonRequest::pendingRequests->count() );
+    if(JsonRequest::isStopped) {
+        JsonRequest::cleanupStatics();
     }
 }
 
@@ -116,13 +129,5 @@ void JsonRequest::read_error()
 
 void JsonRequest::do_done()
 {
-    qInfo("doDone");
     JsonRequest::pendingRequests->remove(this);
-}
-
-void JsonRequest::abortAllPendingRequest() {
-    qInfo("Abort All");
-    for(JsonRequest* req : JsonRequest::pendingRequests->values()) {
-        req->m_reply->abort();
-    }
 }

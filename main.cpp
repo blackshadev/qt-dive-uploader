@@ -56,8 +56,7 @@ int main(int argc, char *argv[])
         return -1;
 
     app.connect(&app, &QGuiApplication::lastWindowClosed, &app, [=]() {
-        qInfo(" last win closed, %i", JsonRequest::pendingRequests->count());
-        JsonRequest::abortAllPendingRequest();
+        JsonRequest::stop();
     });
 
     int res = app.exec();

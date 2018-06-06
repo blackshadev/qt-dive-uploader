@@ -36,7 +36,9 @@ class JsonRequest : public QObject
     Q_OBJECT
 public:
     static QSet<JsonRequest*>* pendingRequests;
+    static bool isStopped;
     static void abortAllPendingRequest();
+    static void stop();
     explicit JsonRequest(QObject *parent = nullptr);
     virtual ~JsonRequest();
     RequestMethod method;
@@ -48,6 +50,7 @@ public:
 signals:
     void complete(JsonResponse resp);
 protected:
+    static void cleanupStatics();
     QNetworkAccessManager m_qnam;
     QNetworkReply* m_reply;
     void read_reply();
