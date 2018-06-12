@@ -67,18 +67,26 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 include(vendor/vendor.pri)
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/release/ -ldivecomputer
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/debug/ -ldivecomputer
-else:unix: LIBS += -L$$PWD/../../../../usr/local/lib/ -ldivecomputer
+INCLUDEPATH += "$$PWD/3rdparty/libdivecomputer/include"
+DEPENDPATH += "$$PWD/3rdparty/libdivecomputer/include"
 
-INCLUDEPATH += $$PWD/../../../../usr/local/include
-DEPENDPATH += $$PWD/../../../../usr/local/include
+win32: PRE_TARGETDEPS += $$PWD/3rdparty/libdivecomputer/win32/lib/libdivecomputer.a
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/release/libdivecomputer.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/debug/libdivecomputer.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/release/divecomputer.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/debug/divecomputer.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/libdivecomputer.a
+win32: LIBS += -L"$$PWD/3rdparty/libdivecomputer/win32/lib" -ldivecomputer
+else:unix: LIBS += -L"$$PWD/3rdparty/libdivecomputer/linux/lib" -ldivecomputer
+
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/release/ -ldivecomputer
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/debug/ -ldivecomputer
+#else:unix: LIBS += -L$$PWD/../../../../usr/local/lib/ -ldivecomputer
+
+#INCLUDEPATH += $$PWD/../../../../usr/local/include
+#DEPENDPATH += $$PWD/../../../../usr/local/include
+
+#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/release/libdivecomputer.a
+#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/debug/libdivecomputer.a
+#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/release/divecomputer.lib
+#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/debug/divecomputer.lib
+#else:unix: PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/libdivecomputer.a
 
 DISTFILES += \
     qmldir
