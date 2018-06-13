@@ -5,14 +5,19 @@ import QtQuick.Layouts 1.3
 import SortFilterProxyModel 0.1
 import DCComputer 0.1
 import Libdivecomputer 0.1
+import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
     objectName: "appWindow"
 
+    Material.theme: Material.Light;
+    Material.accent: Material.Blue;
+
+
     property int margin: 21
     property int labelColumnWidth: 120
-    property int initialWidth: 450
-    property int initialHeight: 360
+    property int initialWidth: 580
+    property int initialHeight: 420
     property int t: DiveModel.DiveDepthRole
 
     visible: true
@@ -81,7 +86,7 @@ ApplicationWindow {
 
     SelectionWindow {
         width: 480
-        height: 480
+        height: 520
         visible: false
         id: selectionwindow
         title: "Select Dives"

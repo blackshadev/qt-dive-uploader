@@ -7,5 +7,6 @@
         <file>MainView.qml</file>
         <file>AccountView.qml</file>
         <file>SelectionWindow.qml</file>
+        <file>AboutView.qml</file>
     </qresource>
 </RCC>

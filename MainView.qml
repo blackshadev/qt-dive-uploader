@@ -20,6 +20,9 @@ ColumnLayout {
             text: qsTr("Log")
         }
 
+        TabButton {
+            text: qsTr("About")
+        }
 
     }
 
@@ -33,6 +36,7 @@ ColumnLayout {
         LogView {
             id: logView
         }
+        AboutView {}
     }
 
 }

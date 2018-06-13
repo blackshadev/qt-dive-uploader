@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
-    QQuickStyle::setStyle("Fusion");
+    QQuickStyle::setStyle("Material");
     qmlRegisterType<DCComputerList>("DCComputer", 0, 1, "ComputerRoles");
     qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "loglevel");
     qmlRegisterType<WriteType>("Libdivecomputer", 0, 1, "WriteTypes");

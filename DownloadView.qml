@@ -224,15 +224,6 @@ GridLayout {
         text: ""
     }
 
-    Label {
-        text: "DC Version"
-    }
-
-    Label {
-        Layout.fillWidth: true
-        text: libdivecomputer.version
-    }
-
     Connections {
         target: libdivecomputer
         onReadProgress: {
