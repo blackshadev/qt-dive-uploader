@@ -7,7 +7,7 @@
 #include <functional>
 #include "./userinfo.h"
 
-enum TokenType {
+enum RequestTokenType {
     NONE,
     REFRESH,
     ACCESS
@@ -40,7 +40,7 @@ public slots:
 protected:
     void fetch_user_computers(std::function<void()> callback);
     void get_access_token(std::function<void()> callback, QObject* parent = NULL);
-    void raw_request(RequestMethod method, QString path, TokenType tokenType, QJsonObject* data, std::function<void(JsonResponse)> callback, QObject* parent = NULL);
+    void raw_request(RequestMethod method, QString path, RequestTokenType tokenType, QJsonObject* data, std::function<void(JsonResponse)> callback, QObject* parent = NULL);
     QString m_refresh_token;
     QString m_access_token;
 };

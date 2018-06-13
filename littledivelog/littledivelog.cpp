@@ -120,7 +120,7 @@ void LittleDiveLog::get_access_token(std::function<void()> callback, QObject* pa
     raw_request(
         RequestMethod::GET,
         "/auth/access-token",
-        TokenType::REFRESH,
+        RequestTokenType::REFRESH,
         NULL,
         [=](JsonResponse resp) {
             auto obj = resp.data.object();
@@ -144,7 +144,7 @@ void LittleDiveLog::get_access_token(std::function<void()> callback, QObject* pa
 void LittleDiveLog::raw_request(
         RequestMethod method,
         QString path,
-        TokenType tokenType,
+        RequestTokenType tokenType,
         QJsonObject *data,
         std::function<void(JsonResponse)> callback,
         QObject* parent
@@ -154,10 +154,10 @@ void LittleDiveLog::raw_request(
     req->method = method;
 
     switch(tokenType) {
-        case TokenType::ACCESS:
+        case RequestTokenType::ACCESS:
             req->jwt = m_access_token;
         break;
-        case TokenType::REFRESH:
+        case RequestTokenType::REFRESH:
             req->jwt = m_refresh_token;
         break;
     }
@@ -199,7 +199,7 @@ void LittleDiveLog::request(
             parent
         );
     } else {
-        raw_request(method, path, TokenType::ACCESS, data, [=](JsonResponse resp) {
+        raw_request(method, path, RequestTokenType::ACCESS, data, [=](JsonResponse resp) {
             if(retry == true && resp.statuscode == 401) {
                 // 401, retry request after get_access_token
                 m_access_token.clear();
@@ -218,7 +218,7 @@ void LittleDiveLog::logout() {
         return;
     }
 
-    raw_request(RequestMethod::DELETE, "/auth/refresh-token/", TokenType::REFRESH, NULL, [=](JsonResponse resp) {
+    raw_request(RequestMethod::DELETE, "/auth/refresh-token/", RequestTokenType::REFRESH, NULL, [=](JsonResponse resp) {
         set_refresh_token(NULL);
         m_access_token.clear();
         emit loggedStateChanged(isLoggedIn());

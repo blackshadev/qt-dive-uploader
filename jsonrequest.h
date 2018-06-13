@@ -5,6 +5,8 @@
 #include <QJsonDocument>
 #include <QNetworkReply>
 
+#undef DELETE
+
 enum RequestState {
     None,
     Sending,

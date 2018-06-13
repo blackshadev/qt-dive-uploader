@@ -11,6 +11,8 @@
 #include "../littledivelog/littledivelog.h"
 #include "qdivemodel.h"
 
+#undef ERROR
+
 class WriteType : public QObject {
     Q_OBJECT
 public:

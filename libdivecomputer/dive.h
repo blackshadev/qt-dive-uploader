@@ -6,6 +6,7 @@
 #include <libdivecomputer/descriptor.h>
 #include "../common/list.h"
 #include "../common/optional.h"
+#include <vector>
 
 struct tank_event_t {
     unsigned int tank;

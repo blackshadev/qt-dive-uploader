@@ -1,6 +1,7 @@
 #ifndef BASE64_H
 #define BASE64_H
 #include <QString>
+#include <vector>
 
 typedef unsigned char byte;
 
