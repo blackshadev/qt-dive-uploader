@@ -67,13 +67,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 include(vendor/vendor.pri)
 
-INCLUDEPATH += "$$PWD/3rdparty/libdivecomputer/include"
-DEPENDPATH += "$$PWD/3rdparty/libdivecomputer/include"
+INCLUDEPATH += include
+DEPENDPATH += include
 
-win32: PRE_TARGETDEPS += $$PWD/3rdparty/libdivecomputer/win32/lib/libdivecomputer.a
+win32: LIBS += -L"$$PWD/lib/win32/" -ldivecomputer
+else:unix: LIBS += -L$$PWD/lib/linux/ -ldivecomputer
 
-win32: LIBS += -L"$$PWD/3rdparty/libdivecomputer/win32/lib" -ldivecomputer
-else:unix: LIBS += -L"$$PWD/3rdparty/libdivecomputer/linux/lib" -ldivecomputer
+win32: PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer.a
+else:unix: PRE_TARGETDEPS += $$PWD/lib/linux/libdivecomputer.a
 
 #win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/release/ -ldivecomputer
 #else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/debug/ -ldivecomputer
