@@ -6,11 +6,12 @@ import QtQuick.Dialogs 1.0
 import SortFilterProxyModel 0.1
 import DCComputer 0.1
 import Libdivecomputer 0.1
-
+import QtQuick.Controls.Material 2.2
 
 GridLayout {
     Layout.fillWidth: true
     columns: 2
+
 
     FileDialog {
         visible: false
@@ -185,12 +186,15 @@ GridLayout {
         id: readProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
+        implicitHeight: 6
     }
 
     ProgressBar {
         id: writeProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
+
+
     }
 
 

@@ -34,7 +34,7 @@ ColumnLayout {
     }
 
     TextArea {
-        Layout.fillHeight: true
+        anchors.bottom: parent.bottom
         Layout.fillWidth: true
 
         font.pointSize: 10

@@ -13,7 +13,6 @@ ApplicationWindow {
     Material.theme: Material.Light;
     Material.accent: Material.Blue;
 
-
     property int margin: 21
     property int labelColumnWidth: 120
     property int initialWidth: 580

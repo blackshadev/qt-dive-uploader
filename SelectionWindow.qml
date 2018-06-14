@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.3
 import Libdivecomputer 0.1
@@ -37,11 +38,10 @@ Window {
             z: 3
             color: "#ffffff"
             Layout.fillWidth: true
-            height: 75
+            height: 85
 
             ColumnLayout {
                 RowLayout {
-                    Layout.topMargin: 10
 
                     Button {
 
@@ -100,7 +100,7 @@ Window {
                 height: 32
 
                 z: 2
-                color: "#cccccc"
+                color: Material.color(Material.Grey, Material.Shade100)
                 RowLayout {
                     anchors.fill: parent
 
@@ -122,7 +122,7 @@ Window {
                         Layout.margins: 4
                         Layout.preferredWidth: columnWidths['depth']
                         text: "Depth"
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     Item {
@@ -135,15 +135,19 @@ Window {
             delegate: ItemDelegate {
                 width: parent.width
                 height: 32
+                topPadding: 8
 
                 checkable: true
                 highlighted: selected
+
+
                 onClicked: {
                     diveData.setSelected(index, !selected);
                 }
 
                 contentItem: RowLayout {
                     Layout.fillWidth: true
+                    Layout.fillHeight: true
 
                     Text {
                         Layout.preferredWidth: columnWidths['datetime']
