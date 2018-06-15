@@ -1,5 +1,6 @@
 {
   "dependencies": [
-    "fr.grecko.sortfilterproxymodel@0.1.0"
+    "fr.grecko.sortfilterproxymodel@0.1.0",
+    "font.awesome.pri@1.0.0"
   ]
 }

@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    QPM_INIT(engine)
+
     SessionStore sess("./session.json");
     sess.load();
 

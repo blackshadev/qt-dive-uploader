@@ -1,12 +1,13 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.1
+import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.0
 import SortFilterProxyModel 0.1
 import DCComputer 0.1
 import Libdivecomputer 0.1
 import QtQuick.Controls.Material 2.2
+import FontAwesome 1.0
 
 GridLayout {
     Layout.fillWidth: true
@@ -172,6 +173,7 @@ GridLayout {
         }
 
         Button {
+            Material.elevation: 0
             text: "Browse..."
             onClicked: {
                 fileDialog.open();
@@ -186,24 +188,36 @@ GridLayout {
         id: readProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
-        implicitHeight: 6
     }
 
     ProgressBar {
         id: writeProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
-
-
     }
 
 
-    Button {
+    RoundButton {
         id: startButton
         Layout.columnSpan: 2
         Layout.alignment: Qt.AlignRight
-        text: "Start"
+        text: FontAwesome.download
+
+        font.family: FontAwesome.fontFamily
+        font.pointSize: 25
+        padding: 20
         enabled: libdivecomputer.isReady
+
+        Component.onCompleted: {
+            startButton.background.color = Material.color(Material.Blue)
+            startButton.contentItem.color = Material.color(Material.Grey, Material.Shade200)
+        }
+
+        onEnabledChanged: {
+            startButton.background.color = enabled ? Material.color(Material.Blue) : Material.color(Material.Blue, Material.Shade300);
+            startButton.contentItem.color = enabled ?   Material.color(Material.Grey, Material.Shade200) :  Material.color(Material.Grey, Material.Shade300);
+        }
+
         onClicked: {
 
             writeProgress.value = 0;
