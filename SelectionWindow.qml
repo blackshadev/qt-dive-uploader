@@ -100,11 +100,12 @@ Window {
                 height: 32
 
                 z: 2
-                color: Material.color(Material.Grey, Material.Shade100)
+                color: Material.color(Material.Blue)
                 RowLayout {
                     anchors.fill: parent
 
                     Text {
+                        color: "#ffffff"
                         Layout.margins: 4
                         Layout.preferredWidth: columnWidths['datetime']
                         text: "Date"
@@ -112,6 +113,7 @@ Window {
                     }
 
                     Text {
+                        color: "#ffffff"
                         Layout.margins: 4
                         Layout.preferredWidth: columnWidths['time']
                         text: "DiveTime"
@@ -119,6 +121,7 @@ Window {
                     }
 
                     Text {
+                        color: "#ffffff"
                         Layout.margins: 4
                         Layout.preferredWidth: columnWidths['depth']
                         text: "Depth"
@@ -139,6 +142,12 @@ Window {
 
                 checkable: true
                 highlighted: selected
+
+                Binding {
+                    target: background
+                    property: "color"
+                    value: highlighted ? Material.color(Material.Blue, Material.Shade100) : Material.color(Material.Grey, Material.Shade50)
+                }
 
 
                 onClicked: {
