@@ -92,6 +92,7 @@ signals:
 
 protected slots:
 protected:
+    bool m_had_error = false;
     LittleDiveLog* m_log = NULL;
     QString get_loglevel();
     void set_loglevel(QString lvl);

@@ -3,7 +3,10 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 
 
-Item {
+RowLayout {
+
+    Layout.fillWidth: true
+    id: accountLayout
 
     Loader {
         sourceComponent: littledivelog.userInfo === null ? notLoggedIn : accountData
@@ -11,18 +14,12 @@ Item {
 
     Component {
         id: notLoggedIn
-        ColumnLayout {
-            Label {
-                text: "Not logged In"
-            }
 
-            Button {
-                text: "Login"
-                onClicked: {
-                    stackView.push(loginViewComp);
-                }
-            }
+        LoginView {
+            width: accountLayout.width
+            height: accountLayout.height
         }
+
     }
 
     Component {

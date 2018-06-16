@@ -226,17 +226,21 @@ void QLibDiveComputer::free_writer() {
 void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descriptor) {
     free_context();
 
+    m_had_error = false;
     m_context = new DCDownloadContext(this);
     m_context->setPortName(port_name);
     m_context->setDescriptor(descriptor);
     m_context->setLogLevel(m_loglevel);
 
-    m_context->connect(m_context, &DCDownloadContext::started, this, [=]() {
+    m_context->connect(m_context, &DCDownloadContext::started, this, [&]() {
         emit start();
     });
     m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(readProgress(uint,uint)));
 
-    m_context->connect(m_context, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
+    m_context->connect(m_context, &DCDownloadContext::error, [&](QString err) {
+        m_had_error = true;
+        emit error(err);
+    });
     m_context->connect(m_context, SIGNAL(log(QString, QString)), this, SIGNAL(log(QString,QString)));
 
     m_context->connect(m_context, &DCDownloadContext::deviceInfo, this, [=](uint model, uint serial, uint firmware) {
@@ -258,9 +262,13 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
         m_writer->add(dive);
     });
 
-    m_context->connect(m_context, &DCDownloadContext::finished, this, [=]() {
-        m_writer->end();
-        m_log->fetch_user_data();
+    m_context->connect(m_context, &DCDownloadContext::finished, this, [&]() {
+        if(!m_had_error) {
+            m_writer->end();
+            m_log->fetch_user_data();
+        } else {
+            emit done();
+        }
     });
 
 }

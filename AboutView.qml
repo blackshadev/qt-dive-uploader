@@ -6,8 +6,8 @@ GridLayout {
     Layout.fillWidth: true
     columns: 2
 
-    Text {
 
+    Text {
         Layout.fillWidth: true
         wrapMode: Text.Wrap
         Layout.bottomMargin: 44

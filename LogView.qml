@@ -1,7 +1,8 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.4
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Styles 1.4
 
 ColumnLayout {
 
@@ -34,13 +35,19 @@ ColumnLayout {
     }
 
     TextArea {
-        anchors.bottom: parent.bottom
+        Layout.fillHeight: true
         Layout.fillWidth: true
 
         font.pointSize: 10
+        padding: 7
 
         readOnly: true
         text: logText
+        background: Rectangle {
+            color: "#fefefe"
+            border.color: Material.color(Material.Grey)
+        }
+
     }
 
     Connections {

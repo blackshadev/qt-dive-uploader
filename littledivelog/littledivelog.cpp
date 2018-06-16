@@ -34,7 +34,9 @@ void LittleDiveLog::login(QString email, QString password)
             emit error("Invalid response from server");
         } else {
             auto obj = resp.data.object();
-            if(obj.contains("error")) {
+            if(resp.hasError()) {
+                emit error(resp.errorString());
+            } else if(obj.contains("error")) {
                 emit error(obj["error"].toString());
             } else {
                 set_refresh_token(obj["jwt"].toString());

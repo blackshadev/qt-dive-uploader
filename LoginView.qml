@@ -1,8 +1,10 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Material 2.4
 
 RowLayout {
+    Layout.fillWidth: true
 
     GridLayout {
 
@@ -44,7 +46,9 @@ RowLayout {
             Layout.alignment: Qt.AlignRight
 
             Button {
+                visible: stackView.depth > 1
                 text: "Offline"
+                Material.elevation: 0
                 onClicked: {
                     stackView.pop();
                 }
@@ -53,6 +57,9 @@ RowLayout {
             Button {
                 id: loginBtn
                 text: "Login"
+                Material.background: Material.color(Material.Blue)
+                Material.theme: Material.Dark
+
                 onClicked: {
                     littledivelog.login(email.text, password.text);
                 }

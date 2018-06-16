@@ -197,9 +197,15 @@ GridLayout {
     }
 
 
+    Label {
+        Layout.fillWidth: true
+        id: errorLabel
+        color: "red"
+        text: ""
+    }
+
     RoundButton {
         id: startButton
-        Layout.columnSpan: 2
         Layout.alignment: Qt.AlignRight
         text: FontAwesome.download
 
@@ -220,6 +226,7 @@ GridLayout {
 
         onClicked: {
 
+            errorLabel.text = "";
             writeProgress.value = 0;
             readProgress.value = 0;
 
@@ -234,13 +241,6 @@ GridLayout {
     }
 
 
-    Label {
-        id: errorLabel
-        Layout.columnSpan: 2
-        Layout.fillWidth: true
-        color: "red"
-        text: ""
-    }
 
     Connections {
         target: libdivecomputer
@@ -259,7 +259,6 @@ GridLayout {
             startButton.enabled = true;
         }
         onError: {
-            console.log(msg);
             errorLabel.text = msg;
         }
     }

@@ -20,9 +20,14 @@ QSet<JsonRequest*>* JsonRequest::pendingRequests = NULL;
 bool JsonRequest::isStopped = false;
 
 void JsonRequest::abortAllPendingRequest() {
+    if(JsonRequest::pendingRequests == NULL) {
+        return;
+    }
+
     for(JsonRequest* req : JsonRequest::pendingRequests->values()) {
         req->m_reply->abort();
     }
+
 }
 
 void JsonRequest::stop() {
@@ -119,8 +124,23 @@ void JsonRequest::read_reply()
 
 void JsonRequest::read_error()
 {
+    m_state = RequestState::Reading;
+    auto replyData = m_reply->readAll();
+
     JsonResponse resp;
-    resp.m_error = m_reply->errorString();
+    QJsonParseError err;
+    resp.data = QJsonDocument::fromJson(replyData, &err);
+    if(err.error == QJsonParseError::NoError) {
+        auto obj = resp.data.object();
+        if(obj.contains("error")) {
+            resp.m_error = obj["error"].toString();
+        }
+    }
+
+    if(resp.m_error.isEmpty()) {
+        resp.m_error = m_reply->errorString();
+
+    }
     resp.statuscode = -1;
     qWarning(("Got network err: " + m_reply->errorString()).toLocal8Bit().data());
     do_done();

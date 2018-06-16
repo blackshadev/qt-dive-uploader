@@ -75,6 +75,8 @@ void DCDownloadContext::run() {
         do_work();
     } catch(const std::invalid_argument& exp) {
         emit error(QString(exp.what()));
+    } catch(const std::runtime_error& exp) {
+        emit error(QString(exp.what()));
     }
 }
 
@@ -95,7 +97,10 @@ void DCDownloadContext::do_work() {
         throw std::invalid_argument("No device selected");
     }
 
-    dc_device_open(&m_device, m_context, m_descriptor, m_port_name);
+    auto status = dc_device_open(&m_device, m_context, m_descriptor, m_port_name);
+    if(status != DC_STATUS_SUCCESS) {
+        throw std::runtime_error("Failed to open device");
+    }
 
     int all_events = DC_EVENT_WAITING|DC_EVENT_CLOCK|DC_EVENT_PROGRESS|DC_EVENT_DEVINFO|DC_EVENT_VENDOR;
     dc_device_set_events(m_device, all_events, [](dc_device_t* device, dc_event_type_t type, const void* data, void* userdata) {
