@@ -18,6 +18,11 @@ void QDiveModel::add(Dive* dive) {
 
 void QDiveModel::setSelected(int row, bool selected)
 {
+    // Nothing changed
+    if(m_dives[row]->ignore == !selected) {
+        return;
+    }
+
     m_dives[row]->ignore = !selected;
     emit dataChanged(createIndex(row, 0), createIndex(row, 0), QVector<int>( { SelectedRole } ));
     emit selectedDivesChanged();

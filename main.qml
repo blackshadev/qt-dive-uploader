@@ -84,6 +84,7 @@ ApplicationWindow {
 
 
     SelectionWindow {
+
         width: 480
         height: 520
         visible: false

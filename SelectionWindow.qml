@@ -7,10 +7,14 @@ import Libdivecomputer 0.1
 
 Window {
 
+    Material.theme: Material.Light
+    Material.accent: Material.Blue
+
     property DiveModel diveData
     property bool done: false;
     property variant curWriter;
     property variant columnWidths: {
+        "checkbox": 32,
         "datetime": 200,
         "time": 100,
         "depth": 100
@@ -36,17 +40,18 @@ Window {
         Rectangle {
 
             z: 3
-            color: "#ffffff"
             Layout.fillWidth: true
             height: 85
 
             ColumnLayout {
+
                 RowLayout {
 
                     Button {
 
                         Layout.leftMargin: 10
                         text: "Select all"
+                        Material.elevation: 0
                         onClicked: {
                             diveData.setSelectedAll(true);
                         }
@@ -56,6 +61,7 @@ Window {
 
                         Layout.leftMargin: 10
                         text: "Deselect all"
+                        Material.elevation: 0
                         onClicked: {
                             diveData.setSelectedAll(false);
                         }
@@ -66,6 +72,8 @@ Window {
                         Layout.leftMargin: 10
                         text: "Done"
                         enabled: curWriter !== undefined
+                        Material.background: Material.color(Material.Blue)
+                        Material.theme: Material.Dark
                         onClicked: {
                             curWriter.selectionDone();
                             done = true;
@@ -100,20 +108,25 @@ Window {
                 height: 32
 
                 z: 2
-                color: Material.color(Material.Blue)
+
+                CustomBorder {
+                    commonBorder: false
+                    bBorderwidth: 1
+                    borderColor: Material.color(Material.Grey)
+                }
+
                 RowLayout {
                     anchors.fill: parent
 
                     Text {
-                        color: "#ffffff"
                         Layout.margins: 4
-                        Layout.preferredWidth: columnWidths['datetime']
+                        Layout.preferredWidth: columnWidths['datetime'] + columnWidths["checkbox"]
                         text: "Date"
                         horizontalAlignment: Text.AlignLeft
+                        leftPadding: 32
                     }
 
                     Text {
-                        color: "#ffffff"
                         Layout.margins: 4
                         Layout.preferredWidth: columnWidths['time']
                         text: "DiveTime"
@@ -121,7 +134,6 @@ Window {
                     }
 
                     Text {
-                        color: "#ffffff"
                         Layout.margins: 4
                         Layout.preferredWidth: columnWidths['depth']
                         text: "Depth"
@@ -137,7 +149,7 @@ Window {
 
             delegate: ItemDelegate {
                 width: parent.width
-                height: 32
+//                height: 32
                 topPadding: 8
 
                 checkable: true
@@ -146,7 +158,7 @@ Window {
                 Binding {
                     target: background
                     property: "color"
-                    value: highlighted ? Material.color(Material.Blue, Material.Shade100) : Material.color(Material.Grey, Material.Shade50)
+                    value: selected ? Material.color(Material.Blue, Material.Shade50) :  Material.color(Material.Grey, Material.Shade50)
                 }
 
 
@@ -157,6 +169,17 @@ Window {
                 contentItem: RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+
+                    CheckBox {
+                        padding: 0;
+                        Layout.margins: 0
+                        checked: selected
+                        onCheckedChanged: {
+                            diveData.setSelected(index, checked);
+                        }
+                        Layout.preferredWidth: columnWidths['checkbox']
+
+                    }
 
                     Text {
                         Layout.preferredWidth: columnWidths['datetime']
