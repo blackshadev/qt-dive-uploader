@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Little Divelog uploader</Name>
+    <Version>0.1.0</Version>
+    <Title>Little Divelog uploader</Title>
+    <Publisher>Littledev</Publisher>
+    <StartMenuDir>Little Divelog</StartMenuDir>
+    <TargetDir>@HomeDir@/LittleDivelog</TargetDir>
+</Installer>
