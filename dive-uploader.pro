@@ -70,6 +70,13 @@ include(vendor/vendor.pri)
 INCLUDEPATH += include
 DEPENDPATH += include
 
+#unix: LIBS += -L$$PWD/../../../../usr/local/lib/ -ldivecomputer
+
+#INCLUDEPATH += $$PWD/../../../../usr/local/include
+#DEPENDPATH += $$PWD/../../../../usr/local/include
+
+#unix: PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/libdivecomputer.a
+
 win32: LIBS += -L"$$PWD/lib/win32/" -ldivecomputer
 else:unix: LIBS += -L$$PWD/lib/linux/ -ldivecomputer
 
@@ -91,3 +98,5 @@ else:unix: PRE_TARGETDEPS += $$PWD/lib/linux/libdivecomputer.a
 
 DISTFILES += \
     qmldir
+
+
