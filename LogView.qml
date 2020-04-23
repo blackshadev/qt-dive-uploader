@@ -1,7 +1,7 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.2
-import QtQuick.Layouts 1.3
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
+import QtQuick.Layouts 1.12
 import QtQuick.Controls.Styles 1.4
 
 ColumnLayout {
@@ -18,10 +18,10 @@ ColumnLayout {
         property bool loaded: false
         Layout.fillWidth: true
         id: loglevelSelector
-        model: libdivecomputer.loglevels
+        model: libdivecomputer.LogLevels
         Component.onCompleted: {
             loaded = true;
-            var idx = loglevelSelector.find(libdivecomputer.loglevel);
+            var idx = loglevelSelector.find(libdivecomputer.logLevel);
             if(idx > -1) {
                 loglevelSelector.currentIndex = idx;
             }
@@ -29,7 +29,7 @@ ColumnLayout {
 
         onCurrentTextChanged: {
             if(loaded) {
-                libdivecomputer.loglevel = loglevelSelector.currentText;
+                libdivecomputer.logLevel = loglevelSelector.currentText;
             }
         }
     }

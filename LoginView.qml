@@ -1,7 +1,7 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.4
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.12
 
 RowLayout {
     Layout.fillWidth: true
@@ -21,6 +21,9 @@ RowLayout {
         TextField {
             id: email
             Layout.fillWidth: true
+            Keys.onReturnPressed: {
+                password.focus = true;
+            }
         }
 
         Label {
@@ -33,6 +36,9 @@ RowLayout {
             id: password
             echoMode: TextInput.Password
             Layout.fillWidth: true
+            Keys.onReturnPressed: {
+                littledivelog.login(email.text, password.text);
+            }
         }
 
         Label {

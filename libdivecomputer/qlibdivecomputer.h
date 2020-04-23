@@ -20,7 +20,7 @@ public:
         File,
         LittleLog
     };
-    Q_ENUMS(writetype)
+    Q_ENUM(writetype)
 
 };
 
@@ -36,7 +36,7 @@ public:
         DEBUG = DC_LOGLEVEL_DEBUG,
         ALL = DC_LOGLEVEL_ALL
     };
-    Q_ENUMS(loglevel)
+    Q_ENUM(loglevel)
 
 };
 Q_DECLARE_METATYPE(LogLevel*)
@@ -48,8 +48,8 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(QString version MEMBER m_version CONSTANT)
     Q_PROPERTY(DCComputerList* devices MEMBER m_available_devices CONSTANT)
     Q_PROPERTY(QVariant ports READ get_ports_as_qvariant CONSTANT)
-    Q_PROPERTY(QStringList loglevels READ get_loglevels CONSTANT)
-    Q_PROPERTY(QString loglevel READ get_loglevel WRITE set_loglevel NOTIFY loglevelChanged)
+    Q_PROPERTY(QStringList LogLevels READ get_logLevels CONSTANT)
+    Q_PROPERTY(QString logLevel READ get_logLevel WRITE set_logLevel NOTIFY logLevelChanged)
     Q_PROPERTY(WriteType::writetype writeType READ get_writeType WRITE set_writeType NOTIFY writeTypeChanged)
     Q_PROPERTY(QString path MEMBER m_path NOTIFY pathChanged)
     Q_PROPERTY(bool selectDives MEMBER m_select_dives NOTIFY selectDivesChanged)
@@ -78,7 +78,7 @@ public:
 
 signals:
     void writeTypeChanged(WriteType::writetype t);
-    void loglevelChanged();
+    void logLevelChanged();
     void pathChanged();
     void selectDivesChanged(bool val);
     void readProgress(uint current, uint total);
@@ -94,8 +94,8 @@ protected slots:
 protected:
     bool m_had_error = false;
     LittleDiveLog* m_log = NULL;
-    QString get_loglevel();
-    void set_loglevel(QString lvl);
+    QString get_logLevel();
+    void set_logLevel(QString lvl);
     void set_writeType(WriteType::writetype t);
     WriteType::writetype get_writeType();
 private:
@@ -103,7 +103,7 @@ private:
     WriteType::writetype m_writetype = WriteType::File;
     DCComputerList* get_devices();
     QStringList* get_ports();
-    QStringList get_loglevels();
+    QStringList get_logLevels();
     DCDownloadContext* m_context;
     DiveWriter* m_writer;
     void create_writer(dc_descriptor_t* descriptor, bool select);

@@ -1,11 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Window 2.3
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick 2.12
+import QtQuick.Window 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.1
 import DCComputer 0.1
 import Libdivecomputer 0.1
-import QtQuick.Controls.Material 2.1
+import QtQuick.Controls.Material 2.12
 
 ApplicationWindow {
     objectName: "appWindow"

@@ -73,7 +73,7 @@ void QLibDiveComputer::set_writeTypeAsString(QString str, WriteType::writetype t
 }
 
 
-QStringList QLibDiveComputer::get_loglevels() {
+QStringList QLibDiveComputer::get_logLevels() {
     auto meta = LogLevel::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);
@@ -97,7 +97,7 @@ bool QLibDiveComputer::get_is_ready() {
     }
 }
 
-QString QLibDiveComputer::get_loglevel() {
+QString QLibDiveComputer::get_logLevel() {
     auto meta = LogLevel::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);
@@ -106,14 +106,14 @@ QString QLibDiveComputer::get_loglevel() {
     return QString(key);
 }
 
-void QLibDiveComputer::set_loglevel(QString lvl) {
+void QLibDiveComputer::set_logLevel(QString lvl) {
     auto meta = LogLevel::staticMetaObject;
     auto idx = meta.indexOfEnumerator("loglevel");
     auto data = meta.enumerator(idx);
 
     dc_loglevel_t loglevel = (dc_loglevel_t) data.keyToValue(lvl.toLocal8Bit().data());
     m_loglevel = loglevel;
-    emit loglevelChanged();
+    emit logLevelChanged();
 }
 
 WriteType::writetype QLibDiveComputer::get_writeType() {

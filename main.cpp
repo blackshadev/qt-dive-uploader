@@ -22,10 +22,13 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("Littledev");
+    app.setOrganizationDomain("littledev.nl");
+
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
     QQuickStyle::setStyle("Material");
     qmlRegisterType<DCComputerList>("DCComputer", 0, 1, "ComputerRoles");
-    qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "loglevel");
+    qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "LogLevel");
     qmlRegisterType<WriteType>("Libdivecomputer", 0, 1, "WriteTypes");
     qmlRegisterType<QDiveModel>("Libdivecomputer", 0, 1, "DiveModel");
 
@@ -67,5 +70,7 @@ int main(int argc, char *argv[])
     sess.save();
 
     delete dc;
+    delete log;
+
     return res;
 }
