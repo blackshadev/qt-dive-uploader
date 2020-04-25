@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Divelog Uploader</DisplayName>
+    <Description>Uploader for the Little Divelog</Description>
+    <Name>nl.littledev.diveloguploader</Name>
+    <Version>0.1.0</Version>
+    <ReleaseDate>2020-05-19</ReleaseDate>
+    <Licenses>
+        <License name="GNU GENERAL PUBLIC LICENSE Version 3" file="license.txt" />
+    </Licenses>
+    <Default>true</Default>
+    <ForcedInstallation>true</ForcedInstallation>
+    <Script>installscript.qs</Script>
+</Package>

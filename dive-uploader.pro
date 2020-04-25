@@ -1,3 +1,9 @@
+
+ICON = $$PWD/resources/icon.ico
+QMAKE_TARGET_COMPANY = "Littledev"
+QMAKE_TARGET_DESCRIPTION = "Uploader tool for the littledevs DiveLogbook"
+RC_ICONS = $$ICON
+
 QT += qml quick serialport quickcontrols2 network
 CONFIG += c++11
 
@@ -52,7 +58,12 @@ HEADERS += \
 
 
 RESOURCES += qml.qrc
+
 DESTDIR = bin
+OBJECTS_DIR = .obj
+MOC_DIR = .moc
+RCC_DIR = .rcc
+UI_DIR = .ui
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -60,43 +71,66 @@ QML_IMPORT_PATH =
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
-
 include(vendor/vendor.pri)
 
 INCLUDEPATH += include
 DEPENDPATH += include
 
-#unix: LIBS += -L$$PWD/../../../../usr/local/lib/ -ldivecomputer
+unix {
+    LIBS += -L"$$PWD/lib/linux/" -ldivecomputer
+    PRE_TARGETDEPS += $$PWD/lib/linux/libdivecomputer.a
+}
 
-#INCLUDEPATH += $$PWD/../../../../usr/local/include
-#DEPENDPATH += $$PWD/../../../../usr/local/include
+win32 {
+    TARGET_EXT = .exe
+    LIBS += -L"$$PWD/lib/win32/" -ldivecomputer
+    PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer-0.dll
+    PRE_TARGETDEPS += $$PWD/lib/win32/libusb-1.0.dll
+    PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer.lib
+    PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer.def
+    PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer.dll
+    copylibs.commands += $(COPY_DIR) $$shell_path($$PWD/lib/win32/libdivecomputer-0.dll) $$shell_path($$DESTDIR) $$escape_expand(\\n\\t)
+    copylibs.commands += $(COPY_DIR) $$shell_path($$PWD/lib/win32/libusb-1.0.dll) $$shell_path($$DESTDIR) $$escape_expand(\\n\\t)
 
-#unix: PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/libdivecomputer.a
+    first.depends = $(first) copylibs
+    export(first.depends)
+    export(copylibs.commands)
+    QMAKE_EXTRA_TARGETS += first copylibs
 
-win32: LIBS += -L"$$PWD/lib/win32/" -ldivecomputer
-else:unix: LIBS += -L$$PWD/lib/linux/ -ldivecomputer
+}
 
-win32: PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer.a
-else:unix: PRE_TARGETDEPS += $$PWD/lib/linux/libdivecomputer.a
+macx:DEPLOY_COMMAND = macdeployqt
+win32:DEPLOY_COMMAND = windeployqt
+unix:DEPLOY_COMMAND = linuxdeployqt
 
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/release/ -ldivecomputer
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../usr/local/lib/debug/ -ldivecomputer
-#else:unix: LIBS += -L$$PWD/../../../../usr/local/lib/ -ldivecomputer
+copy_extra_files.commands = $(COPY_DIR) $$shell_path($$PWD/resources) $$shell_path($$DESTDIR)
+QMAKE_EXTRA_TARGETS += copy_extra_files
 
-#INCLUDEPATH += $$PWD/../../../../usr/local/include
-#DEPENDPATH += $$PWD/../../../../usr/local/include
+DEPLOY_TARGET = $$OUT_PWD/$$DESTDIR/$${TARGET}$${TARGET_EXT}
+deploy.commands = $${DEPLOY_COMMAND} --qmldir $$PWD  $$shell_quote($$shell_path($${DEPLOY_TARGET}))
+deploy.depends = $(first) copy_extra_files
+QMAKE_EXTRA_TARGETS += deploy
 
-#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/release/libdivecomputer.a
-#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/debug/libdivecomputer.a
-#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/release/divecomputer.lib
-#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/debug/divecomputer.lib
-#else:unix: PRE_TARGETDEPS += $$PWD/../../../../usr/local/lib/libdivecomputer.a
+
+PACKAGE_CONFIG = $$PWD/packaging/config/config.xml
+PACKAGE_DIR = $$PWD/packaging/packages
+PACKAGE_DATA_DIR = $$PACKAGE_DIR/nl.littledev.diveloguploader/data
+PACKAGE_DATA_TARGET = $$PACKAGE_DATA_DIR/$${TARGET}.7z
+INSTALLER_TARGET = $$PWD/packaging/diveuploader-installer.exe
+
+package.commands = archivegen $$shell_quote($$shell_path($${PACKAGE_DATA_TARGET})) $$shell_path($$OUT_PWD/$$DESTDIR)/*
+#package.depends = deploy
+QMAKE_EXTRA_TARGETS += package
+
+installer.commands = binarycreator -c $$shell_quote($$shell_path($${PACKAGE_CONFIG})) -p $$shell_quote($$shell_path($$PACKAGE_DIR)) $$shell_quote($$shell_path($$INSTALLER_TARGET))
+#installer.depends = package
+QMAKE_EXTRA_TARGETS += installer
+
+
+
 
 DISTFILES += \
     qmldir
+
 
 

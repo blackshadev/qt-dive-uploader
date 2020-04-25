@@ -72,5 +72,7 @@ Thumbs.db
 *.exe
 
 vendor
+build
 
+!packaging/**/*
 !lib/**/*
