@@ -3,14 +3,33 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 
-RowLayout {
+ColumnLayout {
+
     Layout.fillWidth: true
+
+    Text {
+        Layout.fillWidth: true
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        font.pointSize: 17
+        text: "Welcome to the Little Dive Uploader."
+    }
+
+    Text {
+        Layout.fillWidth: true
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        font.pointSize: 12
+        text: "You can log into your little divelog account or use the tool offline.\nDon't have an account yet? Press the register button below."
+    }
 
     GridLayout {
 
         Layout.fillWidth: true
-
         columns: 2
+
+
+
 
         Label {
             text: "E-Mail"
@@ -57,6 +76,15 @@ RowLayout {
                 Material.elevation: 0
                 onClicked: {
                     stackView.pop();
+                }
+            }
+
+            Button {
+                visible: stackView.depth > 1
+                text: "Register"
+                Material.elevation: 0
+                onClicked: {
+                    Qt.openUrlExternally("https://dive.littledev.nl/register");
                 }
             }
 
