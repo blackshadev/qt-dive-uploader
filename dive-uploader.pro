@@ -3,6 +3,9 @@ ICON = $$PWD/resources/icon.ico
 QMAKE_TARGET_COMPANY = "Littledev"
 QMAKE_TARGET_DESCRIPTION = "Uploader tool for the littledevs DiveLogbook"
 RC_ICONS = $$ICON
+unix:OS = "unix"
+win32:OS = "win32"
+macx:OS = "macx"
 
 QT += qml quick serialport quickcontrols2 network
 CONFIG += c++11
@@ -96,18 +99,22 @@ win32 {
     export(first.depends)
     export(copylibs.commands)
     QMAKE_EXTRA_TARGETS += first copylibs
-
 }
 
 macx:DEPLOY_COMMAND = macdeployqt
 win32:DEPLOY_COMMAND = windeployqt
-unix:DEPLOY_COMMAND = linuxdeployqt
 
 copy_extra_files.commands = $(COPY_DIR) $$shell_path($$PWD/resources) $$shell_path($$DESTDIR)
 QMAKE_EXTRA_TARGETS += copy_extra_files
 
 DEPLOY_TARGET = $$OUT_PWD/$$DESTDIR/$${TARGET}$${TARGET_EXT}
-deploy.commands = $${DEPLOY_COMMAND} --qmldir $$PWD  $$shell_quote($$shell_path($${DEPLOY_TARGET}))
+macx,win32 {
+    deploy.commands = $${DEPLOY_COMMAND} --qmldir $$PWD  $$shell_quote($$shell_path($${DEPLOY_TARGET}))
+}
+unix {
+    deploy.commands = $$PWD/tools/linux-deploy.sh $$DEPLOY_TARGET
+}
+
 deploy.depends = $(first) copy_extra_files
 QMAKE_EXTRA_TARGETS += deploy
 
@@ -116,21 +123,34 @@ PACKAGE_CONFIG = $$PWD/packaging/config/config.xml
 PACKAGE_DIR = $$PWD/packaging/packages
 PACKAGE_DATA_DIR = $$PACKAGE_DIR/nl.littledev.diveloguploader/data
 PACKAGE_DATA_TARGET = $$PACKAGE_DATA_DIR/$${TARGET}.7z
-INSTALLER_TARGET = $$PWD/packaging/diveuploader-installer.exe
+win32:INSTALLER_TARGET = ".exe"
+INSTALLER_TARGET = $$PWD/packaging/$$TARGET-$${OS}-installer$${INSTALLER_EXT}
+unix:QTIFW = ~/Qt/QtIFW-3.2.2/bin/
 
-package.commands = archivegen $$shell_quote($$shell_path($${PACKAGE_DATA_TARGET})) $$shell_path($$OUT_PWD/$$DESTDIR)/*
-#package.depends = deploy
+ARCHIVEGEN = $${QTIFW}archivegen
+BINARYCREATOR = $${QTIFW}binarycreator
+
+package.commands += rm -f $$shell_path($$OUT_PWD/$$DESTDIR/session.json) $$escape_expand(\\n\\t)
+package.commands += rm -f $$shell_quote($$shell_path($${PACKAGE_DATA_TARGET})) $$escape_expand(\\n\\t)
+package.commands += $${ARCHIVEGEN} $$shell_quote($$shell_path($${PACKAGE_DATA_TARGET})) $$shell_path($$OUT_PWD/$$DESTDIR)/* $$escape_expand(\\n\\t)
+package.depends = deploy
 QMAKE_EXTRA_TARGETS += package
 
-installer.commands = binarycreator -c $$shell_quote($$shell_path($${PACKAGE_CONFIG})) -p $$shell_quote($$shell_path($$PACKAGE_DIR)) $$shell_quote($$shell_path($$INSTALLER_TARGET))
-#installer.depends = package
+installer.commands = $${BINARYCREATOR} -c $$shell_quote($$shell_path($${PACKAGE_CONFIG})) -p $$shell_quote($$shell_path($$PACKAGE_DIR)) $$shell_quote($$shell_path($$INSTALLER_TARGET))
+installer.depends = package
 QMAKE_EXTRA_TARGETS += installer
 
 
-
-
 DISTFILES += \
-    qmldir
+    packaging/config/config.xml \
+    packaging/diveuploader-installer.exe \
+    packaging/packages/nl.littledev.diveloguploader/data/dive-uploader.7z \
+    packaging/packages/nl.littledev.diveloguploader/meta/installscript.qs \
+    packaging/packages/nl.littledev.diveloguploader/meta/license.txt \
+    packaging/packages/nl.littledev.diveloguploader/meta/package.xml \
+    qmldir \
+    tools/linux-deploy.sh \
+    tools/linux-run.sh
 
 
 

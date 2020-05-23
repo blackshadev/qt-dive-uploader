@@ -74,5 +74,6 @@ Thumbs.db
 vendor
 build
 
-!packaging/**/*
+packaging/packages/**/*.7z
+!packaging/*
 !lib/**/*
