@@ -6,4 +6,5 @@
     <Publisher>Littledev</Publisher>
     <StartMenuDir>Little Divelog</StartMenuDir>
     <TargetDir>@HomeDir@/LittleDivelog</TargetDir>
+    <AllowSpaceInPath>true</AllowSpaceInPath>
 </Installer>
