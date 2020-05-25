@@ -73,12 +73,15 @@ QML_DESIGNER_IMPORT_PATH =
 INCLUDEPATH += include
 DEPENDPATH += include
 
+
 unix {
     LIBS += -L"$$PWD/lib/linux/" -ldivecomputer
     PRE_TARGETDEPS += $$PWD/lib/linux/libdivecomputer.a
 }
 
 win32 {
+    OPENSSL_PATH = "C:/Program Files (x86)/OpenSSL-Win32"
+    LIBS += -L$(OPENSSL_PATH)/lib -llibcrypto
     TARGET_EXT = .exe
     LIBS += -L"$$PWD/lib/win32/" -ldivecomputer
     PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer-0.dll
@@ -88,6 +91,8 @@ win32 {
     PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer.dll
     copylibs.commands += $(COPY_DIR) $$shell_path($$PWD/lib/win32/libdivecomputer-0.dll) $$shell_path($$DESTDIR) $$escape_expand(\\n\\t)
     copylibs.commands += $(COPY_DIR) $$shell_path($$PWD/lib/win32/libusb-1.0.dll) $$shell_path($$DESTDIR) $$escape_expand(\\n\\t)
+    copylibs.commands += $(COPY_DIR) $$shell_quote($$shell_path($$OPENSSL_PATH/bin/libcrypto-1_1.dll)) $$shell_path($$DESTDIR) $$escape_expand(\\n\\t)
+    copylibs.commands += $(COPY_DIR) $$shell_quote($$shell_path($$OPENSSL_PATH/bin/libssl-1_1.dll)) $$shell_path($$DESTDIR) $$escape_expand(\\n\\t)
 
     first.depends = $(first) copylibs
     export(first.depends)
