@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
 
     QPM_INIT(engine)
 
-    SessionStore sess("./session.json");
+    QString sessionFilePath = QDir(app.applicationDirPath()).filePath("session.json");
+    SessionStore sess(sessionFilePath);
     sess.load();
 
     LittleDiveLog* log = new LittleDiveLog();

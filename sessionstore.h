@@ -66,7 +66,7 @@ Q_DECLARE_METATYPE(SessionData*)
 class SessionStore
 {
 public:
-    SessionStore(const char* path);
+    SessionStore(QString path);
     ~SessionStore();
     bool save();
     bool load();

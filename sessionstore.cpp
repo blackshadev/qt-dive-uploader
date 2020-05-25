@@ -102,9 +102,9 @@ void SessionData::write(QJsonObject &json)
 }
 
 // -- SessionStore --
-SessionStore::SessionStore(const char* path)
+SessionStore::SessionStore(QString path)
 {
-    m_path = QString(path);
+    m_path = path;
 }
 
 SessionStore::~SessionStore()
