@@ -129,8 +129,8 @@ void JsonRequest::read_error()
 
     JsonResponse resp;
     QJsonParseError err;
-    resp.data = QJsonDocument::fromJson(replyData, &err);
-    if(err.error == QJsonParseError::NoError) {
+    resp.data = QJsonDocument::fromJson(replyData, &resp.parseError);
+    if(resp.parseError.error == QJsonParseError::NoError) {
         auto obj = resp.data.object();
         if(obj.contains("error")) {
             resp.m_error = obj["error"].toString();

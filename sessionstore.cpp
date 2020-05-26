@@ -1,4 +1,5 @@
 #include "sessionstore.h"
+#include <QDir>
 
 SessionData::SessionData(QObject *parent) : QObject(parent) {
     m_computer = "";
@@ -115,7 +116,6 @@ SessionStore::~SessionStore()
 bool SessionStore::load()
 {
      QFile loadFile(m_path);
-
      if (!loadFile.open(QIODevice::ReadOnly)) {
          qWarning("Couldn't open save file.");
          return false;
@@ -130,6 +130,8 @@ bool SessionStore::load()
 
 bool SessionStore::save()
 {
+    QFileInfo fileInfo(m_path);
+    fileInfo.absoluteDir().mkpath(".");
     QFile saveFile(m_path);
 
     if (!saveFile.open(QIODevice::WriteOnly)) {

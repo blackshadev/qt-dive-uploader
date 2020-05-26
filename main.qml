@@ -64,6 +64,7 @@ ApplicationWindow {
         target: littledivelog
         onLoggedStateChanged: {
             if(isLoggedIn) {
+                libdivecomputer.writeType = WriteTypes.LittleLog;
                 stackView.pop();
             } else {
                 stackView.push(loginViewComp);

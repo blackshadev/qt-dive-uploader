@@ -55,6 +55,7 @@ void LittleDiveLog::set_refresh_token(QString tok)
 {
     m_refresh_token = tok;
     emit refreshTokenChanged(tok);
+    emit loggedStateChanged(isLoggedIn());
     if(!tok.isEmpty()) {
         fetch_user_data();
     }
@@ -72,6 +73,7 @@ void LittleDiveLog::fetch_user_data()
         "/user/profile",
         NULL,
         [=](JsonResponse resp) {
+
             auto obj = resp.data.object();
             if(m_user_info == NULL) {
                 m_user_info = new UserInfo(this);

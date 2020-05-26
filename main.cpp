@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
 
     QPM_INIT(engine)
 
-    QString sessionFilePath = QDir(QDir::cleanPath(QStandardPaths::HomeLocation + QDir::separator() + "LittleDiveLog")).filePath("session.json");
+    QString homeFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    QString sessionFilePath = QDir(QDir::cleanPath(homeFolder + QDir::separator() + "LittleDiveLog")).filePath("session.json");
     SessionStore sess(sessionFilePath);
     sess.load();
 

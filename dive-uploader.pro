@@ -80,8 +80,8 @@ unix {
 }
 
 win32 {
-    OPENSSL_PATH = "C:/Program Files (x86)/OpenSSL-Win32"
-    LIBS += -L$(OPENSSL_PATH)/lib -llibcrypto
+    OPENSSL_PATH = C:/Program Files (x86)/OpenSSL-Win32
+    LIBS += -L"$$OPENSSL_PATH/lib/MinGW" -lssl -lcrypto
     TARGET_EXT = .exe
     LIBS += -L"$$PWD/lib/win32/" -ldivecomputer
     PRE_TARGETDEPS += $$PWD/lib/win32/libdivecomputer-0.dll

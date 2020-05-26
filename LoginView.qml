@@ -75,6 +75,7 @@ ColumnLayout {
                 text: "Offline"
                 Material.elevation: 0
                 onClicked: {
+                    libdivecomputer.writeType = WriteTypes.File;
                     stackView.pop();
                 }
             }
