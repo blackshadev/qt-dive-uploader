@@ -21,6 +21,7 @@ Event::Event(unsigned int t, int v)
 Dive::Dive()
 {
     current_sample = NULL;
+    datetime.timezone = 0;
 }
 
 Dive::~Dive()

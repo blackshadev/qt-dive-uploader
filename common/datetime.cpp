@@ -12,13 +12,14 @@ std::string format_datetime_iso(dc_datetime_t &dt) {
         dt.hour,
         dt.minute,
         dt.second,
-        dt.timezone / 3600,
-        dt.timezone % 3600
+        GET_TIMEZONE(dt.timezone) / 3600,
+        GET_TIMEZONE(dt.timezone) % 3600
     );
     return std::string(buff);
 }
 
 std::string format_datetime_display(dc_datetime_t &dt) {
+
     char buff[25];
     std::sprintf(
         buff,
@@ -26,8 +27,8 @@ std::string format_datetime_display(dc_datetime_t &dt) {
         dt.year,
         dt.month,
         dt.day,
-        dt.hour + dt.timezone / 3600,
-        dt.minute + dt.timezone % 3600,
+        dt.hour + GET_TIMEZONE(dt.timezone) / 3600,
+        dt.minute + GET_TIMEZONE(dt.timezone) % 3600,
         dt.second
     );
     return std::string(buff);

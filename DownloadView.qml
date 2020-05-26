@@ -10,6 +10,14 @@ import QtQuick.Controls.Material 2.2
 import FontAwesome 1.0
 
 GridLayout {
+    function ensureJSON(filepath) {
+        if(!/\.json$/.test(filepath)) {
+            filepath = filepath.replace(/\..*$/, "");
+            filepath += ".json";
+        }
+        return filepath;
+    }
+
     Layout.fillWidth: true
     columns: 2
 
@@ -22,10 +30,9 @@ GridLayout {
         title: "Please choose a file to save"
         nameFilters: [ "JSON files (*.json)", "All files (*)" ]
         onAccepted: {
-            var text = /^file:\/\/(.*)$/.exec(fileDialog.fileUrl)[1];
-            if(!/\.json$/.test(text)) {
-                text += ".json";
-            }
+            var text = fileDialog.fileUrl.toString().replace(/^(file:\/{3})/, "");
+            text = decodeURIComponent(text);
+            text = ensureJSON(text);
 
             filePath.text = text;
             session.path = text;
@@ -168,8 +175,16 @@ GridLayout {
 
             id: filePath
             text: session.path
-            readOnly: true
             enabled: fileRadio.checked
+            onTextChanged: {
+                var fixedText = ensureJSON(filePath.text);
+                if(filePath.text !== fixedText) {
+                    filePath.text = fixedText;
+                }
+
+                session.path = fixedText;
+                libdivecomputer.path = fixedText;
+            }
         }
 
         Button {

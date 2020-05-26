@@ -1,6 +1,8 @@
 #include "filewriter.h"
 #include "../common/datetime.h"
 #include <QTimer>;
+#include <QMetaEnum>;
+#include <QFileDevice>
 
 FileDiveWriter::FileDiveWriter(QString path)
 {
@@ -40,8 +42,10 @@ void FileDiveWriter::do_start() {
     if(file.isOpen()) {
         throw std::runtime_error("File was already opened");
     }
-    if (!file.open(QIODevice::WriteOnly)) {
-        throw std::runtime_error("Couldn't open save file.");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        auto error = file.error();
+
+        throw std::runtime_error("Couldn't open save file. ");
     }
 
     m_lock.lock();

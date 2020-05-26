@@ -17,6 +17,10 @@
 
 int main(int argc, char *argv[])
 {
+
+    LittleDiveLog log;
+    QLibDiveComputer dc;
+
 #if defined(Q_OS_WIN)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
@@ -41,23 +45,21 @@ int main(int argc, char *argv[])
     SessionStore sess(sessionFilePath);
     sess.load();
 
-    LittleDiveLog* log = new LittleDiveLog();
-    QLibDiveComputer* dc = new QLibDiveComputer();
-    dc->bind_littledivelog(log);
+    dc.bind_littledivelog(&log);
 
-    dc->set_writeTypeAsString(sess.m_data.getWriteType(), WriteType::File);
+    dc.set_writeTypeAsString(sess.m_data.getWriteType(), WriteType::File);
 
-    dc->connect(dc, &QLibDiveComputer::writeTypeChanged, [&sess, dc](WriteType::writetype t) {
-        sess.m_data.setWriteType(dc->get_writeTypeAsString());
+    dc.connect(&dc, &QLibDiveComputer::writeTypeChanged, [&sess, &dc](WriteType::writetype t) {
+        sess.m_data.setWriteType(dc.get_writeTypeAsString());
     });
 
-    dc->m_path = sess.m_data.getPath();
-    log->set_refresh_token(sess.m_data.getRefreshToken());
+    dc.m_path = sess.m_data.getPath();
+    log.set_refresh_token(sess.m_data.getRefreshToken());
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("session", &sess.m_data);
-    ctxt->setContextProperty("libdivecomputer", dc);
-    ctxt->setContextProperty("littledivelog", log);
+    ctxt->setContextProperty("libdivecomputer", &dc);
+    ctxt->setContextProperty("littledivelog", &log);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
@@ -70,9 +72,6 @@ int main(int argc, char *argv[])
     int res = app.exec();
 
     sess.save();
-
-    delete dc;
-    delete log;
 
     return res;
 }
