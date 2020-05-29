@@ -1,92 +1,131 @@
-EXPORTS
-    atomics_cobalt_device_set_simulation @1
-    atomics_cobalt_device_version @2
-    atomics_cobalt_parser_set_calibration @3
-    dc_buffer_append @4
-    dc_buffer_clear @5
-    dc_buffer_free @6
-    dc_buffer_get_data @7
-    dc_buffer_get_size @8
-    dc_buffer_new @9
-    dc_buffer_prepend @10
-    dc_buffer_reserve @11
-    dc_buffer_resize @12
-    dc_buffer_slice @13
-    dc_context_free @14
-    dc_context_new @15
-    dc_context_set_logfunc @16
-    dc_context_set_loglevel @17
-    dc_datetime_gmtime @18
-    dc_datetime_localtime @19
-    dc_datetime_mktime @20
-    dc_datetime_now @21
-    dc_descriptor_free @22
-    dc_descriptor_get_model @23
-    dc_descriptor_get_product @24
-    dc_descriptor_get_transport @25
-    dc_descriptor_get_type @26
-    dc_descriptor_get_vendor @27
-    dc_descriptor_iterator @28
-    dc_device_close @29
-    dc_device_dump @30
-    dc_device_foreach @31
-    dc_device_get_type @32
-    dc_device_open @33
-    dc_device_read @34
-    dc_device_set_cancel @35
-    dc_device_set_events @36
-    dc_device_set_fingerprint @37
-    dc_device_timesync @38
-    dc_device_write @39
-    dc_iterator_free @40
-    dc_iterator_next @41
-    dc_parser_destroy @42
-    dc_parser_get_datetime @43
-    dc_parser_get_field @44
-    dc_parser_get_type @45
-    dc_parser_new @46
-    dc_parser_new2 @47
-    dc_parser_samples_foreach @48
-    dc_parser_set_data @49
-    dc_version @50
-    dc_version_check @51
-    hw_frog_device_customtext @52
-    hw_frog_device_display @53
-    hw_frog_device_version @54
-    hw_ostc3_device_config_read @55
-    hw_ostc3_device_config_reset @56
-    hw_ostc3_device_config_write @57
-    hw_ostc3_device_customtext @58
-    hw_ostc3_device_display @59
-    hw_ostc3_device_fwupdate @60
-    hw_ostc3_device_hardware @61
-    hw_ostc3_device_version @62
-    hw_ostc_device_eeprom_read @63
-    hw_ostc_device_eeprom_write @64
-    hw_ostc_device_fwupdate @65
-    hw_ostc_device_md2hash @66
-    hw_ostc_device_reset @67
-    hw_ostc_device_screenshot @68
-    oceanic_atom2_device_keepalive @69
-    oceanic_atom2_device_version @70
-    oceanic_veo250_device_keepalive @71
-    oceanic_veo250_device_version @72
-    oceanic_vtpro_device_keepalive @73
-    oceanic_vtpro_device_version @74
-    reefnet_sensus_device_get_handshake @75
-    reefnet_sensus_parser_set_calibration @76
-    reefnet_sensuspro_device_get_handshake @77
-    reefnet_sensuspro_device_write_interval @78
-    reefnet_sensuspro_parser_set_calibration @79
-    reefnet_sensusultra_device_get_handshake @80
-    reefnet_sensusultra_device_read_user @81
-    reefnet_sensusultra_device_sense @82
-    reefnet_sensusultra_device_write_parameter @83
-    reefnet_sensusultra_device_write_user @84
-    reefnet_sensusultra_parser_set_calibration @85
-    suunto_d9_device_reset_maxdepth @86
-    suunto_d9_device_version @87
-    suunto_eon_device_write_interval @88
-    suunto_eon_device_write_name @89
-    suunto_vyper2_device_reset_maxdepth @90
-    suunto_vyper2_device_version @91
+dc_version
+dc_version_check
+dc_buffer_new
+dc_buffer_free
+dc_buffer_clear
+dc_buffer_reserve
+dc_buffer_resize
+dc_buffer_append
+dc_buffer_prepend
+dc_buffer_slice
+dc_buffer_get_size
+dc_buffer_get_data
+dc_datetime_now
+dc_datetime_localtime
+dc_datetime_gmtime
+dc_datetime_mktime
+dc_context_new
+dc_context_free
+dc_context_set_loglevel
+dc_context_set_logfunc
+dc_context_get_transports
+dc_iterator_next
+dc_iterator_free
+dc_descriptor_iterator
+dc_descriptor_free
+dc_descriptor_get_vendor
+dc_descriptor_get_product
+dc_descriptor_get_type
+dc_descriptor_get_model
+dc_descriptor_get_transports
+dc_iostream_get_transport
+dc_iostream_set_timeout
+dc_iostream_set_break
+dc_iostream_set_dtr
+dc_iostream_set_rts
+dc_iostream_get_available
+dc_iostream_get_lines
+dc_iostream_configure
+dc_iostream_poll
+dc_iostream_read
+dc_iostream_write
+dc_iostream_ioctl
+dc_iostream_flush
+dc_iostream_purge
+dc_iostream_sleep
+dc_iostream_close
+dc_serial_device_get_name
+dc_serial_device_free
+dc_serial_iterator_new
+dc_serial_open
+dc_bluetooth_addr2str
+dc_bluetooth_str2addr
+dc_bluetooth_device_get_address
+dc_bluetooth_device_get_name
+dc_bluetooth_device_free
+dc_bluetooth_iterator_new
+dc_bluetooth_open
+dc_irda_device_get_address
+dc_irda_device_get_name
+dc_irda_device_free
+dc_irda_iterator_new
+dc_irda_open
+dc_usbhid_device_get_vid
+dc_usbhid_device_get_pid
+dc_usbhid_device_free
+dc_usbhid_iterator_new
+dc_usbhid_open
+dc_custom_open
+dc_parser_new
+dc_parser_new2
+dc_parser_get_type
+dc_parser_set_data
+dc_parser_get_datetime
+dc_parser_get_field
+dc_parser_samples_foreach
+dc_parser_destroy
+reefnet_sensus_parser_set_calibration
+reefnet_sensuspro_parser_set_calibration
+reefnet_sensusultra_parser_set_calibration
+atomics_cobalt_parser_set_calibration
+dc_device_open
+dc_device_close
+dc_device_dump
+dc_device_foreach
+dc_device_get_type
+dc_device_read
+dc_device_set_cancel
+dc_device_set_events
+dc_device_set_fingerprint
+dc_device_timesync
+dc_device_write
+oceanic_atom2_device_version
+oceanic_atom2_device_keepalive
+oceanic_veo250_device_version
+oceanic_veo250_device_keepalive
+oceanic_vtpro_device_version
+oceanic_vtpro_device_keepalive
+reefnet_sensus_device_get_handshake
+reefnet_sensuspro_device_get_handshake
+reefnet_sensuspro_device_write_interval
+reefnet_sensusultra_device_read_user
+reefnet_sensusultra_device_sense
+reefnet_sensusultra_device_get_handshake
+reefnet_sensusultra_device_write_parameter
+reefnet_sensusultra_device_write_user
+suunto_d9_device_version
+suunto_d9_device_reset_maxdepth
+suunto_eon_device_write_interval
+suunto_eon_device_write_name
+suunto_vyper2_device_version
+suunto_vyper2_device_reset_maxdepth
+hw_ostc_device_md2hash
+hw_ostc_device_eeprom_read
+hw_ostc_device_eeprom_write
+hw_ostc_device_reset
+hw_ostc_device_screenshot
+hw_ostc_device_fwupdate
+hw_frog_device_version
+hw_frog_device_display
+hw_frog_device_customtext
+hw_ostc3_device_version
+hw_ostc3_device_hardware
+hw_ostc3_device_display
+hw_ostc3_device_customtext
+hw_ostc3_device_config_read
+hw_ostc3_device_config_write
+hw_ostc3_device_config_reset
+hw_ostc3_device_fwupdate
+atomics_cobalt_device_version
+atomics_cobalt_device_set_simulation
+divesystem_idive_device_fwupdate

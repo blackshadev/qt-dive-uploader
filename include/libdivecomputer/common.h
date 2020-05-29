@@ -41,6 +41,16 @@ typedef enum dc_status_t {
 	DC_STATUS_CANCELLED = -10
 } dc_status_t;
 
+typedef enum dc_transport_t {
+	DC_TRANSPORT_NONE      = 0,
+	DC_TRANSPORT_SERIAL    = (1 << 0),
+	DC_TRANSPORT_USB       = (1 << 1),
+	DC_TRANSPORT_USBHID    = (1 << 2),
+	DC_TRANSPORT_IRDA      = (1 << 3),
+	DC_TRANSPORT_BLUETOOTH = (1 << 4),
+	DC_TRANSPORT_BLE       = (1 << 5)
+} dc_transport_t;
+
 typedef enum dc_family_t {
 	DC_FAMILY_NULL = 0,
 	/* Suunto */
@@ -58,8 +68,8 @@ typedef enum dc_family_t {
 	DC_FAMILY_UWATEC_ALADIN = (3 << 16),
 	DC_FAMILY_UWATEC_MEMOMOUSE,
 	DC_FAMILY_UWATEC_SMART,
-	DC_FAMILY_UWATEC_MERIDIAN,
-	DC_FAMILY_UWATEC_G2,
+	DC_FAMILY_UWATEC_MERIDIAN, /* Deprecated: integrated into the Uwatec Smart family. */
+	DC_FAMILY_UWATEC_G2, /* Deprecated: integrated into the Uwatec Smart family. */
 	/* Oceanic */
 	DC_FAMILY_OCEANIC_VTPRO = (4 << 16),
 	DC_FAMILY_OCEANIC_VEO250,
@@ -76,6 +86,7 @@ typedef enum dc_family_t {
 	/* Cressi */
 	DC_FAMILY_CRESSI_EDY = (7 << 16),
 	DC_FAMILY_CRESSI_LEONARDO,
+	DC_FAMILY_CRESSI_GOA,
 	/* Zeagle */
 	DC_FAMILY_ZEAGLE_N2ITION3 = (8 << 16),
 	/* Atomic Aquatics */
@@ -91,6 +102,8 @@ typedef enum dc_family_t {
 	DC_FAMILY_DIVESYSTEM_IDIVE = (13 << 16),
 	/* Cochran */
 	DC_FAMILY_COCHRAN_COMMANDER = (14 << 16),
+	/* Tecdiving */
+	DC_FAMILY_TECDIVING_DIVECOMPUTEREU = (15 << 16),
 } dc_family_t;
 
 #ifdef __cplusplus

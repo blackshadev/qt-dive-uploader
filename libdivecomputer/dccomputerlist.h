@@ -4,6 +4,7 @@
 #include <QModelIndex>
 #include <QAbstractListModel>
 #include <libdivecomputer/device.h>
+#include "dctransportlist.h"
 
 class DCComputer : public QObject
 {
@@ -14,6 +15,8 @@ public:
     QString* vendor;
     QString* product;
     QString* description;
+    DCTransportList* transports;
+
     int index;
 };
 
@@ -44,9 +47,9 @@ public slots:
     DCComputer* get(int idx);
     void add(DCComputer* comp);
     void clear();
+
 protected:
     QHash<int, QByteArray> roleNames() const ;
-
 private:
     QList<DCComputer*> mComputers;
 };
