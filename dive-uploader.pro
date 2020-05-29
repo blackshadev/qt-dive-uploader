@@ -18,6 +18,7 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
+    libdivecomputer/dctransportlist.cpp \
     libdivecomputer/qlibdivecomputer.cpp \
     libdivecomputer/dccomputerlist.cpp \
     sessionstore.cpp \
@@ -35,6 +36,7 @@ SOURCES += main.cpp \
     common/datetime.cpp
 
 HEADERS += \
+    libdivecomputer/dctransportlist.h \
     libdivecomputer/qlibdivecomputer.h \
     libdivecomputer/dccomputerlist.h \
     sessionstore.h \

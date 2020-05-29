@@ -62,7 +62,7 @@ ApplicationWindow {
 
     Connections {
         target: littledivelog
-        onLoggedStateChanged: {
+        function onLoggedStateChanged(isLoggedIn) {
             if(isLoggedIn) {
                 libdivecomputer.writeType = WriteTypes.LittleLog;
                 stackView.pop();
@@ -70,14 +70,14 @@ ApplicationWindow {
                 stackView.push(loginViewComp);
             }
         }
-        onRefreshTokenChanged: {
-            session.refreshToken = tok;
+        function onRefreshTokenChanged(token) {
+            session.refreshToken = token;
         }
     }
 
     Connections {
         target: libdivecomputer
-        onSelectDives: {
+        function onSelectDives(writer, dives) {
             selectionwindow.visible = true;
             selectionwindow.setDiveData(writer, dives);
         }

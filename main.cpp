@@ -21,6 +21,11 @@ int main(int argc, char *argv[])
     LittleDiveLog log;
     QLibDiveComputer dc;
 
+    QString homeFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    QString sessionFilePath = QDir(QDir::cleanPath(homeFolder + QDir::separator() + "LittleDiveLog")).filePath("session.json");
+    SessionStore sess(sessionFilePath);
+    sess.load();
+
 #if defined(Q_OS_WIN)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
@@ -39,11 +44,6 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     QPM_INIT(engine)
-
-    QString homeFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    QString sessionFilePath = QDir(QDir::cleanPath(homeFolder + QDir::separator() + "LittleDiveLog")).filePath("session.json");
-    SessionStore sess(sessionFilePath);
-    sess.load();
 
     dc.bind_littledivelog(&log);
 

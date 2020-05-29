@@ -106,7 +106,7 @@ ColumnLayout {
     }
     Connections {
         target: littledivelog
-        onError: {
+        function onError(msg) {
             errorLbl.text = msg;
         }
     }

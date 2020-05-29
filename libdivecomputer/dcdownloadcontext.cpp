@@ -2,6 +2,10 @@
 #include <stdexcept>
 #include <QCoreApplication>
 #include "dive.h"
+#include <libdivecomputer/serial.h>
+#include <libdivecomputer/bluetooth.h>
+#include <libdivecomputer/irda.h>
+#include <libdivecomputer/usbhid.h>
 
 DCDownloadContext::DCDownloadContext(QObject *parent) : QThread(parent)
 {
@@ -97,7 +101,27 @@ void DCDownloadContext::do_work() {
         throw std::invalid_argument("No device selected");
     }
 
-    auto status = dc_device_open(&m_device, m_context, m_descriptor, m_port_name);
+    dc_status_t status;
+
+    dc_iterator_t* iter;
+    dc_usbhid_device_t* dev;
+
+    status = dc_usbhid_iterator_new(&iter, m_context, m_descriptor);
+    if(status != DC_STATUS_SUCCESS) {
+        throw std::runtime_error("Failed to open usb");
+    }
+
+    status = dc_iterator_next(iter, &dev);
+    if(status != DC_STATUS_SUCCESS) {
+        throw std::runtime_error("Failed to iterate device");
+    }
+
+    status = dc_usbhid_open(&m_iostream, m_context, dev);
+    if(status != DC_STATUS_SUCCESS) {
+        throw std::runtime_error("Failed to open usb device");
+    }
+
+    status = dc_device_open(&m_device, m_context, m_descriptor, m_iostream);
     if(status != DC_STATUS_SUCCESS) {
         throw std::runtime_error("Failed to open device");
     }
@@ -178,6 +202,7 @@ void DCDownloadContext::do_work() {
         this
     );
 
+    dc_iterator_free(iter);
     dc_device_close(m_device);
     m_device = NULL;
 }

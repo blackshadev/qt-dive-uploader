@@ -259,21 +259,22 @@ GridLayout {
 
     Connections {
         target: libdivecomputer
-        onReadProgress: {
+        function onReadProgress(current, total) {
             readProgress.value = current / total;
         }
 
-        onWriteProgress: {
+        function onWriteProgress(current, total) {
             writeProgress.value = current / total;
         }
 
-        onStart: {
+        function onStart() {
             startButton.enabled = false;
         }
-        onDone: {
+        function onDone() {
             startButton.enabled = true;
         }
-        onError: {
+
+        function onError(msg) {
             errorLabel.text = msg;
         }
     }

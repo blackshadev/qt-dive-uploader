@@ -52,7 +52,7 @@ ColumnLayout {
 
     Connections {
         target: libdivecomputer
-        onLog: log(lvl, msg)
+        function onLog(lvl, msg) { log(lvl, msg); }
     }
 
 }

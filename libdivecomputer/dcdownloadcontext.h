@@ -35,6 +35,7 @@ protected:
     char *m_port_name;
     dc_loglevel_t m_loglevel;
     dc_descriptor_t* m_descriptor;
+    dc_iostream_t* m_iostream;
     dc_context_t* m_context;
     dc_device_t *m_device;
 private:

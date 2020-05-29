@@ -7,16 +7,20 @@ DCComputer::DCComputer(int idx, dc_descriptor_t* descr)
     vendor = new QString(dc_descriptor_get_vendor(descr));
     product = new QString(dc_descriptor_get_product(descr));
     description = new QString();
+    transports = new DCTransportList(this);
+    transports->loadTransports(dc_descriptor_get_transports(descr));
 
     description->append(vendor);
     description->append(" ");
     description->append(product);
 }
+
 DCComputer::~DCComputer() {
     index = -1;
     delete vendor;
     delete product;
     delete description;
+    delete transports;
 
     product = NULL;
     vendor = NULL;
@@ -55,14 +59,14 @@ QVariant DCComputerList::data(const QModelIndex& index, int role) const
 
     DCComputer* comp = mComputers[i];
     switch (role) {
-    case VendorRole:
-        return QVariant::fromValue(*(comp->vendor));
-    case ProductRole:
-        return QVariant::fromValue(*(comp->product));
-    case DescriptionRole:
-        return QVariant::fromValue(*(comp->description));
-    case IndexRole:
-        return QVariant::fromValue(comp->index);
+        case VendorRole:
+            return QVariant::fromValue(*(comp->vendor));
+        case ProductRole:
+            return QVariant::fromValue(*(comp->product));
+        case DescriptionRole:
+            return QVariant::fromValue(*(comp->description));
+        case IndexRole:
+            return QVariant::fromValue(comp->index);
     }
 
     return QVariant(QVariant::Invalid);
