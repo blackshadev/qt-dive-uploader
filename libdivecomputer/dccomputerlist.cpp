@@ -7,8 +7,7 @@ DCComputer::DCComputer(int idx, dc_descriptor_t* descr)
     vendor = new QString(dc_descriptor_get_vendor(descr));
     product = new QString(dc_descriptor_get_product(descr));
     description = new QString();
-    transports = new DCTransportList(this);
-    transports->loadTransports(dc_descriptor_get_transports(descr));
+    transports = (dc_transport_t) dc_descriptor_get_transports(descr) ;
 
     description->append(vendor);
     description->append(" ");
@@ -20,7 +19,6 @@ DCComputer::~DCComputer() {
     delete vendor;
     delete product;
     delete description;
-    delete transports;
 
     product = NULL;
     vendor = NULL;

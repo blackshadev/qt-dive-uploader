@@ -72,7 +72,6 @@ GridLayout {
                 session.portname = portSelection.textAt(portSelection.currentIndex);
             }
         }
-
     }
 
     Label {
@@ -90,10 +89,10 @@ GridLayout {
         model: SortFilterProxyModel {
             sourceModel: libdivecomputer.devices
             sortRoleName: "description"
-            dynamicSortFilter: true
             sortOrder: "AscendingOrder"
         }
         textRole: "description"
+        valueRole: ComputerRoles.IndexRole
         Component.onCompleted: {
             var idx = computerSelection.find(session.computer);
 
@@ -103,11 +102,24 @@ GridLayout {
             loaded = true;
         }
         onCurrentIndexChanged: {
+            libdivecomputer.selected_device = computerSelection.model.get(computerSelection.currentValue);
+
             if(loaded) {
-                session.computer = computerSelection.textAt(computerSelection.currentIndex);
+                session.computer = computerSelection.currentText;
             }
         }
 
+    }
+
+    Label {
+        text: "Protocol"
+        Layout.minimumWidth: labelColumnWidth
+        Layout.maximumWidth: labelColumnWidth
+    }
+
+    ComboBox {
+        Layout.fillWidth: true
+        model: libdivecomputer.transports
     }
 
     Label {
