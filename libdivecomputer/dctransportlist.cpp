@@ -1,6 +1,5 @@
 #include "dctransportlist.h"
 
-
 DCTransport::DCTransport(int idx, dc_transport_t trans)
 {
     index = idx;
@@ -56,11 +55,14 @@ void DCTransportList::loadTransports(unsigned int transports)
         DC_TRANSPORT_USBHID
     };
 
+    clear();
     for(dc_transport_t tran : all_transports) {
         if(transports & tran) {
             addTransport(tran);
         }
     }
+
+    emit dataChanged(QModelIndex(), QModelIndex());
 }
 
 DCTransport* DCTransportList::addTransport(dc_transport_t transport)

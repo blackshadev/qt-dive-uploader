@@ -32,9 +32,8 @@ public:
 
     DCTransportList(QObject *parent = 0);
     virtual ~DCTransportList();
+
     void loadTransports(unsigned int transports);
-
-
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     DCTransport* addTransport(dc_transport_t trans);

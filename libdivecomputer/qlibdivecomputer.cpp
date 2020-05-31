@@ -13,7 +13,6 @@ QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 {
     m_context = NULL;
     m_writer = NULL;
-    m_selected_device = NULL;
     m_available_devices = get_devices();
     m_available_portnames = get_ports();
     m_supported_transports = new DCTransportList(this);
@@ -52,12 +51,9 @@ DCComputerList* QLibDiveComputer::get_devices()
     return list;
 }
 
-void QLibDiveComputer::set_selected_device(DCComputer* device)
+void QLibDiveComputer::set_available_transports(unsigned int trans)
 {
-    m_selected_device = device;
-    m_supported_transports->clear();
-    m_supported_transports->addTransport(device->transports);
-    emit selectedDeviceChanged(device);
+    m_supported_transports->loadTransports(trans);
 }
 
 QString QLibDiveComputer::get_writeTypeAsString()

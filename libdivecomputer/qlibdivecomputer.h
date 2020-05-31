@@ -48,7 +48,6 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(QString version MEMBER m_version CONSTANT)
     Q_PROPERTY(DCComputerList* devices MEMBER m_available_devices CONSTANT)
     Q_PROPERTY(DCTransportList* transports MEMBER m_supported_transports CONSTANT)
-    Q_PROPERTY(DCComputer* selectedDevice MEMBER m_selected_device WRITE set_selected_device NOTIFY selectedDeviceChanged)
     Q_PROPERTY(QStringList LogLevels READ get_logLevels CONSTANT)
     Q_PROPERTY(QString logLevel READ get_logLevel WRITE set_logLevel NOTIFY logLevelChanged)
     Q_PROPERTY(WriteType::writetype writeType READ get_writeType WRITE set_writeType NOTIFY writeTypeChanged)
@@ -66,7 +65,6 @@ public:
     QStringList* m_available_portnames;
     DCComputerList* m_available_devices;
     DCTransportList* m_supported_transports;
-    DCComputer* m_selected_device;
     QString m_path;
     bool m_select_dives = false;
 
@@ -76,6 +74,7 @@ public:
 
     void bind_littledivelog(LittleDiveLog* log);
 
+    Q_INVOKABLE void set_available_transports(unsigned int trans);
     Q_INVOKABLE void start_download(QString port_name, int comp_index, bool select = false);
     Q_INVOKABLE void cancel();
 
@@ -84,7 +83,6 @@ signals:
     void logLevelChanged();
     void pathChanged();
     void selectDivesChanged(bool val);
-    void selectedDeviceChanged(DCComputer* device);
     void readProgress(uint current, uint total);
     void writeProgress(uint current, uint total);
     void start();
@@ -108,7 +106,6 @@ private:
     DCComputerList* get_devices();
     QStringList* get_ports();
     QStringList get_logLevels();
-    void set_selected_device(DCComputer* dev);
     DCDownloadContext* m_context;
     DiveWriter* m_writer;
     void create_writer(dc_descriptor_t* descriptor, bool select);

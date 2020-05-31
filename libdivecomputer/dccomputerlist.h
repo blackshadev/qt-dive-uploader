@@ -15,7 +15,7 @@ public:
     QString* vendor;
     QString* product;
     QString* description;
-    dc_transport_t transports;
+    unsigned int transports;
 
     int index;
 };
@@ -31,6 +31,7 @@ public:
         ProductRole,
         DescriptionRole,
         IndexRole,
+        TransportsRole,
     };
     Q_ENUMS(ComputerRoles)
 
@@ -44,7 +45,7 @@ public:
 public slots:
 
     // Extra function to get the thing easily from outside Repeaters.
-    Q_INVOKABLE DCComputer* get(int idx);
+    DCComputer* get(int idx);
     void add(DCComputer* comp);
     void clear();
 

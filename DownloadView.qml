@@ -102,7 +102,9 @@ GridLayout {
             loaded = true;
         }
         onCurrentIndexChanged: {
-            libdivecomputer.selected_device = computerSelection.model.get(computerSelection.currentValue);
+
+            var idx = computerSelection.model.index(computerSelection.currentIndex, 0);
+            libdivecomputer.set_available_transports(computerSelection.model.data(idx, ComputerRoles.TransportsRole ));
 
             if(loaded) {
                 session.computer = computerSelection.currentText;
