@@ -15,7 +15,7 @@ public:
     QString* vendor;
     QString* product;
     QString* description;
-    DCTransportList* transports;
+    dc_transport_t transports;
 
     int index;
 };
@@ -30,7 +30,7 @@ public:
         VendorRole = Qt::UserRole + 1,
         ProductRole,
         DescriptionRole,
-        IndexRole
+        IndexRole,
     };
     Q_ENUMS(ComputerRoles)
 
@@ -44,7 +44,7 @@ public:
 public slots:
 
     // Extra function to get the thing easily from outside Repeaters.
-    DCComputer* get(int idx);
+    Q_INVOKABLE DCComputer* get(int idx);
     void add(DCComputer* comp);
     void clear();
 

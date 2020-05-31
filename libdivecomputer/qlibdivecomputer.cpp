@@ -13,8 +13,10 @@ QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 {
     m_context = NULL;
     m_writer = NULL;
+    m_selected_device = NULL;
     m_available_devices = get_devices();
     m_available_portnames = get_ports();
+    m_supported_transports = new DCTransportList(this);
     get_version();
     connect(this, SIGNAL(pathChanged()), this, SIGNAL(isReadyChanged()));
 }
@@ -22,6 +24,8 @@ QLibDiveComputer::~QLibDiveComputer()
 {
     delete m_available_devices;
     delete m_available_portnames;
+    delete m_supported_transports;
+
     free_context();
     free_writer();
     m_version.clear();
@@ -46,6 +50,14 @@ DCComputerList* QLibDiveComputer::get_devices()
     dc_iterator_free(iterator);
 
     return list;
+}
+
+void QLibDiveComputer::set_selected_device(DCComputer* device)
+{
+    m_selected_device = device;
+    m_supported_transports->clear();
+    m_supported_transports->addTransport(device->transports);
+    emit selectedDeviceChanged(device);
 }
 
 QString QLibDiveComputer::get_writeTypeAsString()
