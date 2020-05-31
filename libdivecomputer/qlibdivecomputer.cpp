@@ -16,6 +16,7 @@ QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
     m_available_devices = get_devices();
     m_available_portnames = get_ports();
     m_supported_transports = new DCTransportList(this);
+    m_supported_transports->loadTransports(DC_TRANSPORT_BLE|DC_TRANSPORT_USBHID|DC_TRANSPORT_IRDA);
     get_version();
     connect(this, SIGNAL(pathChanged()), this, SIGNAL(isReadyChanged()));
 }
@@ -54,6 +55,7 @@ DCComputerList* QLibDiveComputer::get_devices()
 void QLibDiveComputer::set_available_transports(unsigned int trans)
 {
     m_supported_transports->loadTransports(trans);
+    emit transportChanged();
 }
 
 QString QLibDiveComputer::get_writeTypeAsString()

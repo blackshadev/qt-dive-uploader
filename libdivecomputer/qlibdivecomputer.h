@@ -91,6 +91,7 @@ signals:
     void log(QString lvl, QString msg);
     void selectDives(DiveWriter* writer, QDiveModel* dives);
     void isReadyChanged();
+    void transportChanged();
 
 protected slots:
 protected:

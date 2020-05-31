@@ -40,9 +40,6 @@ public:
 
 
 public slots:
-    // Extra function to get the thing easily from outside Repeaters.
-    DCTransport* get(int idx);
-    void add(DCTransport* comp);
     void clear();
 protected:
     QHash<int, QByteArray> roleNames() const ;

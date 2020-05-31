@@ -46,34 +46,6 @@ GridLayout {
         }
     }
 
-
-    Label {
-        text: "Port"
-        Layout.minimumWidth: labelColumnWidth
-        Layout.maximumWidth: labelColumnWidth
-    }
-
-    ComboBox {
-        Layout.fillWidth: true
-
-        property bool loaded: false
-        id: portSelection
-        editable: true
-        model: libdivecomputer.ports
-        Component.onCompleted: {
-            var idx = portSelection.find(session.portname);
-            if(idx > -1) {
-                portSelection.currentIndex = idx;
-            }
-            loaded = true;
-        }
-        onCurrentIndexChanged: {
-            if(loaded) {
-                session.portname = portSelection.textAt(portSelection.currentIndex);
-            }
-        }
-    }
-
     Label {
         text: "Computer"
         Layout.minimumWidth: labelColumnWidth
@@ -92,7 +64,7 @@ GridLayout {
             sortOrder: "AscendingOrder"
         }
         textRole: "description"
-        valueRole: ComputerRoles.IndexRole
+        valueRole: "index"
         Component.onCompleted: {
             var idx = computerSelection.find(session.computer);
 
@@ -107,7 +79,7 @@ GridLayout {
             libdivecomputer.set_available_transports(computerSelection.model.data(idx, ComputerRoles.TransportsRole ));
 
             if(loaded) {
-                session.computer = computerSelection.currentText;
+                session.computer = computerSelection.model.data(idx, ComputerRoles.DescriptionRole);
             }
         }
 
@@ -120,8 +92,29 @@ GridLayout {
     }
 
     ComboBox {
+
+
+        property bool loaded: false
         Layout.fillWidth: true
+        id: transportSelection
         model: libdivecomputer.transports
+        textRole: "description"
+        valueRole: "index"
+
+        Component.onCompleted: {
+            loaded = true;
+        }
+
+        onCurrentIndexChanged: {
+
+            var idx = transportSelection.model.index(transportSelection.currentIndex, 0);
+            var value =transportSelection.model.data(idx, "description")
+
+            if(loaded) {
+                session.transportType = value || "";
+            }
+        }
+
     }
 
     Label {
@@ -270,7 +263,6 @@ GridLayout {
     }
 
 
-
     Connections {
         target: libdivecomputer
         function onReadProgress(current, total) {
@@ -290,6 +282,17 @@ GridLayout {
 
         function onError(msg) {
             errorLabel.text = msg;
+        }
+
+        function onTransportChanged() {
+            var idx = transportSelection.find(session.transportType);
+
+            if(idx > -1) {
+                transportSelection.currentIndex = idx;
+            } else {
+                transportSelection.currentIndex = 0;
+            }
+
         }
     }
 }

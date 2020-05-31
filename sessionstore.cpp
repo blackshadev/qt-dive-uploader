@@ -85,9 +85,12 @@ void SessionData::read(const QJsonObject &json)
         m_write_type = json["writeType"].toString();
     }
 
-
     if(json.contains("selectDives") && json["selectDives"].isBool()) {
         m_select_dives = json["selectDives"].toBool();
+    }
+
+    if(json.contains("transportType") && json["transportType"].isString()) {
+        m_transport_type = json["transportType"].toString();
     }
 
 }
@@ -100,6 +103,7 @@ void SessionData::write(QJsonObject &json)
     json["refreshToken"] = m_refresh_token;
     json["writeType"] = m_write_type;
     json["selectDives"] = m_select_dives;
+    json["transportType"] = m_transport_type;
 }
 
 // -- SessionStore --

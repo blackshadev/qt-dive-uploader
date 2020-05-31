@@ -22,6 +22,7 @@ const char* translate_transport(dc_transport_t trans)
         case DC_TRANSPORT_SERIAL: return "Serial";
         case DC_TRANSPORT_USB: return "USB";
         case DC_TRANSPORT_USBHID: return "USB HID";
+        default: return "Unknown";
     }
 }
 
@@ -38,14 +39,18 @@ DCTransportList::~DCTransportList()
 
 void DCTransportList::clear()
 {
+    beginResetModel();
     for(DCTransport* c : mTransports) {
         delete c;
     }
     mTransports.clear();
+    endResetModel();
+
 }
 
 void DCTransportList::loadTransports(unsigned int transports)
 {
+
     dc_transport_t const all_transports[6] = {
         DC_TRANSPORT_BLE,
         DC_TRANSPORT_BLUETOOTH,
@@ -56,26 +61,21 @@ void DCTransportList::loadTransports(unsigned int transports)
     };
 
     clear();
+
+    beginResetModel();
     for(dc_transport_t tran : all_transports) {
         if(transports & tran) {
             addTransport(tran);
         }
     }
-
-    emit dataChanged(QModelIndex(), QModelIndex());
+    endResetModel();
 }
 
 DCTransport* DCTransportList::addTransport(dc_transport_t transport)
 {
     auto trans = new DCTransport(mTransports.size(), transport);
-    this->add(trans);
-    return trans;
-}
-
-
-void DCTransportList::add(DCTransport *trans)
-{
     mTransports.append(trans);
+    return trans;
 }
 
 
@@ -100,16 +100,6 @@ QVariant DCTransportList::data(const QModelIndex& index, int role) const
 
     return QVariant(QVariant::Invalid);
 
-}
-
-DCTransport* DCTransportList::get(int idx)
-{
-
-    if (idx < 0 || idx >= mTransports.size()) {
-        return nullptr;
-    }
-
-    return mTransports[idx];
 }
 
 QHash<int, QByteArray> DCTransportList::roleNames() const
