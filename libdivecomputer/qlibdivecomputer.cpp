@@ -55,10 +55,26 @@ void QLibDiveComputer::set_available_transports(unsigned int trans)
 }
 
 
-void QLibDiveComputer::update_availble_ports(dc_descriptor_t* descr, dc_transport_t trans)
+void QLibDiveComputer::update_availble_ports(int computer_idx, unsigned int trans)
 {
-    m_available_ports->load(m_context->m_context, descr, trans);
+    dc_context_t* ctx;
+    dc_context_new(&ctx);
+    dc_context_set_loglevel(ctx, m_loglevel);
+    dc_context_set_logfunc(ctx, QLibDiveComputer::dc_log, NULL );
+
+    auto computer = m_available_devices->get(computer_idx);
+    m_available_ports->load(ctx, computer->descriptor, (dc_transport_t)trans);
+
+    dc_context_free(ctx);
+
     emit availablePortsChanged();
+}
+
+void QLibDiveComputer::dc_log(dc_context_t *context, dc_loglevel_t loglevel, const char *file, unsigned int line, const char *function, const char *msg, void *userdata)
+{
+    auto lib = (QLibDiveComputer*)userdata;
+    const char *loglevels[] = {"NONE", "ERROR", "WARNING", "INFO", "DEBUG", "ALL"};
+    emit lib->log(QString(loglevels[loglevel]), QString(msg));
 }
 
 QString QLibDiveComputer::get_writeTypeAsString()

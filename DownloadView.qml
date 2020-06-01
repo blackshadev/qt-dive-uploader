@@ -110,12 +110,53 @@ GridLayout {
 
             var idx = transportSelection.model.index(transportSelection.currentIndex, 0);
             var value = transportSelection.model.data(idx, TransportRoles.DescriptionRole);
+            var transport = transportSelection.model.data(idx, TransportRoles.TransportRole);
 
             if(loaded && value) {
                 session.transportType = value || "";
             }
+
+            var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
+            if(idx.valid && comp_idx.valid) {
+                var comp = computerSelection.model.data(comp_idx, ComputerRoles.IndexRole);
+                libdivecomputer.update_availble_ports(comp, transport);
+            }
         }
 
+    }
+
+    Label {
+        text: "Sources"
+        Layout.minimumWidth: labelColumnWidth
+        Layout.maximumWidth: labelColumnWidth
+    }
+
+    RowLayout {
+
+        ComboBox {
+
+            Layout.fillWidth: true
+            id: sourceSelection
+            model: libdivecomputer.ports
+            textRole: "description"
+            valueRole: "index"
+
+        }
+
+        Button {
+            text: FontAwesome.refresh
+            font.family: FontAwesome.fontFamily
+            onClicked: {
+                var idx = transportSelection.model.index(transportSelection.currentIndex, 0);
+                var transport = transportSelection.model.data(idx, TransportRoles.TransportRole);
+
+                var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
+                if(idx.valid && comp_idx.valid) {
+                    var comp = computerSelection.model.data(comp_idx, ComputerRoles.IndexRole);
+                    libdivecomputer.update_availble_ports(comp, transport);
+                }
+            }
+        }
     }
 
     Label {

@@ -77,7 +77,7 @@ public:
     void bind_littledivelog(LittleDiveLog* log);
 
     Q_INVOKABLE void set_available_transports(unsigned int trans);
-    Q_INVOKABLE void update_availble_ports(dc_descriptor_t* descr, dc_transport_t trans);
+    Q_INVOKABLE void update_availble_ports(int computer_idx, unsigned int trans);
     Q_INVOKABLE void start_download(QString port_name, int comp_index, bool select = false);
     Q_INVOKABLE void cancel();
 
@@ -117,6 +117,7 @@ private:
     void create_context(char* port_name, dc_descriptor_t* descriptor);
     void free_context();
     void get_version();
+    static void dc_log(dc_context_t *context, dc_loglevel_t loglevel, const char *file, unsigned int line, const char *function, const char *msg, void *userdata);
 
 };
 Q_DECLARE_METATYPE(QLibDiveComputer*)

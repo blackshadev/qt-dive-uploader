@@ -148,11 +148,13 @@ dc_status_t DCPortList::load(dc_context_t* ctx, dc_descriptor_t* descr, dc_trans
     }
 
     void* device;
+
+    beginResetModel();
     while((status = dc_iterator_next(iter, &device)) == DC_STATUS_SUCCESS)
     {
         m_ports.append(new DCPort(m_ports.size(), trans, (dc_device_t *)device));
     }
-
+    endResetModel();
 
     dc_iterator_free(iter);
 
