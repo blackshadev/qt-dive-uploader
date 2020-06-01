@@ -6,6 +6,7 @@
 #include <QObject>
 #include "dcdownloadcontext.h"
 #include "dccomputerlist.h"
+#include "dcportlist.h"
 #include "qdivemodel.h"
 #include "writer/divewriter.h"
 #include "../littledivelog/littledivelog.h"
@@ -48,6 +49,7 @@ class QLibDiveComputer: public QObject
     Q_PROPERTY(QString version MEMBER m_version CONSTANT)
     Q_PROPERTY(DCComputerList* devices MEMBER m_available_devices CONSTANT)
     Q_PROPERTY(DCTransportList* transports MEMBER m_supported_transports CONSTANT)
+    Q_PROPERTY(DCPortList* ports MEMBER m_available_ports CONSTANT)
     Q_PROPERTY(QStringList LogLevels READ get_logLevels CONSTANT)
     Q_PROPERTY(QString logLevel READ get_logLevel WRITE set_logLevel NOTIFY logLevelChanged)
     Q_PROPERTY(WriteType::writetype writeType READ get_writeType WRITE set_writeType NOTIFY writeTypeChanged)
@@ -62,9 +64,9 @@ public:
     ~QLibDiveComputer();
     QVariant get_ports_as_qvariant();
     QString m_version;
-    QStringList* m_available_portnames;
     DCComputerList* m_available_devices;
     DCTransportList* m_supported_transports;
+    DCPortList* m_available_ports;
     QString m_path;
     bool m_select_dives = false;
 
@@ -75,6 +77,7 @@ public:
     void bind_littledivelog(LittleDiveLog* log);
 
     Q_INVOKABLE void set_available_transports(unsigned int trans);
+    Q_INVOKABLE void update_availble_ports(dc_descriptor_t* descr, dc_transport_t trans);
     Q_INVOKABLE void start_download(QString port_name, int comp_index, bool select = false);
     Q_INVOKABLE void cancel();
 
@@ -92,6 +95,7 @@ signals:
     void selectDives(DiveWriter* writer, QDiveModel* dives);
     void isReadyChanged();
     void transportChanged();
+    void availablePortsChanged();
 
 protected slots:
 protected:
@@ -105,7 +109,6 @@ private:
     dc_loglevel_t m_loglevel = DC_LOGLEVEL_ERROR;
     WriteType::writetype m_writetype = WriteType::File;
     DCComputerList* get_devices();
-    QStringList* get_ports();
     QStringList get_logLevels();
     DCDownloadContext* m_context;
     DiveWriter* m_writer;

@@ -14,7 +14,7 @@ QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
     m_context = NULL;
     m_writer = NULL;
     m_available_devices = get_devices();
-    m_available_portnames = get_ports();
+    m_available_ports = new DCPortList(this);
     m_supported_transports = new DCTransportList(this);
     m_supported_transports->loadTransports(DC_TRANSPORT_BLE|DC_TRANSPORT_USBHID|DC_TRANSPORT_IRDA);
     get_version();
@@ -23,16 +23,12 @@ QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
 QLibDiveComputer::~QLibDiveComputer()
 {
     delete m_available_devices;
-    delete m_available_portnames;
+    delete m_available_ports;
     delete m_supported_transports;
 
     free_context();
     free_writer();
     m_version.clear();
-}
-
-QVariant QLibDiveComputer::get_ports_as_qvariant() {
-    return QVariant::fromValue(*m_available_portnames);
 }
 
 DCComputerList* QLibDiveComputer::get_devices()
@@ -56,6 +52,13 @@ void QLibDiveComputer::set_available_transports(unsigned int trans)
 {
     m_supported_transports->loadTransports(trans);
     emit transportChanged();
+}
+
+
+void QLibDiveComputer::update_availble_ports(dc_descriptor_t* descr, dc_transport_t trans)
+{
+    m_available_ports->load(descr, trans);
+    emit availablePortsChanged();
 }
 
 QString QLibDiveComputer::get_writeTypeAsString()
@@ -290,18 +293,6 @@ void QLibDiveComputer::free_context() {
         delete m_context;
         m_context = NULL;
     }
-}
-
-
-QStringList* QLibDiveComputer::get_ports() {
-
-    QStringList* dataList = new QStringList();
-    QList<QSerialPortInfo> data = QSerialPortInfo::availablePorts();
-    for(QSerialPortInfo info : data ) {
-       dataList->append(info.systemLocation());
-    }
-
-    return dataList;
 }
 
 
