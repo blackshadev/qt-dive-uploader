@@ -16,10 +16,10 @@ class DCDownloadContext : public QThread
 public:
     explicit DCDownloadContext(QObject *parent = 0);
     ~DCDownloadContext();
-    void setPortName(const char* port);
     void setLogLevel(dc_loglevel_t err = DC_LOGLEVEL_ERROR);
     void setDescriptor(dc_descriptor_t* descriptor);
     void setFingerprint(const unsigned char* data, unsigned int size);
+    dc_context_t* m_context;
 signals:
     void log(QString loglevel, QString msg);
     void deviceInfo(uint model, uint serial, uint firmware);
@@ -32,11 +32,9 @@ signals:
 protected:
     void run() override;
     void do_work();
-    char *m_port_name;
     dc_loglevel_t m_loglevel;
     dc_descriptor_t* m_descriptor;
     dc_iostream_t* m_iostream;
-    dc_context_t* m_context;
     dc_device_t *m_device;
 private:
     void new_context();

@@ -57,7 +57,7 @@ void QLibDiveComputer::set_available_transports(unsigned int trans)
 
 void QLibDiveComputer::update_availble_ports(dc_descriptor_t* descr, dc_transport_t trans)
 {
-    m_available_ports->load(descr, trans);
+    m_available_ports->load(m_context->m_context, descr, trans);
     emit availablePortsChanged();
 }
 
@@ -241,7 +241,6 @@ void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descript
 
     m_had_error = false;
     m_context = new DCDownloadContext(this);
-    m_context->setPortName(port_name);
     m_context->setDescriptor(descriptor);
     m_context->setLogLevel(m_loglevel);
 

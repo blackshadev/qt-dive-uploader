@@ -9,10 +9,12 @@
 class DCPort : public QObject
 {
 public:
-    DCPort(int index);
+    DCPort(int index, dc_transport_t trans, dc_device_t* dev);
     virtual ~DCPort();
     QString* description;
     int index;
+    dc_transport_t transport;
+    dc_device_t* device;
 };
 
 Q_DECLARE_METATYPE(DCPort*);
@@ -31,7 +33,7 @@ public:
     ~DCPortList();
 
     void clear();
-    dc_status_t load(dc_descriptor_t* descriptor, dc_transport_t transport);
+    dc_status_t load(dc_context_t* ctx, dc_descriptor_t* descr, dc_transport_t trans);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

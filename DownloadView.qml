@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.2
 import SortFilterProxyModel 0.1
 import DCComputer 0.1
+import DCTransport 0.1
 import Libdivecomputer 0.1
 import QtQuick.Controls.Material 2.2
 import FontAwesome 1.0
@@ -108,9 +109,9 @@ GridLayout {
         onCurrentIndexChanged: {
 
             var idx = transportSelection.model.index(transportSelection.currentIndex, 0);
-            var value =transportSelection.model.data(idx, "description")
+            var value = transportSelection.model.data(idx, TransportRoles.DescriptionRole);
 
-            if(loaded) {
+            if(loaded && value) {
                 session.transportType = value || "";
             }
         }
@@ -287,11 +288,15 @@ GridLayout {
         function onTransportChanged() {
             var idx = transportSelection.find(session.transportType);
 
+            transportSelection.loaded = false;
+
             if(idx > -1) {
                 transportSelection.currentIndex = idx;
             } else {
                 transportSelection.currentIndex = 0;
             }
+
+            transportSelection.loaded = true;
 
         }
     }
