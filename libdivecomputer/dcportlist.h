@@ -35,6 +35,7 @@ public:
     void clear();
     dc_status_t load(dc_context_t* ctx, dc_descriptor_t* descr, dc_transport_t trans);
 
+    DCPort* get(int idx);
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 

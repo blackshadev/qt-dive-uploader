@@ -185,7 +185,7 @@ void QLibDiveComputer::cancel() {
 
 }
 
-void QLibDiveComputer::start_download(QString port_name, int comp_idx, bool select_dives) {
+void QLibDiveComputer::start_download(int port_idx, int comp_idx, bool select_dives) {
 
     if(m_writetype == WriteType::LittleLog && m_log->m_user_info == NULL) {
         emit error("Not yet logged in. Either login or wait a second");
@@ -194,8 +194,10 @@ void QLibDiveComputer::start_download(QString port_name, int comp_idx, bool sele
 
     auto computer = m_available_devices->get(comp_idx);
 
+    auto port = m_available_ports->get(port_idx);
+
     try {
-        create_context(port_name.toLatin1().data(), computer->descriptor);
+        create_download_context(port, computer);
         create_writer(computer->descriptor, select_dives);
         m_context->start();
 
@@ -252,12 +254,13 @@ void QLibDiveComputer::free_writer() {
     }
 }
 
-void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descriptor) {
+void QLibDiveComputer::create_download_context(DCPort* port, DCComputer* comp) {
     free_context();
 
     m_had_error = false;
     m_context = new DCDownloadContext(this);
-    m_context->setDescriptor(descriptor);
+    m_context->setComputer(comp);
+    m_context->setPort(port);
     m_context->setLogLevel(m_loglevel);
 
     m_context->connect(m_context, &DCDownloadContext::started, this, [&]() {

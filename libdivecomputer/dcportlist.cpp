@@ -103,6 +103,10 @@ QVariant DCPortList::data(const QModelIndex& index, int role) const
     return QVariant(QVariant::Invalid);
 }
 
+DCPort* DCPortList::get(int idx) {
+    return m_ports[idx];
+}
+
 QHash<int, QByteArray> DCPortList::roleNames() const
 {
     QHash<int, QByteArray> roles;

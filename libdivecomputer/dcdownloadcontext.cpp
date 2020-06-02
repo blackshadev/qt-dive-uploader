@@ -6,27 +6,35 @@
 #include <libdivecomputer/bluetooth.h>
 #include <libdivecomputer/irda.h>
 #include <libdivecomputer/usbhid.h>
+#include <libdivecomputer/ble.h>
 
 DCDownloadContext::DCDownloadContext(QObject *parent) : QThread(parent)
 {
     m_loglevel = DC_LOGLEVEL_WARNING;
     m_context = NULL;
-    m_descriptor = NULL;
     m_device = NULL;
+    m_port = NULL;
+    m_computer = NULL;
 }
 
-DCDownloadContext::~DCDownloadContext() {
+DCDownloadContext::~DCDownloadContext()
+{
     free_context();
+    m_port = NULL;
+    m_computer = NULL;
 
-    if(m_device) {
+    if(m_device)
+    {
         dc_device_close(m_device);
         m_device = NULL;
     }
 }
 
-void DCDownloadContext::new_context() {
+void DCDownloadContext::new_context()
+{
 
-    if(m_context != NULL) {
+    if(m_context != NULL)
+    {
         free_context();
     }
 
@@ -40,21 +48,29 @@ void DCDownloadContext::new_context() {
 
 }
 
-void DCDownloadContext::free_context() {
+void DCDownloadContext::free_context()
+{
     dc_context_free(m_context);
     m_context = NULL;
 }
 
-void DCDownloadContext::setFingerprint(const unsigned char* data, unsigned int len) {
+void DCDownloadContext::setFingerprint(const unsigned char* data, unsigned int len)
+{
     dc_device_set_fingerprint(m_device, data, len);
 }
 
-void DCDownloadContext::setDescriptor(dc_descriptor_t *descriptor) {
-    m_descriptor = descriptor;
+void DCDownloadContext::setComputer(DCComputer *comp)
+{
+    m_computer = comp;
 }
 
+void DCDownloadContext::setPort(DCPort *port)
+{
+    m_port = port;
+}
 
-void DCDownloadContext::setLogLevel(dc_loglevel_t err) {
+void DCDownloadContext::setLogLevel(dc_loglevel_t err)
+{
     m_loglevel = err;
     dc_context_set_loglevel(m_context, m_loglevel);
 }
@@ -77,42 +93,56 @@ void DCDownloadContext::run() {
     }
 }
 
+dc_status_t open_io_device(dc_iostream_t** iostream, dc_context_t* ctx, DCPort* port)
+{
+    switch(port->transport)
+    {
+        case DC_TRANSPORT_BLE:
+        case DC_TRANSPORT_BLUETOOTH:
+        {
+            auto addr = dc_bluetooth_device_get_address((dc_bluetooth_device_t*)port->device);
+            //return dc_bluetooth_open(iostream, ctx, addr);
+            return DC_STATUS_UNSUPPORTED;
+        }
+        case DC_TRANSPORT_USBHID:
+        case DC_TRANSPORT_USB:
+            return dc_usbhid_open(iostream, ctx, (dc_usbhid_device_t*)port->device);
+        case DC_TRANSPORT_IRDA:
+            return dc_irda_open(iostream, ctx, dc_irda_device_get_address((dc_irda_device_t*)port->device), 0);
+        case DC_TRANSPORT_SERIAL:
+            return dc_serial_open(iostream, ctx, dc_serial_device_get_name((dc_serial_device_t*)port->device));
+        case DC_TRANSPORT_NONE:
+            return DC_STATUS_UNSUPPORTED;
+
+    }
+}
+
 void DCDownloadContext::do_work() {
 
     new_context();
 
-    if(m_device != NULL) {
-        throw std::invalid_argument("Device already created. DownloadContext already running?");
+    if(m_computer == NULL)
+    {
+        throw std::invalid_argument("No computer selected");
     }
-    if(m_context == NULL) {
+    if(m_port == NULL)
+    {
+        throw std::invalid_argument("No port selected");
+    }
+    if(m_context == NULL)
+    {
         throw std::invalid_argument("Context not initialized. Constructor not called or destructor was already called");
     }
 
-    if(m_descriptor == NULL) {
-        throw std::invalid_argument("No device selected");
-    }
-
     dc_status_t status;
+    dc_iostream_t* iostream;
 
-    dc_iterator_t* iter;
-    dc_usbhid_device_t* dev;
-
-    status = dc_usbhid_iterator_new(&iter, m_context, m_descriptor);
+    status = open_io_device(&iostream, m_context, m_port);
     if(status != DC_STATUS_SUCCESS) {
-        throw std::runtime_error("Failed to open usb");
+        throw std::runtime_error("Failed to open io device");
     }
 
-    status = dc_iterator_next(iter, &dev);
-    if(status != DC_STATUS_SUCCESS) {
-        throw std::runtime_error("Failed to iterate device");
-    }
-
-    status = dc_usbhid_open(&m_iostream, m_context, dev);
-    if(status != DC_STATUS_SUCCESS) {
-        throw std::runtime_error("Failed to open usb device");
-    }
-
-    status = dc_device_open(&m_device, m_context, m_descriptor, m_iostream);
+    status = dc_device_open(&m_device, m_context, m_computer->descriptor, iostream);
     if(status != DC_STATUS_SUCCESS) {
         throw std::runtime_error("Failed to open device");
     }
@@ -128,34 +158,34 @@ void DCDownloadContext::do_work() {
                 emit ctx->deviceInfo(devinfo->model, devinfo->serial, devinfo->firmware);
 
             }
-            break;
+                break;
 
             case DC_EVENT_WAITING:
             {
                 emit ctx->waiting();
             }
-            break;
+                break;
 
             case DC_EVENT_CLOCK:
             {
                 dc_event_clock_t* clock = (dc_event_clock_t*)data;
                 emit ctx->clock(clock->devtime, clock->systime);
             }
-            break;
+                break;
 
             case DC_EVENT_PROGRESS:
             {
                 dc_event_progress_t* prog = (dc_event_progress_t*)data;
                 emit ctx->progress(prog->current, prog->maximum);
             }
-            break;
+                break;
 
             case DC_EVENT_VENDOR:
             {
                 dc_event_vendor_t* vend = (dc_event_vendor_t*)data;
                 emit ctx->vendor(QString((const char*)vend->data), vend->size);
             }
-            break;
+                break;
         }
 
     }, this);
@@ -193,7 +223,8 @@ void DCDownloadContext::do_work() {
         this
     );
 
-    dc_iterator_free(iter);
+    dc_iostream_close(iostream);
     dc_device_close(m_device);
     m_device = NULL;
+    iostream = NULL;
 }
