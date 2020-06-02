@@ -63,6 +63,15 @@ void SessionData::setRefreshToken(QString tok) {
     emit refreshTokenChanged(tok);
 }
 
+void SessionData::setTransportType(QString trans) {
+    m_transport_type = trans;
+    emit transportTypeChanged(trans);
+}
+
+QString SessionData::getTransportType() {
+    return m_transport_type;
+}
+
 void SessionData::read(const QJsonObject &json)
 {
     if(json.contains("path") && json["path"].isString()) {

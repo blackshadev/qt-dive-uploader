@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
     QQuickStyle::setStyle("Material");
     qmlRegisterType<DCComputerList>("DCComputer", 0, 1, "ComputerRoles");
+    qmlRegisterType<DCTransportList>("DCTransport", 0, 1, "TransportRoles");
+    qmlRegisterType<DCPortList>("DCPort", 0, 1, "PortRoles");
     qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "LogLevel");
     qmlRegisterType<WriteType>("Libdivecomputer", 0, 1, "WriteTypes");
     qmlRegisterType<QDiveModel>("Libdivecomputer", 0, 1, "DiveModel");

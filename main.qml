@@ -16,7 +16,7 @@ ApplicationWindow {
     property int margin: 21
     property int labelColumnWidth: 120
     property int initialWidth: 580
-    property int initialHeight: 440
+    property int initialHeight: 490
     property int t: DiveModel.DiveDepthRole
 
     visible: true

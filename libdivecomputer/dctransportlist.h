@@ -26,7 +26,8 @@ class DCTransportList : public QAbstractListModel
 public:
     enum TransportRoles {
         DescriptionRole = Qt::UserRole + 1,
-        IndexRole
+        IndexRole,
+        TransportRole,
     };
     Q_ENUMS(TransportRoles)
 

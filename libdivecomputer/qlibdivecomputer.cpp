@@ -55,10 +55,26 @@ void QLibDiveComputer::set_available_transports(unsigned int trans)
 }
 
 
-void QLibDiveComputer::update_availble_ports(dc_descriptor_t* descr, dc_transport_t trans)
+void QLibDiveComputer::update_availble_ports(int computer_idx, unsigned int trans)
 {
-    m_available_ports->load(descr, trans);
+    dc_context_t* ctx;
+    dc_context_new(&ctx);
+    dc_context_set_loglevel(ctx, m_loglevel);
+    dc_context_set_logfunc(ctx, QLibDiveComputer::dc_log, NULL );
+
+    auto computer = m_available_devices->get(computer_idx);
+    m_available_ports->load(ctx, computer->descriptor, (dc_transport_t)trans);
+
+    dc_context_free(ctx);
+
     emit availablePortsChanged();
+}
+
+void QLibDiveComputer::dc_log(dc_context_t *context, dc_loglevel_t loglevel, const char *file, unsigned int line, const char *function, const char *msg, void *userdata)
+{
+    auto lib = (QLibDiveComputer*)userdata;
+    const char *loglevels[] = {"NONE", "ERROR", "WARNING", "INFO", "DEBUG", "ALL"};
+    emit lib->log(QString(loglevels[loglevel]), QString(msg));
 }
 
 QString QLibDiveComputer::get_writeTypeAsString()
@@ -169,7 +185,7 @@ void QLibDiveComputer::cancel() {
 
 }
 
-void QLibDiveComputer::start_download(QString port_name, int comp_idx, bool select_dives) {
+void QLibDiveComputer::start_download(int port_idx, int comp_idx, bool select_dives) {
 
     if(m_writetype == WriteType::LittleLog && m_log->m_user_info == NULL) {
         emit error("Not yet logged in. Either login or wait a second");
@@ -178,8 +194,10 @@ void QLibDiveComputer::start_download(QString port_name, int comp_idx, bool sele
 
     auto computer = m_available_devices->get(comp_idx);
 
+    auto port = m_available_ports->get(port_idx);
+
     try {
-        create_context(port_name.toLatin1().data(), computer->descriptor);
+        create_download_context(port, computer);
         create_writer(computer->descriptor, select_dives);
         m_context->start();
 
@@ -236,13 +254,13 @@ void QLibDiveComputer::free_writer() {
     }
 }
 
-void QLibDiveComputer::create_context(char *port_name, dc_descriptor_t *descriptor) {
+void QLibDiveComputer::create_download_context(DCPort* port, DCComputer* comp) {
     free_context();
 
     m_had_error = false;
     m_context = new DCDownloadContext(this);
-    m_context->setPortName(port_name);
-    m_context->setDescriptor(descriptor);
+    m_context->setComputer(comp);
+    m_context->setPort(port);
     m_context->setLogLevel(m_loglevel);
 
     m_context->connect(m_context, &DCDownloadContext::started, this, [&]() {

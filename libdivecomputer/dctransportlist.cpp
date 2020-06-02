@@ -34,7 +34,7 @@ DCTransportList::DCTransportList(QObject*parent) : QAbstractListModel(parent)
 
 DCTransportList::~DCTransportList()
 {
-    this->clear();
+    clear();
 }
 
 void DCTransportList::clear()
@@ -96,6 +96,8 @@ QVariant DCTransportList::data(const QModelIndex& index, int role) const
             return QVariant::fromValue(*(trans->description));
         case IndexRole:
             return QVariant::fromValue(trans->index);
+        case TransportRole:
+            return QVariant::fromValue((unsigned int)trans->transport);
     }
 
     return QVariant(QVariant::Invalid);
@@ -107,5 +109,6 @@ QHash<int, QByteArray> DCTransportList::roleNames() const
     QHash<int, QByteArray> roles;
     roles[DescriptionRole] = "description";
     roles[IndexRole] = "index";
+    roles[TransportRole] = "transport";
     return roles;
 }
