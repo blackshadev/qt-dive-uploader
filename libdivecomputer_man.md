@@ -7,7 +7,7 @@ Using libdivecomputer you can extract data from various divecomputer devices. Th
 1. Creating a context for logging and error handling
 2. Selecting the descriptor for your dive computer
 3. Selecting and the transport to interface with your device
-4. Selecting a source which connects to your device
+4. Selecting a transport device and opening communication with it
 5. Downloading data from your device
 6. Parsing the the data to a more usable state
 
@@ -202,9 +202,11 @@ Available transports are:
 - DC_TRANSPORT_NONE
 
 
-## Selecting source
+## Selecting source Device
 
 After selecting a transport you need to list the available sources. If you have multiple devices plugged in, or if the transport type doesn't support the detection of the specific device. 
+
+### Iterating transport devices
 
 Each type of transport has it's own iterator function, all variants have the same arguments `fn(dc_iterator_t **iterator, dc_context_t *ctx, dc_descriptor_t *descriptor)` but each iterator returns a different device type. 
  
@@ -213,13 +215,22 @@ Each type of transport has it's own iterator function, all variants have the sam
 - IRDA `dc_irda_iterator_new` iterates over `dc_irda_device_t` devices
 - bluetooth `dc_bluetooth_iterator_new` iterates over `dc_bluetooth_device_t` devices
 
+### Interfacing functions for different transports
+
 Each device type has it's own set of interfacing functions
 - `dc_usbhid_device_t` has `int dc_usbhid_device_t(dc_usbhid_device_t *dev)` and  `int dc_usbhid_device_get_vid(dc_usbhid_device_t *dev)`
 - `dc_irda_device_t` has  `const char* dc_irda_device_get_name(dc_irda_device_t *device)` and `unsigned int dc_irda_device_get_address(dc_irda_device_t *device)`
 - `dc_serial_device_t` has `const char* dc_serial_device_get_name(dc_serial_device_t* device)`
 - `dc_bluetooth_device_t` has `const char* dc_bluetooth_device_get_name(dc_bluetooth_device_t* device)` and `dc_bluetooth_address_t dc_bluetooth_device_get_address(dc_bluetooth_device_t *)`
 
+Some of these functions are purely for displaying, others are also required when connecting to the source.
 
+### Connecting to the source
+
+As with the iterating of transport devices for each type of transport there is a different open function. The firsty to parameters are the same for each function. The first is the output parameter setting a `dc_iostream_t`, the second is the `dc_context_t` for logging. The other parameters differ between transports. 
+
+- USBHID: `dc_status_t dc_usbhid_open(dc_iostream_t** strm, dc_context_t* ctx, dc_usbhid_device_it*dev)`
+- BLUETOOTH: `dc_status_t dc_bluebooth_open(dc_iostream_t** strm, dc_context_t* ctx, dc_bluebooth_address_t addr, unsigned int port)`
 
 
 ## Downloading Dives
