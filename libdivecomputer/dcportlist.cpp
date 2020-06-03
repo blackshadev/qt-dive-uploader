@@ -35,7 +35,8 @@ QString device_to_string(dc_transport_t trans, dc_device_t *device) {
         case DC_TRANSPORT_BLUETOOTH:
         {
             auto name = dc_bluetooth_device_get_name((dc_bluetooth_device_t *)device);
-            return QString("[BLUETOOTH] %1").arg(name);
+            auto addr = dc_bluetooth_device_get_address((dc_bluetooth_device_t *)device);
+            return QString("[BLUETOOTH] %1 (%2)").arg(name).arg(dc_bluetooth_addr2str(addr));
         }
         default:
             return QString("NONE");
