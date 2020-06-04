@@ -38,6 +38,8 @@ public:
     DCPort* get(int idx);
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+signals:
+    void loaded();
 
 protected:
     QHash<int, QByteArray> roleNames() const ;

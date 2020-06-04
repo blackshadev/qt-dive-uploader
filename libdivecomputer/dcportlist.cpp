@@ -36,7 +36,9 @@ QString device_to_string(dc_transport_t trans, dc_device_t *device) {
         {
             auto name = dc_bluetooth_device_get_name((dc_bluetooth_device_t *)device);
             auto addr = dc_bluetooth_device_get_address((dc_bluetooth_device_t *)device);
-            return QString("[BLUETOOTH] %1 (%2)").arg(name).arg(dc_bluetooth_addr2str(addr));
+            char str_addr[DC_BLUETOOTH_SIZE];
+            dc_bluetooth_addr2str(addr, str_addr, DC_BLUETOOTH_SIZE);
+            return QString("[BLUETOOTH] %1 (%2)").arg(name).arg(str_addr);
         }
         default:
             return QString("NONE");
@@ -137,6 +139,7 @@ dc_status_t get_iterator_for(dc_iterator_t** iter, dc_context_t* ctx, dc_descrip
 dc_status_t DCPortList::load(dc_context_t* ctx, dc_descriptor_t* descr, dc_transport_t trans)
 {
     clear();
+
     if(!(dc_descriptor_get_transports(descr) & trans))
     {
         return DC_STATUS_UNSUPPORTED;
@@ -162,6 +165,8 @@ dc_status_t DCPortList::load(dc_context_t* ctx, dc_descriptor_t* descr, dc_trans
     endResetModel();
 
     dc_iterator_free(iter);
+
+    emit loaded();
 
     return DC_STATUS_SUCCESS;
 }
