@@ -7,10 +7,43 @@ import SortFilterProxyModel 0.1
 import DCComputer 0.1
 import DCTransport 0.1
 import Libdivecomputer 0.1
-import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material 2.12
 import FontAwesome 1.0
 
 GridLayout {
+
+    enum Stages {
+        None = 0,
+        ComputerSelection = 1,
+        TransportSelection = 2,
+        SourceSelection = 3,
+        OutputSelection = 4
+    }
+
+    function isValid(stage) {
+        var validStages = 1 << DownloadView.Stages.None;
+
+        if(computerSelection.currentIndex > -1) {
+            validStages |= 1 << DownloadView.Stages.ComputerSelection;
+        }
+        if(transportSelection.currentIndex > -1) {
+            validStages |= 1 << DownloadView.Stages.TransportSelection;
+        }
+        if(sourceSelection.currentIndex > -1) {
+            validStages |= 1 << DownloadView.Stages.SourceSelection;
+        }
+
+        if(fileRadio.checked && filePath.text !== "") {
+            validStages |= 1 << DownloadView.Stages.OutputSelection;
+        } else if(llRadio.checked && littledivelog.isLoggedIn) {
+            validStages |= 1 << DownloadView.Stages.OutputSelection;
+        }
+
+        var mask  = (1 << (stage + 1)) -1;
+
+        return (validStages & mask) === mask;
+    }
+
     function ensureJSON(filepath) {
         if(!/\.json$/.test(filepath)) {
             filepath = filepath.replace(/\..*$/, "");
@@ -77,23 +110,35 @@ GridLayout {
         onCurrentIndexChanged: {
 
             var idx = computerSelection.model.index(computerSelection.currentIndex, 0);
-            libdivecomputer.set_available_transports(computerSelection.model.data(idx, ComputerRoles.TransportsRole ));
+
+            var comp = "";
+            var trans = 0;
+
+            if(idx.valid) {
+                comp = computerSelection.model.data(idx, ComputerRoles.DescriptionRole);
+                trans = computerSelection.model.data(idx, ComputerRoles.TransportsRole);
+            }
+
+            libdivecomputer.set_available_transports(trans);
 
             if(loaded) {
-                session.computer = computerSelection.model.data(idx, ComputerRoles.DescriptionRole);
+                session.computer = comp;
             }
+
         }
 
     }
 
     Label {
+        visible: isValid(DownloadView.Stages.ComputerSelection)
+
         text: "Protocol"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
     }
 
     ComboBox {
-
+        visible: isValid(DownloadView.Stages.ComputerSelection)
 
         property bool loaded: false
         Layout.fillWidth: true
@@ -126,15 +171,17 @@ GridLayout {
     }
 
     Label {
+        visible: isValid(DownloadView.Stages.TransportSelection)
+
         text: "Sources"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
     }
 
     RowLayout {
+        visible: isValid(DownloadView.Stages.TransportSelection)
 
         ComboBox {
-
             Layout.fillWidth: true
             id: sourceSelection
             model: libdivecomputer.ports
@@ -157,6 +204,23 @@ GridLayout {
                 }
             }
         }
+    }    
+
+    Label {
+        text: "Select Dives"
+        Layout.minimumWidth: labelColumnWidth
+        Layout.maximumWidth: labelColumnWidth
+    }
+
+    CheckBox {
+        id: selectDives
+        Component.onCompleted: {
+            checked = session.selectDives;
+        }
+        onCheckStateChanged: {
+            session.selectDives = checked;
+        }
+
     }
 
     Label {
@@ -194,29 +258,14 @@ GridLayout {
     }
 
     Label {
-        text: "Select Dives"
-        Layout.minimumWidth: labelColumnWidth
-        Layout.maximumWidth: labelColumnWidth
-    }
-
-    CheckBox {
-        id: selectDives
-        Component.onCompleted: {
-            checked = session.selectDives;
-        }
-        onCheckStateChanged: {
-            session.selectDives = checked;
-        }
-
-    }
-
-    Label {
+        visible: fileRadio.checked
         text: "Output file"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
     }
 
     RowLayout {
+        visible: fileRadio.checked
         Layout.fillWidth: true
 
         TextField {
@@ -224,7 +273,6 @@ GridLayout {
 
             id: filePath
             text: session.path
-            enabled: fileRadio.checked
             onTextChanged: {
                 var fixedText = ensureJSON(filePath.text);
                 if(filePath.text !== fixedText) {
@@ -243,7 +291,6 @@ GridLayout {
                 fileDialog.open();
             }
 
-            enabled: fileRadio.checked
         }
     }
 
@@ -276,7 +323,7 @@ GridLayout {
         font.family: FontAwesome.fontFamily
         font.pointSize: 25
         padding: 20
-        enabled: libdivecomputer.isReady
+        enabled: isValid(DownloadView.Stages.OutputSelection)
 
         Component.onCompleted: {
             startButton.background.color = Material.color(Material.Blue)
@@ -339,6 +386,10 @@ GridLayout {
 
             transportSelection.loaded = true;
 
+        }
+
+        function onAvailablePortsChanged() {
+            sourceSelection.currentIndex = 0;
         }
     }
 }

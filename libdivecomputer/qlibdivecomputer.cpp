@@ -19,6 +19,7 @@ QLibDiveComputer::QLibDiveComputer(QObject *parent) : QObject(parent)
     m_supported_transports->loadTransports(DC_TRANSPORT_BLE|DC_TRANSPORT_USBHID|DC_TRANSPORT_IRDA);
     get_version();
     connect(this, SIGNAL(pathChanged()), this, SIGNAL(isReadyChanged()));
+    connect(m_available_ports, SIGNAL(loadend()), this, SIGNAL(availablePortsChanged()));
 }
 QLibDiveComputer::~QLibDiveComputer()
 {

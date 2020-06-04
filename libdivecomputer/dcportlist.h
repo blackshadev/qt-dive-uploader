@@ -39,7 +39,8 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 signals:
-    void loaded();
+    void loadstart();
+    void loadend();
 
 protected:
     QHash<int, QByteArray> roleNames() const ;

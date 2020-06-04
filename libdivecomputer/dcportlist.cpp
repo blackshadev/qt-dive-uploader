@@ -166,7 +166,7 @@ dc_status_t DCPortList::load(dc_context_t* ctx, dc_descriptor_t* descr, dc_trans
 
     dc_iterator_free(iter);
 
-    emit loaded();
+
 
     return DC_STATUS_SUCCESS;
 }
