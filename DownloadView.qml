@@ -11,6 +11,7 @@ import QtQuick.Controls.Material 2.12
 import FontAwesome 1.0
 
 GridLayout {
+    property bool isDownloading: false
 
     enum Stages {
         None = 0,
@@ -42,6 +43,16 @@ GridLayout {
         var mask  = (1 << (stage + 1)) -1;
 
         return (validStages & mask) === mask;
+    }
+
+    function refreshUI() {
+        transportSelection.visible = isValid(DownloadView.Stages.ComputerSelection);
+        transportSelectionLabel.visible = isValid(DownloadView.Stages.ComputerSelection);
+
+        sourceLabel.visible = isValid(DownloadView.Stages.TransportSelection);
+        sourceRow.visible = isValid(DownloadView.Stages.TransportSelection);
+
+        startButton.enabled = isValid(DownloadView.Stages.OutputSelection) && isDownloading == false;
     }
 
     function ensureJSON(filepath) {
@@ -133,6 +144,7 @@ GridLayout {
         visible: isValid(DownloadView.Stages.ComputerSelection)
 
         text: "Protocol"
+        id: transportSelectionLabel
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
     }
@@ -173,6 +185,7 @@ GridLayout {
     Label {
         visible: isValid(DownloadView.Stages.TransportSelection)
 
+        id: sourceLabel
         text: "Sources"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
@@ -181,13 +194,13 @@ GridLayout {
     RowLayout {
         visible: isValid(DownloadView.Stages.TransportSelection)
 
+        id: sourceRow
         ComboBox {
             Layout.fillWidth: true
             id: sourceSelection
             model: libdivecomputer.ports
             textRole: "description"
             valueRole: "index"
-
         }
 
         Button {
@@ -323,7 +336,7 @@ GridLayout {
         font.family: FontAwesome.fontFamily
         font.pointSize: 25
         padding: 20
-        enabled: isValid(DownloadView.Stages.OutputSelection)
+        enabled: isValid(DownloadView.Stages.OutputSelection) && isDownloading == false
 
         Component.onCompleted: {
             startButton.background.color = Material.color(Material.Blue)
@@ -336,6 +349,10 @@ GridLayout {
         }
 
         onClicked: {
+            if(!isValid(DownloadView.Stages.OutputSelection)) {
+                refreshUI();
+                return;
+            }
 
             errorLabel.text = "";
             writeProgress.value = 0;
@@ -363,10 +380,12 @@ GridLayout {
         }
 
         function onStart() {
-            startButton.enabled = false;
+            isDownloading = true;
+            refreshUI();
         }
         function onDone() {
-            startButton.enabled = true;
+            isDownloading = false;
+            refreshUI();
         }
 
         function onError(msg) {
@@ -386,10 +405,13 @@ GridLayout {
 
             transportSelection.loaded = true;
 
+            refreshUI();
         }
 
         function onAvailablePortsChanged() {
             sourceSelection.currentIndex = 0;
+
+            refreshUI();
         }
     }
 }
