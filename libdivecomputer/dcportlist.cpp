@@ -9,7 +9,6 @@ QString device_to_string(dc_transport_t trans, dc_device_t *device) {
 
     switch(trans)
     {
-        case DC_TRANSPORT_USB:
         case DC_TRANSPORT_USBHID:
         {
             int pid = dc_usbhid_device_get_pid((dc_usbhid_device_t *)device);
@@ -31,7 +30,6 @@ QString device_to_string(dc_transport_t trans, dc_device_t *device) {
 
             return QString("[SERIAL] %1").arg(name);
         }
-        case DC_TRANSPORT_BLE:
         case DC_TRANSPORT_BLUETOOTH:
         {
             auto name = dc_bluetooth_device_get_name((dc_bluetooth_device_t *)device);

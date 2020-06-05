@@ -21,7 +21,7 @@ const char* translate_transport(dc_transport_t trans)
         case DC_TRANSPORT_IRDA: return "IRDA";
         case DC_TRANSPORT_SERIAL: return "Serial";
         case DC_TRANSPORT_USB: return "USB";
-        case DC_TRANSPORT_USBHID: return "USB HID";
+        case DC_TRANSPORT_USBHID: return "USB";
         default: return "Unknown";
     }
 }
@@ -51,12 +51,10 @@ void DCTransportList::clear()
 void DCTransportList::loadTransports(unsigned int transports)
 {
 
-    dc_transport_t const all_transports[6] = {
-        DC_TRANSPORT_BLE,
+    dc_transport_t const all_transports[4] = {
         DC_TRANSPORT_BLUETOOTH,
         DC_TRANSPORT_IRDA,
         DC_TRANSPORT_SERIAL,
-        DC_TRANSPORT_USB,
         DC_TRANSPORT_USBHID
     };
 

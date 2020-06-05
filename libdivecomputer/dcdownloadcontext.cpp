@@ -97,7 +97,6 @@ dc_status_t open_io_device(dc_iostream_t** iostream, dc_context_t* ctx, DCPort* 
 {
     switch(port->transport)
     {
-        case DC_TRANSPORT_BLE:
         case DC_TRANSPORT_BLUETOOTH:
         {
             auto addr = dc_bluetooth_device_get_address((dc_bluetooth_device_t*)port->device);
@@ -105,7 +104,6 @@ dc_status_t open_io_device(dc_iostream_t** iostream, dc_context_t* ctx, DCPort* 
             return DC_STATUS_UNSUPPORTED;
         }
         case DC_TRANSPORT_USBHID:
-        case DC_TRANSPORT_USB:
             return dc_usbhid_open(iostream, ctx, (dc_usbhid_device_t*)port->device);
         case DC_TRANSPORT_IRDA:
             return dc_irda_open(iostream, ctx, dc_irda_device_get_address((dc_irda_device_t*)port->device), 1);
