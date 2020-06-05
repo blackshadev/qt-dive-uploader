@@ -5,7 +5,7 @@
 #include <libdivecomputer/irda.h>
 #include <libdivecomputer/usbhid.h>
 
-QString device_to_string(dc_transport_t trans, dc_device_t *device) {
+QString device_to_string(dc_transport_t trans, void *device) {
 
     switch(trans)
     {
@@ -44,7 +44,29 @@ QString device_to_string(dc_transport_t trans, dc_device_t *device) {
 
 }
 
-DCPort::DCPort(int idx, dc_transport_t trans, dc_device_t* dev)
+dc_status_t device_free(dc_transport_t transport, void *device)
+{
+    switch(transport) {
+        case DC_TRANSPORT_IRDA:
+            dc_irda_device_free((dc_irda_device_t *)device);
+            break;
+        case DC_TRANSPORT_USBHID:
+            dc_usbhid_device_free((dc_usbhid_device_t *)device);
+            break;
+        case DC_TRANSPORT_BLUETOOTH:
+            dc_bluetooth_device_free((dc_bluetooth_device_t *)device);
+            break;
+        case DC_TRANSPORT_SERIAL:
+            dc_serial_device_free((dc_serial_device_t *)device);
+            break;
+        default:
+            return DC_STATUS_UNSUPPORTED;
+    }
+
+    return DC_STATUS_SUCCESS;
+}
+
+DCPort::DCPort(int idx, dc_transport_t trans, void *dev)
 {
     index = idx;
     transport = trans;
@@ -55,6 +77,8 @@ DCPort::DCPort(int idx, dc_transport_t trans, dc_device_t* dev)
 DCPort::~DCPort()
 {
     delete description;
+    device_free(transport, device);
+    device = NULL;
 }
 
 DCPortList::DCPortList(QObject*parent) : QAbstractListModel(parent)
@@ -64,7 +88,7 @@ DCPortList::DCPortList(QObject*parent) : QAbstractListModel(parent)
 
 DCPortList::~DCPortList()
 {
-
+    clear();
 }
 
 

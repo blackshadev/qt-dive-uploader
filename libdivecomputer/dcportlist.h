@@ -9,12 +9,12 @@
 class DCPort : public QObject
 {
 public:
-    DCPort(int index, dc_transport_t trans, dc_device_t* dev);
+    DCPort(int index, dc_transport_t trans, void *dev);
     virtual ~DCPort();
     QString* description;
     int index;
     dc_transport_t transport;
-    dc_device_t* device;
+    void *device;
 };
 
 Q_DECLARE_METATYPE(DCPort*);
