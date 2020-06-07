@@ -48,7 +48,6 @@ ColumnLayout {
         Layout.fillWidth: true
 
         RoundButton {
-            Layout.alignment: Qt.Align
             Material.elevation: 0
 
             text: FontAwesome.github
@@ -57,6 +56,34 @@ ColumnLayout {
             onClicked: {
                 Qt.openUrlExternally("https://github.com/blackshadev/qt-dive-uploader");
             }
+
+            hoverEnabled: true
+            ToolTip.timeout: 5000
+            ToolTip.text: "Open github project page"
+            ToolTip.visible: hovered
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: "PointingHandCursor"
+            }
+        }
+
+        RoundButton {
+            Material.elevation: 0
+
+            text: FontAwesome.globe
+            font.family: FontAwesome.fontFamily
+            font.pixelSize: 22
+            onClicked: {
+                Qt.openUrlExternally("https://dive.littledev.nl/");
+            }
+
+
+            hoverEnabled: true
+            ToolTip.timeout: 5000
+            ToolTip.text: "Open divelog website"
+            ToolTip.visible: hovered
+
 
             MouseArea {
                 anchors.fill: parent

@@ -22,15 +22,20 @@ GridLayout {
     }
 
     function isValid(stage) {
+        var idx;
         var validStages = 1 << DownloadView.Stages.None;
 
-        if(computerSelection.currentIndex > -1) {
+        idx = computerSelection.model.index(computerSelection.currentIndex);
+        if(idx.valid) {
             validStages |= 1 << DownloadView.Stages.ComputerSelection;
         }
-        if(transportSelection.currentIndex > -1) {
+        idx = transportSelection.model.index(transportSelection.currentIndex);
+        if(idx.valid) {
             validStages |= 1 << DownloadView.Stages.TransportSelection;
         }
-        if(sourceSelection.currentIndex > -1) {
+
+        idx = sourceSelection.model.index(sourceSelection.currentIndex);
+        if(idx.valid) {
             validStages |= 1 << DownloadView.Stages.SourceSelection;
         }
 
@@ -216,7 +221,20 @@ GridLayout {
                     libdivecomputer.update_availble_ports(comp, transport);
                 }
             }
+
+            hoverEnabled: true
+            ToolTip.timeout: 5000
+            ToolTip.text: "Refresh available source ports"
+            ToolTip.visible: hovered
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: "PointingHandCursor"
+            }
+
+
         }
+
     }    
 
     Label {
@@ -337,15 +355,26 @@ GridLayout {
         font.pointSize: 25
         padding: 20
         enabled: isValid(DownloadView.Stages.OutputSelection) && isDownloading == false
+        visible: isDownloading == false
 
-        Component.onCompleted: {
-            startButton.background.color = Material.color(Material.Blue)
-            startButton.contentItem.color = Material.color(Material.Grey, Material.Shade200)
+        Material.foreground: Material.color(Material.Grey, Material.Shade100)
+
+        hoverEnabled: true
+        ToolTip.timeout: 5000
+        ToolTip.text: "Start download"
+        ToolTip.visible: hovered
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: "PointingHandCursor"
         }
 
         onEnabledChanged: {
-            startButton.background.color = enabled ? Material.color(Material.Blue) : Material.color(Material.Blue, Material.Shade300);
-            startButton.contentItem.color = enabled ?   Material.color(Material.Grey, Material.Shade200) :  Material.color(Material.Grey, Material.Shade300);
+            startButton.background.color = enabled ? Material.color(Material.Blue) : Material.color(Material.BlueGrey);
+        }
+
+        Component.onCompleted: {
+            startButton.background.color = enabled ? Material.color(Material.Blue) : Material.color(Material.BlueGrey);
         }
 
         onClicked: {
@@ -367,6 +396,22 @@ GridLayout {
 
         }
     }
+
+    RoundButton {
+        id: cancelButton
+        Layout.alignment: Qt.AlignRight
+        text: FontAwesome.ban
+
+        font.family: FontAwesome.fontFamily
+        font.pointSize: 25
+        padding: 20
+        visible: isDownloading == true
+
+        Material.background: Material.Red
+        Material.foreground: Material.color(Material.Grey, Material.Shade100)
+
+    }
+
 
 
     Connections {
