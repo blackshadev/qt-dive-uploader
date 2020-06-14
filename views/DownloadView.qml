@@ -84,15 +84,21 @@ GridLayout {
         title: "Please choose a file to save"
         nameFilters: [ "JSON files (*.json)", "All files (*)" ]
         onAccepted: {
-            var text = fileDialog.fileUrl.toString().replace(/^(file:\/{3})/, "");
+            var text = fileDialog.fileUrl.toString();
+            var cleanupRegExp = /^(file:\/{2})/;
+            // windows specific
+            if(/^file:\/\/\/[A-Z]\:/.test(text)) {
+                cleanupRegExp = /^(file:\/{3})/;
+            }
+
+            text = text.replace(cleanupRegExp, "");
             text = decodeURIComponent(text);
             text = ensureJSON(text);
 
             filePath.text = text;
-            session.path = text;
-            libdivecomputer.path = text;
 
             fileDialog.close();
+
         }
         onRejected: {
             fileDialog.close();
@@ -311,6 +317,7 @@ GridLayout {
 
                 session.path = fixedText;
                 libdivecomputer.path = fixedText;
+                refreshUI();
             }
         }
 
