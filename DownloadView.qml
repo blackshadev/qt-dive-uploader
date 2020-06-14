@@ -12,6 +12,7 @@ import QtQuick.Controls.Styles 1.4
 import FontAwesome 1.0
 
 GridLayout {
+    property bool isDownloading: false
 
     enum Stages {
         None = 0,
@@ -22,6 +23,7 @@ GridLayout {
     }
 
     function isValid(stage) {
+        var idx;
         var validStages = 1 << DownloadView.Stages.None;
         var idx;
 
@@ -49,6 +51,16 @@ GridLayout {
         var mask  = (1 << (stage + 1)) -1;
 
         return (validStages & mask) === mask;
+    }
+
+    function refreshUI() {
+        transportSelection.visible = isValid(DownloadView.Stages.ComputerSelection);
+        transportSelectionLabel.visible = isValid(DownloadView.Stages.ComputerSelection);
+
+        sourceLabel.visible = isValid(DownloadView.Stages.TransportSelection);
+        sourceRow.visible = isValid(DownloadView.Stages.TransportSelection);
+
+        startButton.enabled = isValid(DownloadView.Stages.OutputSelection) && isDownloading == false;
     }
 
     function ensureJSON(filepath) {
@@ -140,6 +152,7 @@ GridLayout {
         visible: isValid(DownloadView.Stages.ComputerSelection)
 
         text: "Protocol"
+        id: transportSelectionLabel
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
     }
@@ -180,6 +193,7 @@ GridLayout {
     Label {
         visible: isValid(DownloadView.Stages.TransportSelection)
 
+        id: sourceLabel
         text: "Sources"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
@@ -188,13 +202,13 @@ GridLayout {
     RowLayout {
         visible: isValid(DownloadView.Stages.TransportSelection)
 
+        id: sourceRow
         ComboBox {
             Layout.fillWidth: true
             id: sourceSelection
             model: libdivecomputer.ports
             textRole: "description"
             valueRole: "index"
-
         }
 
         Button {
@@ -211,7 +225,20 @@ GridLayout {
                 }
 
             }
+
+            hoverEnabled: true
+            ToolTip.timeout: 5000
+            ToolTip.text: "Refresh available source ports"
+            ToolTip.visible: hovered
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: "PointingHandCursor"
+            }
+
+
         }
+
     }    
 
     Label {
@@ -349,19 +376,34 @@ GridLayout {
         font.family: FontAwesome.fontFamily
         font.pointSize: 25
         padding: 20
-        enabled: isValid(DownloadView.Stages.OutputSelection)
+        enabled: isValid(DownloadView.Stages.OutputSelection) && isDownloading == false
+        visible: isDownloading == false
 
-        Component.onCompleted: {
-            startButton.background.color = Material.color(Material.Blue)
-            startButton.contentItem.color = Material.color(Material.Grey, Material.Shade200)
+        Material.foreground: Material.color(Material.Grey, Material.Shade100)
+
+        hoverEnabled: true
+        ToolTip.timeout: 5000
+        ToolTip.text: "Start download"
+        ToolTip.visible: hovered
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: "PointingHandCursor"
         }
 
         onEnabledChanged: {
-            startButton.background.color = enabled ? Material.color(Material.Blue) : Material.color(Material.Blue, Material.Shade300);
-            startButton.contentItem.color = enabled ?   Material.color(Material.Grey, Material.Shade200) :  Material.color(Material.Grey, Material.Shade300);
+            startButton.background.color = enabled ? Material.color(Material.Blue) : Material.color(Material.BlueGrey);
+        }
+
+        Component.onCompleted: {
+            startButton.background.color = enabled ? Material.color(Material.Blue) : Material.color(Material.BlueGrey);
         }
 
         onClicked: {
+            if(!isValid(DownloadView.Stages.OutputSelection)) {
+                refreshUI();
+                return;
+            }
 
             errorLabel.text = "";
             writeProgress.value = 0;
@@ -377,6 +419,22 @@ GridLayout {
         }
     }
 
+    RoundButton {
+        id: cancelButton
+        Layout.alignment: Qt.AlignRight
+        text: FontAwesome.ban
+
+        font.family: FontAwesome.fontFamily
+        font.pointSize: 25
+        padding: 20
+        visible: isDownloading == true
+
+        Material.background: Material.Red
+        Material.foreground: Material.color(Material.Grey, Material.Shade100)
+
+    }
+
+
 
     Connections {
         target: libdivecomputer
@@ -389,10 +447,12 @@ GridLayout {
         }
 
         function onStart() {
-            startButton.enabled = false;
+            isDownloading = true;
+            refreshUI();
         }
         function onDone() {
-            startButton.enabled = true;
+            isDownloading = false;
+            refreshUI();
         }
 
         function onError(msg) {
@@ -412,10 +472,13 @@ GridLayout {
 
             transportSelection.loaded = true;
 
+            refreshUI();
         }
 
         function onAvailablePortsChanged() {
             sourceSelection.currentIndex = 0;
+
+            refreshUI();
         }
     }
 }

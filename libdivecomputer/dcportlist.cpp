@@ -143,14 +143,12 @@ QHash<int, QByteArray> DCPortList::roleNames() const
 dc_status_t get_iterator_for(dc_iterator_t** iter, dc_context_t* ctx, dc_descriptor_t* descr, dc_transport_t trans)
 {
     switch(trans) {
-        case DC_TRANSPORT_BLE:
         case DC_TRANSPORT_BLUETOOTH:
             return dc_bluetooth_iterator_new(iter, ctx, descr);
         case DC_TRANSPORT_IRDA:
             return dc_irda_iterator_new(iter, ctx, descr);
         case DC_TRANSPORT_SERIAL:
             return dc_serial_iterator_new(iter, ctx, descr);
-        case DC_TRANSPORT_USB:
         case DC_TRANSPORT_USBHID:
             return dc_usbhid_iterator_new(iter, ctx, descr);
     }

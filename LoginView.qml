@@ -28,9 +28,6 @@ ColumnLayout {
         Layout.fillWidth: true
         columns: 2
 
-
-
-
         Label {
             text: "E-Mail"
             Layout.minimumWidth: labelColumnWidth

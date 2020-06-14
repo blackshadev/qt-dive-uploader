@@ -4,6 +4,9 @@ import QtQuick.Controls 2.12
 
 ColumnLayout {
 
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+
     TabBar  {
         z: 50
         id: tabBar
