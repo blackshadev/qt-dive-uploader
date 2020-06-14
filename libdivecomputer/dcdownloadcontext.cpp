@@ -15,6 +15,7 @@ DCDownloadContext::DCDownloadContext(QObject *parent) : QThread(parent)
     m_device = NULL;
     m_port = NULL;
     m_computer = NULL;
+    m_is_cancelled = false;
 }
 
 DCDownloadContext::~DCDownloadContext()
@@ -22,6 +23,7 @@ DCDownloadContext::~DCDownloadContext()
     free_context();
     m_port = NULL;
     m_computer = NULL;
+    m_is_cancelled = true;
 
     if(m_device)
     {
@@ -46,6 +48,10 @@ void DCDownloadContext::new_context()
     );
     dc_context_set_loglevel(m_context, m_loglevel);
 
+}
+
+void DCDownloadContext::cancel() {
+    this->m_is_cancelled = true;
 }
 
 void DCDownloadContext::free_context()
@@ -144,6 +150,10 @@ void DCDownloadContext::do_work() {
     if(status != DC_STATUS_SUCCESS) {
         throw std::runtime_error("Failed to open device");
     }
+
+    dc_device_set_cancel(m_device, [](void* userdata) {
+        return ((DCDownloadContext*)userdata)->m_is_cancelled ? 1 : 0;
+    }, this);
 
     int all_events = DC_EVENT_WAITING|DC_EVENT_CLOCK|DC_EVENT_PROGRESS|DC_EVENT_DEVINFO|DC_EVENT_VENDOR;
     dc_device_set_events(m_device, all_events, [](dc_device_t* device, dc_event_type_t type, const void* data, void* userdata) {

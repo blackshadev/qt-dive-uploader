@@ -11,6 +11,7 @@
 #include "dive.h"
 #include "dccomputerlist.h"
 #include "dcportlist.h"
+#include <signal.h>
 
 class DCDownloadContext : public QThread
 {
@@ -23,6 +24,7 @@ public:
     void setFingerprint(const unsigned char* data, unsigned int size);
     void setComputer(DCComputer* comp);
     void setPort(DCPort* port);
+    void cancel();
     dc_context_t* m_context;
 signals:
     void log(QString loglevel, QString msg);
@@ -38,6 +40,7 @@ protected:
     void do_work();
     dc_loglevel_t m_loglevel;
     DCComputer* m_computer;
+    volatile sig_atomic_t m_is_cancelled;
     DCPort* m_port;
     dc_device_t* m_device;
 private:

@@ -6,6 +6,7 @@ import SortFilterProxyModel 0.1
 import DCComputer 0.1
 import Libdivecomputer 0.1
 import QtQuick.Controls.Material 2.12
+import "views"
 
 ApplicationWindow {
     objectName: "appWindow"

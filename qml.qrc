@@ -1,14 +1,14 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>DownloadView.qml</file>
-        <file>LogView.qml</file>
-        <file>LoginView.qml</file>
-        <file>MainView.qml</file>
-        <file>AccountView.qml</file>
+        <file>views/DownloadView.qml</file>
+        <file>views/LogView.qml</file>
+        <file>views/LoginView.qml</file>
+        <file>views/MainView.qml</file>
+        <file>views/AccountView.qml</file>
         <file>SelectionWindow.qml</file>
-        <file>AboutView.qml</file>
+        <file>views/AboutView.qml</file>
         <file>CustomBorder.qml</file>
-        <file>LDLProgressBar.qml</file>
+        <file>components/LDLProgressBar.qml</file>
     </qresource>
 </RCC>

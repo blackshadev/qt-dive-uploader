@@ -10,6 +10,7 @@ import Libdivecomputer 0.1
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Styles 1.4
 import FontAwesome 1.0
+import "../components"
 
 GridLayout {
     property bool isDownloading: false
@@ -231,12 +232,6 @@ GridLayout {
             ToolTip.text: "Refresh available source ports"
             ToolTip.visible: hovered
 
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: "PointingHandCursor"
-            }
-
-
         }
 
     }    
@@ -330,31 +325,15 @@ GridLayout {
     }
 
 
-    ProgressBar {
+    LDLProgressBar{
+        visible: isDownloading
         id: readProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
-        background: Rectangle {
-          implicitWidth: 200
-          implicitHeight: 6
-          color: "#e6e6e6"
-          radius: 3
-        }
-
-        contentItem: Item {
-            implicitWidth: 200
-            implicitHeight: 4
-
-            Rectangle {
-                width: readProgress.visualPosition * parent.width
-                height: parent.height
-                color: "#17a81a"
-            }
-        }
-
     }
 
-    ProgressBar {
+    LDLProgressBar {
+        visible: isDownloading
         id: writeProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
@@ -376,7 +355,7 @@ GridLayout {
         font.family: FontAwesome.fontFamily
         font.pointSize: 25
         padding: 20
-        enabled: isValid(DownloadView.Stages.OutputSelection) && isDownloading == false
+        enabled: isValid(DownloadView.Stages.OutputSelection)
         visible: isDownloading == false
 
         Material.foreground: Material.color(Material.Grey, Material.Shade100)
@@ -385,11 +364,6 @@ GridLayout {
         ToolTip.timeout: 5000
         ToolTip.text: "Start download"
         ToolTip.visible: hovered
-
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: "PointingHandCursor"
-        }
 
         onEnabledChanged: {
             startButton.background.color = enabled ? Material.color(Material.Blue) : Material.color(Material.BlueGrey);
@@ -409,10 +383,12 @@ GridLayout {
             writeProgress.value = 0;
             readProgress.value = 0;
 
-            var idx = computerSelection.model.index(computerSelection.currentIndex, 0);
+            var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
+            var port_idx = sourceSelection.model.index(sourceSelection.currentIndex, 0);
+
             libdivecomputer.start_download(
-                portSelection.currentText,
-                computerSelection.model.data(idx, ComputerRoles.IndexRole),
+                sourceSelection.model.data(port_idx, ComputerRoles.IndexRole),
+                computerSelection.model.data(comp_idx, ComputerRoles.IndexRole),
                 selectDives.checked
             );
 
@@ -431,6 +407,10 @@ GridLayout {
 
         Material.background: Material.Red
         Material.foreground: Material.color(Material.Grey, Material.Shade100)
+
+        onClicked: {
+            libdivecomputer.cancel();
+        }
 
     }
 
