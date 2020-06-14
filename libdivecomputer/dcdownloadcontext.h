@@ -40,7 +40,7 @@ protected:
     void do_work();
     dc_loglevel_t m_loglevel;
     DCComputer* m_computer;
-    volatile sig_atomic_t m_is_cancelled;
+    volatile bool m_is_cancelled;
     DCPort* m_port;
     dc_device_t* m_device;
 private:

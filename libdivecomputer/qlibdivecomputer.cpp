@@ -170,7 +170,8 @@ void QLibDiveComputer::bind_littledivelog(LittleDiveLog *log)
 
 void QLibDiveComputer::cancel() {
     if(m_context != NULL) {
-        m_context->quit();
+        m_context->cancel();
+//        m_context->quit();
         m_context->wait();
         delete m_context;
         m_context = NULL;
