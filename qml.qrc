@@ -9,5 +9,6 @@
         <file>SelectionWindow.qml</file>
         <file>AboutView.qml</file>
         <file>CustomBorder.qml</file>
+        <file>LDLProgressBar.qml</file>
     </qresource>
 </RCC>

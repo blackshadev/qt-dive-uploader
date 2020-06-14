@@ -8,6 +8,7 @@ import DCComputer 0.1
 import DCTransport 0.1
 import Libdivecomputer 0.1
 import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Styles 1.4
 import FontAwesome 1.0
 
 GridLayout {
@@ -22,14 +23,20 @@ GridLayout {
 
     function isValid(stage) {
         var validStages = 1 << DownloadView.Stages.None;
+        var idx;
 
-        if(computerSelection.currentIndex > -1) {
+        idx = computerSelection.model.index(computerSelection.currentIndex, 0);
+        if(idx.valid) {
             validStages |= 1 << DownloadView.Stages.ComputerSelection;
         }
-        if(transportSelection.currentIndex > -1) {
+
+        idx = transportSelection.model.index(transportSelection.currentIndex, 0);
+        if(idx.valid) {
             validStages |= 1 << DownloadView.Stages.TransportSelection;
         }
-        if(sourceSelection.currentIndex > -1) {
+
+        idx = sourceSelection.model.index(sourceSelection.currentIndex, 0);
+        if(idx.valid) {
             validStages |= 1 << DownloadView.Stages.SourceSelection;
         }
 
@@ -202,6 +209,7 @@ GridLayout {
                     var comp = computerSelection.model.data(comp_idx, ComputerRoles.IndexRole);
                     libdivecomputer.update_availble_ports(comp, transport);
                 }
+
             }
         }
     }    
@@ -299,6 +307,24 @@ GridLayout {
         id: readProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
+        background: Rectangle {
+          implicitWidth: 200
+          implicitHeight: 6
+          color: "#e6e6e6"
+          radius: 3
+        }
+
+        contentItem: Item {
+            implicitWidth: 200
+            implicitHeight: 4
+
+            Rectangle {
+                width: readProgress.visualPosition * parent.width
+                height: parent.height
+                color: "#17a81a"
+            }
+        }
+
     }
 
     ProgressBar {
