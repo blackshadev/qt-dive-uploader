@@ -421,8 +421,6 @@ GridLayout {
 
     }
 
-
-
     Connections {
         target: libdivecomputer
         function onReadProgress(current, total) {

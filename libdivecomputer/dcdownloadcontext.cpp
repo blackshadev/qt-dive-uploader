@@ -221,7 +221,9 @@ void DCDownloadContext::do_work() {
             d->parse(parser);
             d->set_fingerprint(fingerprint, fsize);
 
-            emit ctx->dive(d);
+            if(!ctx->m_is_cancelled) {
+                emit ctx->dive(d);
+            }
 
             dc_parser_destroy(parser);
             parser = NULL;

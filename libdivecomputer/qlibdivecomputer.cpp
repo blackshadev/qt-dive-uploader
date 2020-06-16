@@ -169,22 +169,17 @@ void QLibDiveComputer::bind_littledivelog(LittleDiveLog *log)
 
 
 void QLibDiveComputer::cancel() {
+    m_is_cancelling = true;
     if(m_context != NULL) {
         m_context->cancel();
-//        m_context->quit();
         m_context->wait();
         delete m_context;
         m_context = NULL;
     }
 
     if(m_writer != NULL) {
-        m_writer->quit();
-        m_writer->wait();
-
-        delete m_writer;
-        m_writer = NULL;
+        free_writer();
     }
-
 }
 
 void QLibDiveComputer::start_download(int port_idx, int comp_idx, bool select_dives) {
@@ -242,15 +237,14 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr, bool select_dives) 
 
         emit selectDives(writer, model);
     });
-    connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {
-        delete d;
-    });
+    connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {});
 }
 
 void QLibDiveComputer::free_writer() {
     if(m_writer != NULL) {
-        m_writer->wait();
         m_writer->disconnect();
+        m_writer->quit();
+        m_writer->wait();
         delete m_writer;
         m_writer = NULL;
     }
@@ -292,11 +286,14 @@ void QLibDiveComputer::create_download_context(DCPort* port, DCComputer* comp) {
     });
 
     m_context->connect(m_context, &DCDownloadContext::dive, this, [=](Dive* dive) {
+        if(m_is_cancelling) {
+            return;
+        }
         m_writer->add(dive);
     });
 
     m_context->connect(m_context, &DCDownloadContext::finished, this, [&]() {
-        if(!m_had_error) {
+        if(!m_had_error && !m_is_cancelling) {
             m_writer->end();
             m_log->fetch_user_data();
         } else {

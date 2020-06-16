@@ -58,7 +58,7 @@ void FileDiveWriter::do_start() {
 void FileDiveWriter::do_end() {
     if(!file.isOpen()) {
         qWarning("File was not yet opened");
-        _teardown();
+        teardown();
         return;
     }
 
@@ -78,5 +78,5 @@ void FileDiveWriter::do_end() {
     file.write(saveDoc.toJson());
 
     file.close();
-    _teardown();
+    teardown();
 }

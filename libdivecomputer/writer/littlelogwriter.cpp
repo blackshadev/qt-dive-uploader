@@ -53,7 +53,7 @@ void LittleLogWriter::do_start()
 
 void LittleLogWriter::do_end()
 {
-    _teardown();
+    teardown();
 }
 
 

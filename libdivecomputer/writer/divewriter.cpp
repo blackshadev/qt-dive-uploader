@@ -3,7 +3,9 @@
 DiveWriter::DiveWriter() : QThread(NULL) {
 }
 
-
+DiveWriter::~DiveWriter() {
+    cleanup();
+}
 
 void DiveWriter::set_device_clock(uint devtime, uint systime) {}
 void DiveWriter::set_device_descriptor(dc_descriptor_t *descr) {}
@@ -31,6 +33,7 @@ void DiveWriter::run()
 {
     connect(this, &DiveWriter::dive, this, [this](Dive* d) { this->do_work(d); } );
     exec();
+    teardown();
 }
 
 bool DiveWriter::is_ready() {
@@ -111,7 +114,15 @@ void DiveWriter::end()
     }
 }
 
-void DiveWriter::_teardown()
+void DiveWriter::cleanup()
+{
+    for(Dive* d : m_queue) {
+        delete d;
+    }
+    m_queue.clear();
+}
+
+void DiveWriter::teardown()
 {
     emit done();
     exit(m_error == false);

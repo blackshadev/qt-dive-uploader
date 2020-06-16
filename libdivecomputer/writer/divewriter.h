@@ -16,6 +16,7 @@ class DiveWriter: public QThread {
     Q_OBJECT
 public:
     DiveWriter();
+    ~DiveWriter();
 
     virtual void set_device_descriptor(dc_descriptor_t* descr);
     virtual void set_device_info(uint model, uint serial, uint firmware);
@@ -52,8 +53,9 @@ protected:
     virtual void work_done(Dive* d);
     virtual void do_start() = 0;
     virtual void do_end() = 0;
-    void _teardown();
+    void teardown();
     void run() override;
+    void cleanup();
 
 };
 
