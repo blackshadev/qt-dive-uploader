@@ -4,7 +4,8 @@
 SessionData::SessionData(QObject *parent) : QObject(parent) {
     m_computer = "";
     m_path = "";
-    m_portname = "";
+    m_select_dives = false;
+    m_use_fingerprint = true;
 }
 
 void SessionData::setComputer(QString computer) {
@@ -13,14 +14,6 @@ void SessionData::setComputer(QString computer) {
 }
 QString SessionData::getComputer() {
     return m_computer;
-}
-
-void SessionData::setPortname(QString portname) {
-    m_portname = portname;
-    emit portnameChanged(portname);
-}
-QString SessionData::getPortname() {
-    return m_portname;
 }
 
 QString SessionData::getWriteType()
@@ -43,6 +36,17 @@ void SessionData::setSelectDives(bool selectDives)
 {
     m_select_dives = selectDives;
     emit selectDivesChanged(selectDives);
+}
+
+void SessionData::setUseFingerprint(bool useFingerprint)
+{
+    m_use_fingerprint = useFingerprint;
+    emit useFingerprintChanged(useFingerprint);
+}
+
+bool SessionData::getUseFingerprint()
+{
+    return m_use_fingerprint;
 }
 
 void SessionData::setPath(QString path) {
@@ -82,10 +86,6 @@ void SessionData::read(const QJsonObject &json)
         m_computer = json["computer"].toString();
     }
 
-    if(json.contains("portname") && json["portname"].isString()) {
-        m_portname = json["portname"].toString();
-    }
-
     if(json.contains("refreshToken") && json["refreshToken"].isString()) {
         m_refresh_token = json["refreshToken"].toString();
     }
@@ -102,17 +102,20 @@ void SessionData::read(const QJsonObject &json)
         m_transport_type = json["transportType"].toString();
     }
 
+    if(json.contains("useFingerprint") && json["useFingerprint"].isString()) {
+        m_use_fingerprint = json["useFingerprint"].toBool();
+    }
 }
 
 void SessionData::write(QJsonObject &json)
 {
     json["path"] = m_path;
     json["computer"] = m_computer;
-    json["portname"] = m_portname;
     json["refreshToken"] = m_refresh_token;
     json["writeType"] = m_write_type;
     json["selectDives"] = m_select_dives;
     json["transportType"] = m_transport_type;
+    json["useFingerprint"] = m_use_fingerprint;
 }
 
 // -- SessionStore --

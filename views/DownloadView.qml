@@ -256,7 +256,24 @@ GridLayout {
         onCheckStateChanged: {
             session.selectDives = checked;
         }
+    }
 
+    Label {
+        visible: littledivelog.isLoggedIn
+        text: "Only download new dives"
+        Layout.minimumWidth: labelColumnWidth
+        Layout.maximumWidth: labelColumnWidth
+    }
+
+    CheckBox {
+        visible: littledivelog.isLoggedIn
+        id: useFingerprint
+        Component.onCompleted: {
+            checked = session.useFingerprint;
+        }
+        onCheckStateChanged: {
+            session.onlyNewDives = checked;
+        }
     }
 
     Label {
@@ -396,7 +413,8 @@ GridLayout {
             libdivecomputer.start_download(
                 sourceSelection.model.data(port_idx, ComputerRoles.IndexRole),
                 computerSelection.model.data(comp_idx, ComputerRoles.IndexRole),
-                selectDives.checked
+                selectDives.checked,
+                useFingerprint.checked && littledivelog.isLoggedIn
             );
 
         }

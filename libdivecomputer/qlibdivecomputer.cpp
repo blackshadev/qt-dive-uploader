@@ -182,7 +182,7 @@ void QLibDiveComputer::cancel() {
     }
 }
 
-void QLibDiveComputer::start_download(int port_idx, int comp_idx, bool select_dives) {
+void QLibDiveComputer::start_download(int port_idx, int comp_idx, bool select_dives, bool use_fingerprint) {
 
     if(m_writetype == WriteType::LittleLog && m_log->m_user_info == NULL) {
         emit error("Not yet logged in. Either login or wait a second");
@@ -194,7 +194,7 @@ void QLibDiveComputer::start_download(int port_idx, int comp_idx, bool select_di
     auto port = m_available_ports->get(port_idx);
 
     try {
-        create_download_context(port, computer);
+        create_download_context(port, computer, use_fingerprint);
         create_writer(computer->descriptor, select_dives);
         m_context->start();
 
@@ -229,7 +229,7 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr, bool select_dives) 
     connect(m_writer, SIGNAL(done()), this, SIGNAL(done()));
     connect(m_writer, SIGNAL(progress(uint,uint)), this, SIGNAL(writeProgress(uint,uint)));
     connect(m_writer, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
-    connect(m_writer, &DiveWriter::selectDives, [&](DiveWriter* writer, QList<Dive*> dives) {
+    connect(m_writer, &DiveWriter::selectDives, this, [&](DiveWriter* writer, QList<Dive*> dives) {
         auto model = new QDiveModel();
         for(auto d : dives) {
             model->add(d);
@@ -237,20 +237,20 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr, bool select_dives) 
 
         emit selectDives(writer, model);
     });
-    connect(m_writer, &DiveWriter::diveWritten, [](Dive* d) {});
+    connect(m_writer, &DiveWriter::diveWritten, this, [](Dive* d) {});
 }
 
 void QLibDiveComputer::free_writer() {
     if(m_writer != NULL) {
-        m_writer->disconnect();
         m_writer->quit();
         m_writer->wait();
+        m_writer->disconnect(this);
         delete m_writer;
         m_writer = NULL;
     }
 }
 
-void QLibDiveComputer::create_download_context(DCPort* port, DCComputer* comp) {
+void QLibDiveComputer::create_download_context(DCPort* port, DCComputer* comp, bool use_fingerprint) {
     free_context();
 
     m_had_error = false;
@@ -271,7 +271,7 @@ void QLibDiveComputer::create_download_context(DCPort* port, DCComputer* comp) {
     m_context->connect(m_context, SIGNAL(log(QString, QString)), this, SIGNAL(log(QString,QString)));
 
     m_context->connect(m_context, &DCDownloadContext::deviceInfo, this, [=](uint model, uint serial, uint firmware) {
-        if(m_log->m_user_info != NULL) {
+        if(m_log->m_user_info != NULL && use_fingerprint) {
             auto comp_data = m_log->m_user_info->get_computer(serial);
             if(comp_data != NULL) {
                 m_context->setFingerprint(comp_data->fingerprint);

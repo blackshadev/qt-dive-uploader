@@ -13,11 +13,11 @@ class SessionData : public QObject
     Q_OBJECT
     Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(QString computer READ getComputer WRITE setComputer NOTIFY computerChanged)
-    Q_PROPERTY(QString portname READ getPortname WRITE setPortname NOTIFY portnameChanged)
     Q_PROPERTY(QString refreshToken READ getRefreshToken WRITE setRefreshToken NOTIFY refreshTokenChanged)
     Q_PROPERTY(QString writeType READ getWriteType WRITE setWriteType NOTIFY writeTypeChanged)
     Q_PROPERTY(QString transportType MEMBER m_transport_type NOTIFY transportTypeChanged)
     Q_PROPERTY(bool selectDives READ getSelectDives WRITE setSelectDives NOTIFY selectDivesChanged)
+    Q_PROPERTY(bool useFingerprint READ getUseFingerprint WRITE setUseFingerprint NOTIFY useFingerprintChanged)
 
 
 
@@ -29,9 +29,6 @@ public:
 
     QString getPath();
     void setPath(QString m_path);
-
-    QString getPortname();
-    void setPortname(QString m_portname);
 
     QString getRefreshToken();
     void setRefreshToken(QString m_refresh_token);
@@ -45,28 +42,30 @@ public:
     QString getTransportType();
     void setTransportType(QString trans);
 
+    bool getUseFingerprint();
+    void setUseFingerprint(bool useFingerprint);
+
     void read(const QJsonObject &json);
     void write(QJsonObject &json);
 
 signals:
     void pathChanged(QString);
     void computerChanged(QString);
-    void portnameChanged(QString);
     void refreshTokenChanged(QString);
     void writeTypeChanged(QString);
     void selectDivesChanged(bool);
     void transportTypeChanged(QString);
+    void useFingerprintChanged(bool);
 
 protected :
     QString m_computer;
     QString m_path;
-    QString m_portname;
     QString m_refresh_token;
     QString m_write_type;
     QString m_transport_type;
     bool m_select_dives;
+    bool m_use_fingerprint;
 };
-
 
 Q_DECLARE_METATYPE(SessionData*)
 
