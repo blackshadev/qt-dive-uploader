@@ -20,7 +20,8 @@ void UserInfo::add_computer(QJsonObject obj)
     auto comp = new t_user_computer;
     int comp_id = obj["computer_id"].toInt();
     uint serial = (uint)std::stoul(obj["serial"].toString().toStdString());
-    auto fingerprint = base64_decode(obj["last_fingerprint"].toString());
+    auto strFingerprint = obj["last_fingerprint"].toString();
+    auto fingerprint = QByteArray::fromBase64(strFingerprint.toLatin1());
     comp->id = comp_id;
     comp->fingerprint = fingerprint;
 

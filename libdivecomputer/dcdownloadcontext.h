@@ -21,7 +21,7 @@ public:
     ~DCDownloadContext();
     void setLogLevel(dc_loglevel_t err = DC_LOGLEVEL_ERROR);
     void setDescriptor(dc_descriptor_t* descriptor);
-    void setFingerprint(const unsigned char* data, unsigned int size);
+    void setFingerprint(QByteArray data);
     void setComputer(DCComputer* comp);
     void setPort(DCPort* port);
     void cancel();

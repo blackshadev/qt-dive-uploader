@@ -5,7 +5,7 @@
 
 struct t_user_computer {
     int id;
-    std::vector<unsigned char> fingerprint;
+    QByteArray fingerprint;
 };
 
 class UserInfo : public QObject

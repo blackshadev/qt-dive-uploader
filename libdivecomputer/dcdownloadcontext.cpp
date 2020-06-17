@@ -60,9 +60,9 @@ void DCDownloadContext::free_context()
     m_context = NULL;
 }
 
-void DCDownloadContext::setFingerprint(const unsigned char* data, unsigned int len)
+void DCDownloadContext::setFingerprint(QByteArray data)
 {
-    dc_device_set_fingerprint(m_device, data, len);
+    dc_device_set_fingerprint(m_device, reinterpret_cast<const unsigned char*>(data.constData()), data.size());
 }
 
 void DCDownloadContext::setComputer(DCComputer *comp)
