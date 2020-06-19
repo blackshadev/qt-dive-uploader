@@ -89,7 +89,8 @@ signals:
     void readProgress(uint current, uint total);
     void writeProgress(uint current, uint total);
     void start();
-    void done();
+    void finished();
+    void cancelled();
     void error(QString msg);
     void log(QString lvl, QString msg);
     void selectDives(DiveWriter* writer, QDiveModel* dives);
@@ -113,6 +114,12 @@ private:
     QStringList get_logLevels();
     DCDownloadContext* m_context;
     DiveWriter* m_writer;
+    void before_downloading();
+    void after_downloading();
+    void before_writing();
+    void during_writing(DiveWriter* writer, QList<Dive*> dives);
+    void after_writing();
+
     void create_writer(dc_descriptor_t* descriptor, bool selectDives);
     void free_writer();
     void create_download_context(DCPort* port, DCComputer* comp, bool use_fingerpring = true);

@@ -79,18 +79,34 @@ ApplicationWindow {
     Connections {
         target: libdivecomputer
         function onSelectDives(writer, dives) {
-            selectionwindow.visible = true;
-            selectionwindow.setDiveData(writer, dives);
+
+            function finishCreation() {
+                if (incubator.status === Component.Ready) {
+                    var selectionWindow = incubator.object;
+                    selectionWindow.onCancelled.connect(function() {
+                        stackView.pop();
+                        libdivecomputer.cancel();
+                    });
+                    selectionWindow.onFinished.connect(function() {
+                        writer.selectionDone();
+                        stackView.pop();
+                    });
+                    stackView.push(selectionWindow);
+                }
+            }
+
+            var component = Qt.createComponent("SelectionWindow.qml");
+            var incubator = component.incubateObject(stackView, {
+                diveData: dives
+            });
+
+            if(incubator.status === Component.Ready || incubator.status === Component.Error) {
+                finishCreation();
+            } else {
+                incubator.onStatusChanged = finishCreation;
+            }
+
         }
     }
 
-
-    SelectionWindow {
-
-        width: 480
-        height: 520
-        visible: false
-        id: selectionwindow
-        title: "Select Dives"
-    }
 }

@@ -453,7 +453,8 @@ GridLayout {
             isDownloading = true;
             refreshUI();
         }
-        function onDone() {
+
+        function onFinished() {
             isDownloading = false;
             refreshUI();
         }

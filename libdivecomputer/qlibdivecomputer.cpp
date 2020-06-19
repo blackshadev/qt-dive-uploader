@@ -180,6 +180,10 @@ void QLibDiveComputer::cancel() {
     if(m_writer != NULL) {
         free_writer();
     }
+    m_is_cancelling = false;
+
+    emit cancelled();
+    emit finished();
 }
 
 void QLibDiveComputer::start_download(int port_idx, int comp_idx, bool select_dives, bool use_fingerprint) {
@@ -226,17 +230,10 @@ void QLibDiveComputer::create_writer(dc_descriptor_t* descr, bool select_dives) 
 
     m_writer->set_device_descriptor(descr);
 
-    connect(m_writer, SIGNAL(done()), this, SIGNAL(done()));
+    connect(m_writer, &DiveWriter::finished, this, &QLibDiveComputer::after_writing);
     connect(m_writer, SIGNAL(progress(uint,uint)), this, SIGNAL(writeProgress(uint,uint)));
     connect(m_writer, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
-    connect(m_writer, &DiveWriter::selectDives, this, [&](DiveWriter* writer, QList<Dive*> dives) {
-        auto model = new QDiveModel();
-        for(auto d : dives) {
-            model->add(d);
-        }
-
-        emit selectDives(writer, model);
-    });
+    connect(m_writer, &DiveWriter::selectDives, this, &QLibDiveComputer::during_writing);
     connect(m_writer, &DiveWriter::diveWritten, this, [](Dive* d) {});
 }
 
@@ -259,9 +256,7 @@ void QLibDiveComputer::create_download_context(DCPort* port, DCComputer* comp, b
     m_context->setPort(port);
     m_context->setLogLevel(m_loglevel);
 
-    m_context->connect(m_context, &DCDownloadContext::started, this, [&]() {
-        emit start();
-    });
+    m_context->connect(m_context, &DCDownloadContext::started, this, &QLibDiveComputer::before_downloading);
     m_context->connect(m_context, SIGNAL(progress(uint,uint)), this, SIGNAL(readProgress(uint,uint)));
 
     m_context->connect(m_context, &DCDownloadContext::error, [&](QString err) {
@@ -291,15 +286,7 @@ void QLibDiveComputer::create_download_context(DCPort* port, DCComputer* comp, b
         m_writer->add(dive);
     });
 
-    m_context->connect(m_context, &DCDownloadContext::finished, this, [&]() {
-        if(!m_had_error && !m_is_cancelling) {
-            m_writer->end();
-            m_log->fetch_user_data();
-        } else {
-            emit done();
-        }
-    });
-
+    m_context->connect(m_context, &DCDownloadContext::finished, this, &QLibDiveComputer::after_downloading);
 }
 
 void QLibDiveComputer::free_context() {
@@ -320,4 +307,34 @@ void QLibDiveComputer::get_version()
     char buff[64];
     sprintf(buff, "v%d.%d.%d", version.major, version.minor, version.micro);
     m_version = QString::fromLocal8Bit(buff);
+}
+
+void QLibDiveComputer::before_downloading() {
+    emit start();
+}
+
+void QLibDiveComputer::after_downloading() {
+    if(!m_had_error && !m_is_cancelling) {
+        m_writer->end();
+        m_log->fetch_user_data();
+    } else {
+        emit finished();
+    }
+}
+
+void QLibDiveComputer::before_writing() {
+
+}
+
+void QLibDiveComputer::after_writing() {
+    emit finished();
+}
+
+void QLibDiveComputer::during_writing(DiveWriter* writer, QList<Dive*> dives) {
+    auto model = new QDiveModel();
+    for(auto d : dives) {
+        model->add(d);
+    }
+
+    emit selectDives(writer, model);
 }

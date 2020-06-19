@@ -5,35 +5,31 @@ import QtQuick.Layouts 1.12
 import QtQuick.Window 2.12
 import Libdivecomputer 0.1
 
-Window {
+//Component {
 
-    Material.theme: Material.Light
-    Material.accent: Material.Blue
-
-    property DiveModel diveData
-    property bool done: false;
-    property variant curWriter;
-    property variant columnWidths: {
-        "checkbox": 32,
-        "datetime": 200,
-        "time": 100,
-        "depth": 100
-    }
-
-    function setDiveData(writer, data) {
-        diveData = data;
-        curWriter = writer;
-        done = false;
-    }
-
-    onVisibleChanged: {
-
-        if(!done && diveData !== undefined && visible === false) {
-            libdivecomputer.cancel();
-        }
-    }
+//    onClosing: {
+//        if(!done && diveData !== undefined && visible === false) {
+//            libdivecomputer.cancel();
+//        }
+//    }
 
     ColumnLayout {
+
+        Material.theme: Material.Light;
+        Material.accent: Material.Blue;
+
+        signal cancelled();
+        signal finished();
+
+        property DiveModel diveData
+        property variant columnWidths: {
+            "checkbox": 32,
+            "datetime": 200,
+            "time": 100,
+            "depth": 100
+        }
+
+        id: mainView
         anchors.fill: parent
         spacing: 0
 
@@ -42,6 +38,7 @@ Window {
             z: 3
             Layout.fillWidth: true
             height: 85
+            color: "transparent"
 
             ColumnLayout {
 
@@ -71,13 +68,25 @@ Window {
 
                         Layout.leftMargin: 10
                         text: "Done"
-                        enabled: curWriter !== undefined
                         Material.background: Material.color(Material.Blue)
                         Material.theme: Material.Dark
                         onClicked: {
-                            curWriter.selectionDone();
-                            done = true;
-                            selectionwindow.visible = false;
+                            mainView.finished();
+//                            curWriter.selectionDone();
+//                            done = true;
+//                            window.close();
+                        }
+                    }
+
+
+                    Button {
+
+                        Layout.leftMargin: 10
+                        text: "Cancel"
+                        Material.background: Material.color(Material.Blue)
+                        Material.theme: Material.Dark
+                        onClicked: {
+                            mainView.cancelled();
                         }
                     }
                 }
@@ -210,4 +219,4 @@ Window {
         }
     }
 
-}
+//}

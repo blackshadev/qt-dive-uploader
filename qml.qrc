@@ -6,7 +6,7 @@
         <file>views/LoginView.qml</file>
         <file>views/MainView.qml</file>
         <file>views/AccountView.qml</file>
-        <file>SelectionWindow.qml</file>
+        <file>views/SelectionWindow.qml</file>
         <file>views/AboutView.qml</file>
         <file>CustomBorder.qml</file>
         <file>components/LDLProgressBar.qml</file>

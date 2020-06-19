@@ -1,6 +1,5 @@
 #include "userinfo.h"
 #include <QJsonObject>
-#include "../common/base64.h"
 
 UserInfo::UserInfo(QObject *parent) : QObject(parent)
 {
