@@ -15,6 +15,10 @@ import "../components"
 GridLayout {
     property bool isDownloading: false
 
+    Layout.fillWidth: true
+    columns: 2
+    id: downloadLayout
+
     enum Stages {
         None = 0,
         ComputerSelection = 1,
@@ -71,10 +75,6 @@ GridLayout {
         }
         return filepath;
     }
-
-    Layout.fillWidth: true
-    columns: 2
-
 
     FileDialog {
         visible: false
@@ -372,8 +372,9 @@ GridLayout {
     }
 
     RoundButton {
+        Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+
         id: startButton
-        Layout.alignment: Qt.AlignRight
         text: FontAwesome.download
 
         font.family: FontAwesome.fontFamily
@@ -421,8 +422,9 @@ GridLayout {
     }
 
     RoundButton {
+        Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+
         id: cancelButton
-        Layout.alignment: Qt.AlignRight
         text: FontAwesome.ban
 
         font.family: FontAwesome.fontFamily
@@ -436,7 +438,6 @@ GridLayout {
         onClicked: {
             libdivecomputer.cancel();
         }
-
     }
 
     Connections {

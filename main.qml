@@ -17,8 +17,7 @@ ApplicationWindow {
     property int margin: 21
     property int labelColumnWidth: 120
     property int initialWidth: 580
-    property int initialHeight: 490
-    property int t: DiveModel.DiveDepthRole
+    property int initialHeight: 580
 
     visible: true
 
@@ -92,10 +91,17 @@ ApplicationWindow {
                         stackView.pop();
                     });
                     stackView.push(selectionWindow);
+                } else if (incubator.status === Component.Error) {
+                    console.error(incubator.errorString());
                 }
             }
 
-            var component = Qt.createComponent("SelectionWindow.qml");
+            var component = Qt.createComponent("views/SelectionWindow.qml");
+            if(component.status === Component.Error) {
+                console.error(component.errorString());
+                return;
+            }
+
             var incubator = component.incubateObject(stackView, {
                 diveData: dives
             });
