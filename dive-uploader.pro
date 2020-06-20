@@ -76,9 +76,14 @@ INCLUDEPATH += include
 DEPENDPATH += include
 
 
-unix {
+unix|macx {
     LIBS += -L"$$PWD/lib/linux/" -ldivecomputer
     PRE_TARGETDEPS += $$PWD/lib/linux/libdivecomputer.a
+
+    copylibs.commands += $(COPY_DIR) $$shell_path($$PWD/lib/linux/libdivecomputer.so*) $$shell_path($$DESTDIR/lib) $$escape_expand(\\n\\t)
+    first.depends = $(first) copylibs
+    export(first.depends)
+    QMAKE_EXTRA_TARGETS += first copylibs
 }
 
 win32 {
@@ -125,7 +130,7 @@ PACKAGE_DATA_DIR = $$PACKAGE_DIR/nl.littledev.diveloguploader/data
 PACKAGE_DATA_TARGET = $$PACKAGE_DATA_DIR/$${TARGET}.7z
 win32:INSTALLER_TARGET = ".exe"
 INSTALLER_TARGET = $$PWD/packaging/$$TARGET-$${OS}-installer$${INSTALLER_EXT}
-unix:QTIFW = ~/Qt/QtIFW-3.2.2/bin/
+unix:QTIFW = ~/Qt/Tools/QtInstallerFramework/3.2/bin/
 
 ARCHIVEGEN = $${QTIFW}archivegen
 BINARYCREATOR = $${QTIFW}binarycreator
