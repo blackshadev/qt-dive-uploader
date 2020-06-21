@@ -314,7 +314,7 @@ void QLibDiveComputer::before_downloading() {
 }
 
 void QLibDiveComputer::after_downloading() {
-    if(!m_had_error && !m_is_cancelling) {
+    if(!m_had_error && m_writer != NULL) {
         m_writer->end();
         m_log->fetch_user_data();
     } else {

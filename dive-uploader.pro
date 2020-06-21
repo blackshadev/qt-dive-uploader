@@ -80,6 +80,7 @@ unix|macx {
     LIBS += -L"$$PWD/lib/linux/" -ldivecomputer
     PRE_TARGETDEPS += $$PWD/lib/linux/libdivecomputer.a
 
+    copylibs.commands += mkdir -p $$shell_path($$DESTDIR/lib) $$escape_expand(\\n\\t)
     copylibs.commands += $(COPY_DIR) $$shell_path($$PWD/lib/linux/libdivecomputer.so*) $$shell_path($$DESTDIR/lib) $$escape_expand(\\n\\t)
     first.depends = $(first) copylibs
     export(first.depends)
