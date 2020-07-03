@@ -18,10 +18,15 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
+    entities/dive.cpp \
+    entities/divesample.cpp \
+    entities/divesampleevent.cpp \
     libdivecomputer/dcportlist.cpp \
     libdivecomputer/dctransportlist.cpp \
     libdivecomputer/qlibdivecomputer.cpp \
     libdivecomputer/dccomputerlist.cpp \
+    parsers/diveparser.cpp \
+    parsers/divesampleparser.cpp \
     sessionstore.cpp \
     libdivecomputer/dcdownloadcontext.cpp \
     libdivecomputer/dive.cpp \
@@ -36,10 +41,16 @@ SOURCES += main.cpp \
     common/datetime.cpp
 
 HEADERS += \
+    common/vector.h \
+    entities/dive.h \
+    entities/divesample.h \
+    entities/divesampleevent.h \
     libdivecomputer/dcportlist.h \
     libdivecomputer/dctransportlist.h \
     libdivecomputer/qlibdivecomputer.h \
     libdivecomputer/dccomputerlist.h \
+    parsers/diveparser.h \
+    parsers/divesampleparser.h \
     sessionstore.h \
     libdivecomputer/dcdownloadcontext.h \
     libdivecomputer/dive.h \
