@@ -13,10 +13,12 @@ class DiveSampleParser
 {
 public:
     DiveSampleParser();
+    ~DiveSampleParser();
     void setCallback(sampleparser_callback function);
     void addSample(sampledata_t sample);
     void finalize();
 private:
+    static DCDiveSampleEvent *createEvent(unsigned int type, int value);
     sampleparser_callback callback;
     DCDiveSample *currentSample;
 };

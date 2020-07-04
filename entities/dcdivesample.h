@@ -20,7 +20,7 @@ typedef struct {
     optional_t<double> temperature;
     optional_t<int> heartbeat;
     optional_t<int> bearing;
-    optional_t<int> rbt;
+    optional_t<unsigned int> rbt;
     optional_t<double> cns;
     optional_t<double> setpoint;
     optional_t<double> ppo2;
@@ -47,6 +47,8 @@ public:
     void setSetpoint(double setpoint);
     optional_t<double> getPPO2();
     void setPPO2(double ppo2);
+    optional_t<unsigned int> getRBT();
+    void setRBT(unsigned int rbt);
     std::vector<pressures_t> *getPressures();
     void addPressure(pressures_t pressure);
     std::vector<DCDiveSampleEvent *> *getEvents();

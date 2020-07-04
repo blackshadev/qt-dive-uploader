@@ -103,6 +103,16 @@ void DCDiveSample::setPPO2(double ppo2)
     data.ppo2 = ppo2;
 }
 
+optional_t<unsigned int> DCDiveSample::getRBT()
+{
+    return data.rbt;
+}
+
+void DCDiveSample::setRBT(unsigned int rbt)
+{
+    data.rbt = rbt;
+}
+
 std::vector<pressures_t> *DCDiveSample::getPressures()
 {
     return pressures;
