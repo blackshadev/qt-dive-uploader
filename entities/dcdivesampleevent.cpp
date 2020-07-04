@@ -1,4 +1,4 @@
-#include "divesampleevent.h"
+#include "dcdivesampleevent.h"
 
 #define EVENT_TYPE_COUNT 26
 const char* invalid_event_type_name = "unknown";
@@ -12,33 +12,33 @@ const char* event_type_names[EVENT_TYPE_COUNT] = {
 };
 
 
-DiveSampleEvent::DiveSampleEvent()
+DCDiveSampleEvent::DCDiveSampleEvent()
 {
     data.type = 0;
     data.value = 0;
 }
 
-unsigned int DiveSampleEvent::getType()
+unsigned int DCDiveSampleEvent::getType()
 {
     return data.type;
 }
 
-void DiveSampleEvent::setType(unsigned int type)
+void DCDiveSampleEvent::setType(unsigned int type)
 {
     data.type = type;
 }
 
-const char *DiveSampleEvent::getTypeName()
+const char *DCDiveSampleEvent::getTypeName()
 {
     return event_type_names[data.type];
 }
 
-int DiveSampleEvent::getValue()
+int DCDiveSampleEvent::getValue()
 {
     return data.value;
 }
 
-void DiveSampleEvent::setValue(int value)
+void DCDiveSampleEvent::setValue(int value)
 {
     data.value = value;
 }

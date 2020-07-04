@@ -1,8 +1,8 @@
-#include "dive.h"
+#include "dcdive.h"
 #include "../common/vector.h"
 #include "../common/datetime.h"
 
-Dive::Dive()
+DCDive::DCDive()
 {
     data.fingerprint = NULL;
     data.datetime.year = 0;
@@ -23,143 +23,143 @@ Dive::Dive()
     data.atmosphericPressure.has_value = false;
     data.divemode.has_value = false;
 
-    samples = new std::vector<DiveSample *>();
+    samples = new std::vector<DCDiveSample *>();
     tanks = new std::vector<tank_t>();
 }
 
-Dive::~Dive()
+DCDive::~DCDive()
 {
     FREE_VECTOR_PTR(samples)
     FREE_VECTOR(tanks)
 
 }
 
-unsigned char *Dive::getFingerprint()
+unsigned char *DCDive::getFingerprint()
 {
     return data.fingerprint;
 }
 
-void Dive::setFingerprint(unsigned char *fp)
+void DCDive::setFingerprint(unsigned char *fp)
 {
     data.fingerprint = fp;
 }
 
-double Dive::getMaxDepth()
+double DCDive::getMaxDepth()
 {
     return data.maxDepth;
 }
 
-void Dive::setMaxDepth(double depth)
+void DCDive::setMaxDepth(double depth)
 {
     data.maxDepth = depth;
 }
 
-unsigned int Dive::getDivetime()
+unsigned int DCDive::getDivetime()
 {
     return data.divetime;
 }
 
-void Dive::setDivetime(unsigned int time)
+void DCDive::setDivetime(unsigned int time)
 {
     data.divetime = time;
 }
 
-datetime_t Dive::getDatetime()
+datetime_t DCDive::getDatetime()
 {
     return data.datetime;
 }
 
-void Dive::setDatetime(datetime_t datetime)
+void DCDive::setDatetime(datetime_t datetime)
 {
     data.datetime = datetime;
 }
 
-std::string Dive::getDisplayDateTime()
+std::string DCDive::getDisplayDateTime()
 {
     return format_datetime_iso((dc_datetime_t&)data.datetime);
 }
 
-std::string Dive::getISODateTime()
+std::string DCDive::getISODateTime()
 {
     return format_datetime_iso((dc_datetime_t&)data.datetime);
 }
 
-optional_t<double> Dive::getMaxTemperature()
+optional_t<double> DCDive::getMaxTemperature()
 {
     return data.maxTemperature;
 }
 
-void Dive::setMaxTemperature(double temperature)
+void DCDive::setMaxTemperature(double temperature)
 {
     data.maxTemperature = temperature;
 }
 
-optional_t<double> Dive::getMinTemperature()
+optional_t<double> DCDive::getMinTemperature()
 {
     return data.minTemperature;
 }
 
-void Dive::setMinTemperature(double temperature)
+void DCDive::setMinTemperature(double temperature)
 {
         data.minTemperature = temperature;
 }
 
-optional_t<double> Dive::getSurfaceTemperature()
+optional_t<double> DCDive::getSurfaceTemperature()
 {
     return data.surfaceTemperature;
 }
 
-void Dive::setSurfaceTemperature(double temperature)
+void DCDive::setSurfaceTemperature(double temperature)
 {
     data.surfaceTemperature = temperature;
 }
 
-optional_t<double> Dive::getAtmosphericPressure()
+optional_t<double> DCDive::getAtmosphericPressure()
 {
     return data.atmosphericPressure;
 }
 
-void Dive::setAtmosphericPressure(double pressure)
+void DCDive::setAtmosphericPressure(double pressure)
 {
     data.atmosphericPressure = pressure;
 }
 
-optional_t<salinity_t> Dive::getSalinity()
+optional_t<salinity_t> DCDive::getSalinity()
 {
     return data.salinity;
 }
 
-void Dive::setSalinity(salinity_t salinity)
+void DCDive::setSalinity(salinity_t salinity)
 {
     data.salinity = salinity;
 }
 
-optional_t<divemode_t> Dive::getDivemode()
+optional_t<divemode_t> DCDive::getDivemode()
 {
     return data.divemode;
 }
 
-void Dive::setDivemode(divemode_t divemode)
+void DCDive::setDivemode(divemode_t DCDivemode)
 {
-    data.divemode = divemode;
+    data.divemode = DCDivemode;
 }
 
-std::vector<tank_t> *Dive::getTanks()
+std::vector<tank_t> *DCDive::getTanks()
 {
     return tanks;
 }
 
-std::vector<DiveSample *> *Dive::getSamples()
+std::vector<DCDiveSample *> *DCDive::getSamples()
 {
     return samples;
 }
 
-void Dive::addTank(tank_t tank)
+void DCDive::addTank(tank_t tank)
 {
     tanks->push_back(tank);
 }
 
-void Dive::addSample(DiveSample *sample)
+void DCDive::addSample(DCDiveSample *sample)
 {
     samples->push_back(sample);
 }

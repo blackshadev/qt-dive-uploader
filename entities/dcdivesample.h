@@ -1,11 +1,13 @@
-#ifndef DIVESAMPLE_H
-#define DIVESAMPLE_H
+#ifndef DCDIVESAMPLE_H
+#define DCDIVESAMPLE_H
 #include "libdivecomputer/common.h"
 #include "libdivecomputer/parser.h"
 #include "libdivecomputer/datetime.h"
 #include "../common/optional.h"
 #include "../common/list.h"
-#include "divesampleevent.h"
+#include "dcdivesampleevent.h"
+#include <vector>
+#include <string>
 
 typedef struct {
     unsigned int tank;
@@ -24,11 +26,11 @@ typedef struct {
     optional_t<double> ppo2;
 } sample_data_t;
 
-class DiveSample
+class DCDiveSample
 {
 public:
-    DiveSample();
-    ~DiveSample();
+    DCDiveSample();
+    ~DCDiveSample();
     unsigned int getTime();
     void setTime(unsigned int time);
     optional_t<double> getDepth();
@@ -47,13 +49,13 @@ public:
     void setPPO2(double ppo2);
     std::vector<pressures_t> *getPressures();
     void addPressure(pressures_t pressure);
-    std::vector<DiveSampleEvent *> *getEvents();
-    void addEvent(DiveSampleEvent *sample);
+    std::vector<DCDiveSampleEvent *> *getEvents();
+    void addEvent(DCDiveSampleEvent *sample);
 
 private:
     sample_data_t data;
     std::vector<pressures_t> *pressures;
-    std::vector<DiveSampleEvent *> *events;
+    std::vector<DCDiveSampleEvent *> *events;
 };
 
-#endif // DIVESAMPLE_H
+#endif // DCDIVESAMPLE_H

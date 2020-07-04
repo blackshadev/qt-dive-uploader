@@ -20,6 +20,16 @@ struct optional_t {
         return *this;
     }
 
+    optional_t<T>& operator =(optional_t<T> val)
+    {
+        has_value = val.has_value;
+        if (val.has_value) {
+            value = val.value;
+        }
+
+        return *this;
+    }
+
 };
 
 template <typename T>

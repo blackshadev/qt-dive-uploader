@@ -1,15 +1,15 @@
-#ifndef DIVESAMPLEEVENT_H
-#define DIVESAMPLEEVENT_H
+#ifndef DCDIVESAMPLEEVENT_H
+#define DCDIVESAMPLEEVENT_H
 
 typedef struct {
     unsigned int type;
     int value;
 } event_data_t;
 
-class DiveSampleEvent
+class DCDiveSampleEvent
 {
 public:
-    DiveSampleEvent();
+    DCDiveSampleEvent();
     unsigned int getType();
     void setType(unsigned int type);
     const char *getTypeName();
@@ -19,4 +19,4 @@ private:
     event_data_t data;
 };
 
-#endif // DIVESAMPLEEVENT_H
+#endif // DCDIVESAMPLEEVENT_H

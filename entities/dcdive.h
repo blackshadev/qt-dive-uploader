@@ -1,11 +1,13 @@
-#ifndef DIVE_H
-#define DIVE_H
+#ifndef DCDIVE_H
+#define DCDIVE_H
 #include "libdivecomputer/common.h"
 #include "libdivecomputer/parser.h"
 #include "libdivecomputer/datetime.h"
 #include "../common/optional.h"
 #include "../common/list.h"
-#include "divesample.h"
+#include "dcdivesample.h"
+#include <vector>
+#include <string>
 
 typedef dc_datetime_t datetime_t;
 typedef dc_salinity_t salinity_t;
@@ -29,11 +31,11 @@ typedef struct {
     optional_t<salinity_t> salinity;
 } divedata_t;
 
-class Dive
+class DCDive
 {
 public:
-    Dive();
-    ~Dive();
+    DCDive();
+    ~DCDive();
     unsigned char* getFingerprint();
     void setFingerprint(unsigned char* fp);
     double getMaxDepth();
@@ -57,13 +59,13 @@ public:
     optional_t<divemode_t> getDivemode();
     void setDivemode(divemode_t divemode);
     std::vector<tank_t> *getTanks();
-    std::vector<DiveSample *> *getSamples();
+    std::vector<DCDiveSample *> *getSamples();
     void addTank(tank_t tank);
-    void addSample(DiveSample* sample);
+    void addSample(DCDiveSample* sample);
 private:
-    std::vector<DiveSample *> *samples;
+    std::vector<DCDiveSample *> *samples;
     std::vector<tank_t> *tanks;
     divedata_t data;
 };
 
-#endif // DIVE_H
+#endif // DCDIVE_H
