@@ -18,6 +18,8 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
+    divecomputer/dccontext.cpp \
+    divecomputer/dcdevicedescriptor.cpp \
     entities/dcdive.cpp \
     entities/dcdivesample.cpp \
     entities/dcdivesampleevent.cpp \
@@ -46,6 +48,8 @@ SOURCES += main.cpp \
 
 HEADERS += \
     common/vector.h \
+    divecomputer/dccontext.h \
+    divecomputer/dcdevicedescriptor.h \
     entities/dcdive.h \
     entities/dcdivesample.h \
     entities/dcdivesampleevent.h \
