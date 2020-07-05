@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-07-02T17:02:06.682Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36" etag="rO4V-tQ3PorMShT1xkvi" version="13.3.7" type="github">
+<mxfile host="app.diagrams.net" modified="2020-07-05T11:38:41.509Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36" etag="hcFKyCBe21OuKepqbJYp" version="13.3.9" type="github">
   <diagram id="l0Hb1Kvt9UqNzEm9A9QA" name="Page-1">
     <mxGraphModel dx="1422" dy="796" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -282,16 +282,16 @@
         <mxCell id="LenTutCYug-NzjJxEsnI-71" value="Array&amp;lt;dc_gasmix_t&amp;gt; getGasMixtures()" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
           <mxGeometry x="555" y="930" width="200" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="LenTutCYug-NzjJxEsnI-73" value="DCSample" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
+        <mxCell id="LenTutCYug-NzjJxEsnI-73" value="DCDiveSample" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
           <mxGeometry x="17.5" y="1070" width="672.5" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="LenTutCYug-NzjJxEsnI-74" value="DCEvent" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
+        <mxCell id="LenTutCYug-NzjJxEsnI-74" value="DCDiveSampleEvent" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
           <mxGeometry x="210" y="1190" width="467.5" height="20" as="geometry" />
         </mxCell>
         <mxCell id="nu18OdhDVVGL0PULstCD-1" value="DCDiveParser" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
           <mxGeometry x="340" y="670" width="215" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Bv5yyoWbIXBtn_ELixdd-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="nu18OdhDVVGL0PULstCD-3" target="spZWWF0u4A5Y6FCt7kzm-20">
+        <mxCell id="Bv5yyoWbIXBtn_ELixdd-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="nu18OdhDVVGL0PULstCD-3" target="spZWWF0u4A5Y6FCt7kzm-20" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nu18OdhDVVGL0PULstCD-3" value="parseDive(const unsigned char *, unsigned int size): DCDive*" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
@@ -373,6 +373,61 @@
         </mxCell>
         <mxCell id="spZWWF0u4A5Y6FCt7kzm-24" value="finalize(): DCSample*" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
           <mxGeometry x="75" y="800" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-1" value="DCDiveSerializer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
+          <mxGeometry x="640" y="680" width="215" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="NFH4je1Bz-bS19m63YZz-2" target="NFH4je1Bz-bS19m63YZz-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="875" y="710" />
+              <mxPoint x="875" y="758" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;dashed=1;endArrow=none;endFill=0;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="NFH4je1Bz-bS19m63YZz-2" target="LenTutCYug-NzjJxEsnI-51">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="710" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-2" value="serialize(QJsonObject &amp;amp;, DCDive *)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
+          <mxGeometry x="655" y="700" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-3" value="DCDiveSampleSerializer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
+          <mxGeometry x="640" y="730" width="215" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="NFH4je1Bz-bS19m63YZz-4" target="NFH4je1Bz-bS19m63YZz-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.958;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;endArrow=none;endFill=0;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="NFH4je1Bz-bS19m63YZz-4" target="LenTutCYug-NzjJxEsnI-73">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="635" y="765" />
+              <mxPoint x="635" y="860" />
+              <mxPoint x="780" y="860" />
+              <mxPoint x="780" y="1072" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-4" value="serialize(QJsonObject &amp;amp;, DCDiveSample *)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
+          <mxGeometry x="655" y="750" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-5" value="DCDiveSampleEventSerializer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
+          <mxGeometry x="640" y="785" width="215" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=none;endFill=0;entryX=0.95;entryY=0.05;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="NFH4je1Bz-bS19m63YZz-6" target="LenTutCYug-NzjJxEsnI-74">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780" y="1100" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="800" y="1170" />
+              <mxPoint x="654" y="1170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NFH4je1Bz-bS19m63YZz-6" value="serialize(QJsonObject &amp;amp;, DCDiveSampleEvent *)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
+          <mxGeometry x="655" y="805" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="ltwnF_Ncu5DMhvB-tiFt-4" value="QT specific" style="swimlane;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="90" y="1660" width="700" height="240" as="geometry" />
