@@ -102,10 +102,12 @@ DCDive *DiveParser::parseDives(const unsigned char *data, unsigned int size)
     sampleParser->setCallback([dive](DCDiveSample *sample) {
         dive->addSample(sample);
     });
+    
     dc_parser_samples_foreach(parser, [](dc_sample_type_t type, dc_sample_value_t value, void *userdata) {
         auto sampleParser = (DiveSampleParser *)userdata;
         sampleParser->addSample({ type, value });
     }, sampleParser);
+    
     sampleParser->finalize();
 
     return dive;

@@ -27,6 +27,10 @@ SOURCES += main.cpp \
     libdivecomputer/dccomputerlist.cpp \
     parsers/dcdiveparser.cpp \
     parsers/dcdivesampleparser.cpp \
+    serializer/dcdivesampleeventserializer.cpp \
+    serializer/dcdivesampleserializer.cpp \
+    serializer/dcdiveserializer.cpp \
+    serializer/optionalserializer.cpp \
     sessionstore.cpp \
     libdivecomputer/dcdownloadcontext.cpp \
     libdivecomputer/dive.cpp \
@@ -51,6 +55,10 @@ HEADERS += \
     libdivecomputer/dccomputerlist.h \
     parsers/dcdiveparser.h \
     parsers/dcdivesampleparser.h \
+    serializer/dcdivesampleeventserializer.h \
+    serializer/dcdivesampleserializer.h \
+    serializer/dcdiveserializer.h \
+    serializer/optionalserializer.h \
     sessionstore.h \
     libdivecomputer/dcdownloadcontext.h \
     libdivecomputer/dive.h \

@@ -19,7 +19,12 @@ typedef struct {
 } tank_t;
 
 typedef struct {
-    unsigned char* fingerprint;
+    unsigned char *data;
+    unsigned int size;
+} fingerprint_t;
+
+typedef struct {
+    fingerprint_t fingerprint;
     double maxDepth;
     unsigned int divetime;
     datetime_t datetime;
@@ -36,8 +41,8 @@ class DCDive
 public:
     DCDive();
     ~DCDive();
-    unsigned char* getFingerprint();
-    void setFingerprint(unsigned char* fp);
+    fingerprint_t getFingerprint();
+    void setFingerprint(fingerprint_t fp);
     double getMaxDepth();
     void setMaxDepth(double depth);
     unsigned int getDivetime();

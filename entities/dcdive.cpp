@@ -4,7 +4,8 @@
 
 DCDive::DCDive()
 {
-    data.fingerprint = NULL;
+    data.fingerprint.data = NULL;
+    data.fingerprint.size = 0;
     data.datetime.year = 0;
     data.datetime.month = 0;
     data.datetime.day = 0;
@@ -34,14 +35,15 @@ DCDive::~DCDive()
 
 }
 
-unsigned char *DCDive::getFingerprint()
+fingerprint_t DCDive::getFingerprint()
 {
     return data.fingerprint;
 }
 
-void DCDive::setFingerprint(unsigned char *fp)
+void DCDive::setFingerprint(fingerprint_t fp)
 {
-    data.fingerprint = fp;
+    data.fingerprint.data = fp.data;
+    data.fingerprint.size = fp.size;
 }
 
 double DCDive::getMaxDepth()
