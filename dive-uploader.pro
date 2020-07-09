@@ -18,17 +18,17 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
-    divecomputer/dccontext.cpp \
-    divecomputer/dcdevicedescriptor.cpp \
-    entities/dcdive.cpp \
-    entities/dcdivesample.cpp \
-    entities/dcdivesampleevent.cpp \
+    divecomputer/context/dccontext.cpp \
+    divecomputer/descriptor/dcdevicedescriptor.cpp \
+    divecomputer/entities/dcdive.cpp \
+    divecomputer/entities/dcdivesample.cpp \
+    divecomputer/entities/dcdivesampleevent.cpp \
+    divecomputer/parsers/dcdiveparser.cpp \
+    divecomputer/parsers/dcdivesampleparser.cpp \
     libdivecomputer/dcportlist.cpp \
     libdivecomputer/dctransportlist.cpp \
     libdivecomputer/qlibdivecomputer.cpp \
     libdivecomputer/dccomputerlist.cpp \
-    parsers/dcdiveparser.cpp \
-    parsers/dcdivesampleparser.cpp \
     serializer/dcdivesampleeventserializer.cpp \
     serializer/dcdivesampleserializer.cpp \
     serializer/dcdiveserializer.cpp \
@@ -48,17 +48,18 @@ SOURCES += main.cpp \
 
 HEADERS += \
     common/vector.h \
-    divecomputer/dccontext.h \
-    divecomputer/dcdevicedescriptor.h \
-    entities/dcdive.h \
-    entities/dcdivesample.h \
-    entities/dcdivesampleevent.h \
+    divecomputer/context/dccontext.h \
+    divecomputer/descriptor/dcdevicedescriptor.h \
+    divecomputer/descriptor/devicedescriptorinterface.h \
+    divecomputer/entities/dcdive.h \
+    divecomputer/entities/dcdivesample.h \
+    divecomputer/entities/dcdivesampleevent.h \
+    divecomputer/parsers/dcdiveparser.h \
+    divecomputer/parsers/dcdivesampleparser.h \
     libdivecomputer/dcportlist.h \
     libdivecomputer/dctransportlist.h \
     libdivecomputer/qlibdivecomputer.h \
     libdivecomputer/dccomputerlist.h \
-    parsers/dcdiveparser.h \
-    parsers/dcdivesampleparser.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \
     serializer/dcdiveserializer.h \

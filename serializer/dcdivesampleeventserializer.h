@@ -1,7 +1,7 @@
 #ifndef DCDIVESAMPLEEVENTSERIALIZER_H
 #define DCDIVESAMPLEEVENTSERIALIZER_H
 #include "optionalserializer.h"
-#include "../entities/dcdivesampleevent.h"
+#include "../divecomputer/entities/dcdivesampleevent.h"
 
 class DCDiveSampleEventSerializer
 {

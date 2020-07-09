@@ -2,7 +2,7 @@
 #define DCDIVESAMPLESERIALIZER_H
 #include "optionalserializer.h"
 #include "dcdivesampleeventserializer.h"
-#include "../entities/dcdivesample.h"
+#include "../divecomputer/entities/dcdivesample.h"
 
 class DCDiveSampleSerializer
 {
