@@ -7,13 +7,14 @@ class DCDeviceDescriptor : public DeviceDescriptorInterface
 {
 public:
     DCDeviceDescriptor(dc_descriptor_t *descriptor);
-    ~DCDeviceDescriptor();
+    virtual ~DCDeviceDescriptor();
     std::string getDisplayValue();
     const char *getProductName();
     const char *getVendorName();
     unsigned int getModelNumber();
     dc_family_t getFamilyType();
-    TransportFlag getTransports();
+    transports_t getTransports();
+    dc_descriptor_t *getNative();
 private:
     dc_descriptor_t *descriptor;
 };

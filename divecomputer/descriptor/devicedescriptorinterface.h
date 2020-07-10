@@ -1,11 +1,8 @@
 #ifndef DEVICEDESCRIPTORINTERFACE_H
 #define DEVICEDESCRIPTORINTERFACE_H
+#include "../transports/transporttype.h"
 #include <libdivecomputer/descriptor.h>
 #include <string>
-
-enum TransportFlag {
-
-};
 
 class DeviceDescriptorInterface
 {
@@ -15,7 +12,7 @@ public:
     virtual const char *getVendorName() = 0;
     virtual unsigned int getModelNumber() = 0;
     virtual dc_family_t getFamilyType() = 0;
-    virtual TransportFlag getTransports() = 0;
+    virtual transports_t getTransports() = 0;
 };
 
 #endif // DEVICEDESCRIPTORINTERFACE_H

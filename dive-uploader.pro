@@ -18,13 +18,20 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
+    divecomputer/utils/dcstatus.cpp \
+    common/string_format.cpp \
     divecomputer/context/dccontext.cpp \
     divecomputer/descriptor/dcdevicedescriptor.cpp \
+    divecomputer/devices/dcdevice.cpp \
+    divecomputer/devices/dcusbhiddevice.cpp \
     divecomputer/entities/dcdive.cpp \
     divecomputer/entities/dcdivesample.cpp \
     divecomputer/entities/dcdivesampleevent.cpp \
     divecomputer/parsers/dcdiveparser.cpp \
     divecomputer/parsers/dcdivesampleparser.cpp \
+    divecomputer/transports/dctransportinterface.cpp \
+    divecomputer/transports/dcusbhidtransport.cpp \
+    divecomputer/transports/transporttype.cpp \
     libdivecomputer/dcportlist.cpp \
     libdivecomputer/dctransportlist.cpp \
     libdivecomputer/qlibdivecomputer.cpp \
@@ -47,15 +54,22 @@ SOURCES += main.cpp \
     common/datetime.cpp
 
 HEADERS += \
+    divecomputer/utils//dcstatus.h \
+    common/string_format.h \
     common/vector.h \
     divecomputer/context/dccontext.h \
     divecomputer/descriptor/dcdevicedescriptor.h \
     divecomputer/descriptor/devicedescriptorinterface.h \
+    divecomputer/devices/dcdevice.h \
+    divecomputer/devices/dcusbhiddevice.h \
     divecomputer/entities/dcdive.h \
     divecomputer/entities/dcdivesample.h \
     divecomputer/entities/dcdivesampleevent.h \
     divecomputer/parsers/dcdiveparser.h \
     divecomputer/parsers/dcdivesampleparser.h \
+    divecomputer/transports/dctransportinterface.h \
+    divecomputer/transports/dcusbhidtransport.h \
+    divecomputer/transports/transporttype.h \
     libdivecomputer/dcportlist.h \
     libdivecomputer/dctransportlist.h \
     libdivecomputer/qlibdivecomputer.h \
