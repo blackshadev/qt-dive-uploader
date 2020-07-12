@@ -25,7 +25,7 @@ QVariant QDCTransportListModel::data(const QModelIndex &index, int role) const
     QDCTransport* transport = items[i];
     switch (role) {
         case DescriptionRole:
-            return QVariant::fromValue(descriptor->getQDescription());
+            return QVariant::fromValue(transport->getQDescription());
     }
 
     return QVariant(QVariant::Invalid);
