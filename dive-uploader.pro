@@ -21,7 +21,6 @@ SOURCES += main.cpp \
     divecomputer/reader/dcreader.cpp \
     divecomputer/transports/dctransport.cpp \
     divecomputer/utils/dcstatus.cpp \
-    common/string_format.cpp \
     divecomputer/context/dccontext.cpp \
     divecomputer/descriptor/dcdevicedescriptor.cpp \
     divecomputer/devices/dcdevice.cpp \
@@ -60,7 +59,6 @@ HEADERS += \
     divecomputer/reader/dcreader.h \
     divecomputer/transports/dctransport.h \
     divecomputer/utils//dcstatus.h \
-    common/string_format.h \
     common/vector.h \
     divecomputer/context/dccontext.h \
     divecomputer/descriptor/dcdevicedescriptor.h \

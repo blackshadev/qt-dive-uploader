@@ -1,5 +1,6 @@
 #include "dcstatus.h"
-#include "../../common/string_format.h"
+#include <stdio.h>
+#include <string>
 #include <stdexcept>
 
 const char *statusToMessage(dc_status_t status)
@@ -37,9 +38,9 @@ const char *statusToMessage(dc_status_t status)
 
 void checkDCStatus(dc_status_t status) {
     if(status != DC_STATUS_SUCCESS && status != DC_STATUS_DONE) {
-        std::string test = string_format("Invalid status code %s", statusToMessage(status));
-        throw std::runtime_error(
-            test
-        );
+        char message[256];
+        snprintf(message, 256, "Invalid status code %s", statusToMessage(status));
+
+        throw std::runtime_error(message);
     }
 }
