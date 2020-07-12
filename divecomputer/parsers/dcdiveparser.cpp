@@ -41,22 +41,24 @@ DiveParser::DiveParser()
     parser = NULL;
 }
 
-void DiveParser::setDevice(IDevice *device)
+DiveParser *DiveParser::setDevice(DCDevice *device)
 {
     if (parser != NULL) {
         dc_parser_destroy(parser);
     }
     dc_parser_new(&parser, device->getNative());
+    return this;
 }
 
-DCDive *DiveParser::parseDives(const unsigned char *data, unsigned int size)
+DCDive *DiveParser::parseDive(rawdivedata_t &divedata)
 {
     if(parser == NULL) {
         throw new std::logic_error("Parser not yet initialized, call setDevice first");
     }
     auto dive = new DCDive();
+    dive->setFingerprint(divedata.fingerprint);
 
-    dc_parser_set_data(parser, data, size);
+    dc_parser_set_data(parser, divedata.data, divedata.size);
 
     dc_datetime_t datetime;
     dc_parser_get_datetime(parser, &datetime);

@@ -1,13 +1,13 @@
 #ifndef DCUSBHIDTRANSPORT_H
 #define DCUSBHIDTRANSPORT_H
-#include "dctransportinterface.h"
+#include "dctransport.h"
 
-class DCUSBHIDTransport : public DCTransportInterface
+class DCUSBHIDTransport : public DCTransport
 {
 public:
     DCUSBHIDTransport(DCContext *ctx);
     TransportType getTransportType();
-    virtual std::vector<DCDevice *> *getDevices(DCDeviceDescriptor *descriptor);
+    std::vector<DCDeviceInterface *> *getDevices(DCDeviceDescriptor *descriptor);
 };
 
 #endif // DCUSBHIDTRANSPORT_H

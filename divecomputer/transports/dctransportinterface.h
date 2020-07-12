@@ -1,18 +1,14 @@
 #ifndef TRANSPORTINTERFACE_H
 #define TRANSPORTINTERFACE_H
 #include "transporttype.h"
-#include "../context/dccontext.h"
+#include "../devices/dcdeviceinterface.h"
 #include <vector>
 
 class DCTransportInterface
 {
 public:
-    DCTransportInterface(DCContext *ctx);
-    virtual ~DCTransportInterface();
     virtual TransportType getTransportType() = 0;
-    virtual std::vector<DCDevice *> *getDevices() = 0;
-protected:
-    DCContext *context;
+    virtual std::vector<DCDeviceInterface *> *getDevices(DCDeviceDescriptor *descriptor) = 0;
 };
 
 #endif // TRANSPORTINTERFACE_H

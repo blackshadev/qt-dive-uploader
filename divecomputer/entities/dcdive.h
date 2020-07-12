@@ -5,6 +5,7 @@
 #include "libdivecomputer/datetime.h"
 #include "../common/optional.h"
 #include "../common/list.h"
+#include "../common.h"
 #include "dcdivesample.h"
 #include <vector>
 #include <string>
@@ -17,11 +18,6 @@ typedef struct {
     optional_t<dc_tank_t> pressures;
     optional_t<dc_gasmix_t> gasmix;
 } tank_t;
-
-typedef struct {
-    unsigned char *data;
-    unsigned int size;
-} fingerprint_t;
 
 typedef struct {
     fingerprint_t fingerprint;

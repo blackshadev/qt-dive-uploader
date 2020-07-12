@@ -1,10 +1,11 @@
 #include "string_format.h"
+#include <string>
+#include <stdio.h>
 
 template<typename ... Args>
-std::string string_format( const std::string& format, Args ... args ) {
-    size_t size = snprintf( nullptr, 0, format.c_str(), args ... ) + 1; // Extra space for '\0'
-    if( size <= 0 ){ throw std::runtime_error( "Error during formatting." ); }
-    std::unique_ptr<char[]> buf( new char[ size ] );
-    snprintf( buf.get(), size, format.c_str(), args ... );
-    return std::string( buf.get(), buf.get() + size - 1 ); // We don't want the '\0' inside
+std::string string_format(const std::string& fmt, Args ...args) {
+    const char* buff[256];
+    snprintf(buff, sizeof(buff), fmt, args... );
+    std::string buffAsStdStr((const char *)buff);
+    return buffAsStdStr;
 }

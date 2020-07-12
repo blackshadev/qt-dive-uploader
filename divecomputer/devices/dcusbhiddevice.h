@@ -7,12 +7,12 @@
 class DCUSBHIDDevice : public DCDevice
 {
 public:
-    DCUSBHIDDevice(DCContext *ctx, dc_usbhid_device_t *dev);
+    DCUSBHIDDevice(DCContext *ctx, DCDeviceDescriptor *descr, dc_usbhid_device_t *dev);
     ~DCUSBHIDDevice();
     std::string getDescription();
-    dc_iostream_t *loadNativeStream();
 protected:
     dc_usbhid_device_t *device;
+    dc_iostream_t *loadNativeStream();
 };
 
 #endif // DCUSBHIDDEVICE_H

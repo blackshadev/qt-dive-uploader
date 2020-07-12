@@ -37,8 +37,9 @@ const char *statusToMessage(dc_status_t status)
 
 void checkDCStatus(dc_status_t status) {
     if(status != DC_STATUS_SUCCESS && status != DC_STATUS_DONE) {
+        std::string test = string_format("Invalid status code %s", statusToMessage(status));
         throw std::runtime_error(
-            string_format("Invalid status code %s", statusToMessage(status))
+            test
         );
     }
 }

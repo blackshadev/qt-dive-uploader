@@ -1,7 +1,7 @@
 #include "dcusbhiddevice.h"
 #include "../../common/string_format.h"
 
-DCUSBHIDDevice::DCUSBHIDDevice(DCContext *ctx, dc_usbhid_device_t *dev) : DCDevice(ctx)
+DCUSBHIDDevice::DCUSBHIDDevice(DCContext *ctx, DCDeviceDescriptor *descr, dc_usbhid_device_t *dev) : DCDevice(ctx, descr)
 {
     device = dev;
 }

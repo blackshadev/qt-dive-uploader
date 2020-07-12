@@ -9,7 +9,7 @@ win32:OS = "win32"
 macx:OS = "macx"
 
 QT += qml quick serialport quickcontrols2 network
-CONFIG += c++11
+CONFIG += c++latest
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -18,6 +18,8 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
+    divecomputer/reader/dcreader.cpp \
+    divecomputer/transports/dctransport.cpp \
     divecomputer/utils/dcstatus.cpp \
     common/string_format.cpp \
     divecomputer/context/dccontext.cpp \
@@ -29,7 +31,6 @@ SOURCES += main.cpp \
     divecomputer/entities/dcdivesampleevent.cpp \
     divecomputer/parsers/dcdiveparser.cpp \
     divecomputer/parsers/dcdivesampleparser.cpp \
-    divecomputer/transports/dctransportinterface.cpp \
     divecomputer/transports/dcusbhidtransport.cpp \
     divecomputer/transports/transporttype.cpp \
     libdivecomputer/dcportlist.cpp \
@@ -54,6 +55,10 @@ SOURCES += main.cpp \
     common/datetime.cpp
 
 HEADERS += \
+    divecomputer/common.h \
+    divecomputer/devices/dcdeviceinterface.h \
+    divecomputer/reader/dcreader.h \
+    divecomputer/transports/dctransport.h \
     divecomputer/utils//dcstatus.h \
     common/string_format.h \
     common/vector.h \
