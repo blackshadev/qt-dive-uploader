@@ -9,7 +9,7 @@ win32:OS = "win32"
 macx:OS = "macx"
 
 QT += qml quick serialport quickcontrols2 network
-CONFIG += c++latest
+CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -36,6 +36,11 @@ SOURCES += main.cpp \
     libdivecomputer/dctransportlist.cpp \
     libdivecomputer/qlibdivecomputer.cpp \
     libdivecomputer/dccomputerlist.cpp \
+    qtdivecomputer/context/qdccontext.cpp \
+    qtdivecomputer/entities/qdcdevicedescriptor.cpp \
+    qtdivecomputer/listmodels/qdcdevicedescriptorlistmodel.cpp \
+    qtdivecomputer/listmodels/qdctransportlistmodel.cpp \
+    qtdivecomputer/transports/qdctransport.cpp \
     serializer/dcdivesampleeventserializer.cpp \
     serializer/dcdivesampleserializer.cpp \
     serializer/dcdiveserializer.cpp \
@@ -77,6 +82,11 @@ HEADERS += \
     libdivecomputer/dctransportlist.h \
     libdivecomputer/qlibdivecomputer.h \
     libdivecomputer/dccomputerlist.h \
+    qtdivecomputer/context/qdccontext.h \
+    qtdivecomputer/entities/qdcdevicedescriptor.h \
+    qtdivecomputer/listmodels/qdcdevicedescriptorlistmodel.h \
+    qtdivecomputer/listmodels/qdctransportlistmodel.h \
+    qtdivecomputer/transports/qdctransport.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \
     serializer/dcdiveserializer.h \

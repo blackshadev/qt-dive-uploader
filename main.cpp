@@ -13,13 +13,14 @@
 #include "littledivelog/littledivelog.h"
 #include "libdivecomputer/qdivemodel.h"
 #include "jsonrequest.h"
-
+#include "qtdivecomputer/context/qdccontext.h"
 
 int main(int argc, char *argv[])
 {
 
     LittleDiveLog log;
     QLibDiveComputer dc;
+    QDCContext dccontext;
 
     QString homeFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     QString sessionFilePath = QDir(QDir::cleanPath(homeFolder + QDir::separator() + "LittleDiveLog")).filePath("session.json");
@@ -62,6 +63,7 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("session", &sess.m_data);
     ctxt->setContextProperty("libdivecomputer", &dc);
     ctxt->setContextProperty("littledivelog", &log);
+    ctxt->setContextProperty("divecomputer", &dccontext);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

@@ -3,10 +3,10 @@
 #include "dctransportinterface.h"
 #include "../context/dccontext.h"
 
-class DCTransport : public DCTransportInterface
+class DCTransport2 : public DCTransportInterface
 {
 public:
-    DCTransport(DCContext *); 
+    DCTransport2(DCContext *);
 protected:
     DCContext *context;
 };

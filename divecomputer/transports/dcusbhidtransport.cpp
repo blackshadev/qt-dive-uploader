@@ -2,7 +2,7 @@
 #include "../devices/dcusbhiddevice.h"
 #include <libdivecomputer/usbhid.h>
 
-DCUSBHIDTransport::DCUSBHIDTransport(DCContext *ctx) : DCTransport(ctx)
+DCUSBHIDTransport::DCUSBHIDTransport(DCContext *ctx) : DCTransport2(ctx)
 {}
 
 TransportType DCUSBHIDTransport::getTransportType()

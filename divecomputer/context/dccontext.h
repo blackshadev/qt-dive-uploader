@@ -27,11 +27,12 @@ public:
     dc_context_t *getNative();
     std::vector<DCDeviceDescriptor *> *getDescriptors();
     std::vector<DCTransportInterface *> *getTransport(TransportType flag);
-private:
+protected:
     loglevel_t logLevel = DC_LOGLEVEL_ERROR;
     logfunc_t log;
     dc_context_t *context;
     static void logfunction(dc_context_t *context, dc_loglevel_t loglevel, const char *file, unsigned int line, const char *function, const char *msg, void *userdata);
+    virtual DCDeviceDescriptor *createDescriptor(dc_descriptor_t *descr);
     std::vector<DCDeviceDescriptor *> *descriptors;
     std::vector<DCTransportInterface *> *transports;
     std::vector<DCDeviceDescriptor *> *loadDescriptors();

@@ -73,11 +73,16 @@ std::vector<DCDeviceDescriptor *> *DCContext::loadDescriptors()
 
     auto descriptors = new std::vector<DCDeviceDescriptor *>();
     while (dc_iterator_next(iter, &descr) == DC_STATUS_SUCCESS) {
-        descriptors->push_back(new DCDeviceDescriptor(descr));
+        descriptors->push_back(createDescriptor(descr));
     }
 
     dc_iterator_free(iter);
     return descriptors;
+}
+
+DCDeviceDescriptor *DCContext::createDescriptor(dc_descriptor_t *descr)
+{
+    return new DCDeviceDescriptor(descr);
 }
 
 void DCContext::logfunction(

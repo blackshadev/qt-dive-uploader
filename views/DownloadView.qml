@@ -107,10 +107,28 @@ GridLayout {
     }
 
     Label {
+        text: "Test"
+        Layout.minimumWidth: labelColumnWidth
+        Layout.maximumWidth: labelColumnWidth
+    }
+
+    ComboBox {
+        Layout.fillWidth: true
+
+        model: SortFilterProxyModel {
+            sourceModel: divecomputer.descriptors
+            sortRoleName: "description"
+            sortOrder: "AscendingOrder"
+        }
+        textRole: "description"
+    }
+
+    Label {
         text: "Computer"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
     }
+
 
     ComboBox {
         Layout.fillWidth: true

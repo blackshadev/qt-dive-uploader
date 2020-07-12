@@ -2,7 +2,7 @@
 #define DCUSBHIDTRANSPORT_H
 #include "dctransport.h"
 
-class DCUSBHIDTransport : public DCTransport
+class DCUSBHIDTransport : public DCTransport2
 {
 public:
     DCUSBHIDTransport(DCContext *ctx);
