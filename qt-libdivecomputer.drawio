@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-07-13T17:31:28.074Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36" etag="PDJfuL7p_yfixBZ1Hsd5" version="13.4.2" type="github">
+<mxfile host="app.diagrams.net" modified="2020-07-13T17:32:42.247Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36" etag="2LMMpGhOiO7LU7rECnpZ" version="13.4.2" type="github">
   <diagram id="l0Hb1Kvt9UqNzEm9A9QA" name="Page-1">
-    <mxGraphModel dx="2873" dy="896" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3231" dy="1089" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -16,14 +16,14 @@
         <mxCell id="ltwnF_Ncu5DMhvB-tiFt-10" value="dc_context_set_loglevel" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-2" vertex="1">
           <mxGeometry x="50" y="90" width="140" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="ltwnF_Ncu5DMhvB-tiFt-25" value="dc_descriptor_t&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-2" vertex="1">
+        <mxCell id="ltwnF_Ncu5DMhvB-tiFt-25" value="dc_descriptor_t&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="ltwnF_Ncu5DMhvB-tiFt-2" vertex="1">
           <mxGeometry x="370" y="50" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="WCboHnmUrijgcAGSZFJO-1" value="dc_descriptor_get_transports" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-2" vertex="1">
           <mxGeometry x="390" y="70" width="180" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="WCboHnmUrijgcAGSZFJO-2" value="dc_context_t" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-2" vertex="1">
-          <mxGeometry x="40" y="30" width="140" height="20" as="geometry" />
+        <mxCell id="WCboHnmUrijgcAGSZFJO-2" value="dc_context_t" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="ltwnF_Ncu5DMhvB-tiFt-2" vertex="1">
+          <mxGeometry x="40" y="30" width="150" height="20" as="geometry" />
         </mxCell>
         <mxCell id="WCboHnmUrijgcAGSZFJO-3" value="dc_descriptor_get_type" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-2" vertex="1">
           <mxGeometry x="390" y="90" width="180" height="20" as="geometry" />
@@ -555,7 +555,7 @@
         <mxCell id="8DadM0GUW-9kGgjXNJf9-14" value="+ divecomputer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-5">
           <mxGeometry x="10" y="40" width="137.5" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="ltwnF_Ncu5DMhvB-tiFt-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;endArrow=none;endFill=0;" parent="1" source="ltwnF_Ncu5DMhvB-tiFt-11" target="WCboHnmUrijgcAGSZFJO-2" edge="1">
+        <mxCell id="ltwnF_Ncu5DMhvB-tiFt-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;endArrow=classic;endFill=1;" parent="1" source="ltwnF_Ncu5DMhvB-tiFt-11" target="WCboHnmUrijgcAGSZFJO-2" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="205" y="315" />
