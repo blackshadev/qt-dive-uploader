@@ -2,17 +2,17 @@
 
 transports_t operator|(TransportType a, TransportType b)
 {
-    return (transports_t)(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+    return (transports_t)(2 << static_cast<unsigned int>(a) | 2 << static_cast<unsigned int>(b));
 }
 
 transports_t operator|(transports_t a, TransportType b)
 {
-    return (transports_t)(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+    return (transports_t)(static_cast<unsigned int>(a) | 2 << static_cast<unsigned int>(b));
 }
 
 transports_t operator|(TransportType a, transports_t b)
 {
-    return (transports_t)(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+    return (transports_t)(static_cast<unsigned int>(2 << a) | static_cast<unsigned int>(b));
 }
 
 const char *transportTypeToString(TransportType t)
@@ -56,4 +56,9 @@ transports_t getTransports(dc_transport_t transport)
         transports |= TransportType::Serial;
     }
     return transports;
+}
+
+bool operator&(transports_t a, TransportType b)
+{
+    return static_cast<unsigned int>(a) & 2 << static_cast<unsigned int>(b);
 }

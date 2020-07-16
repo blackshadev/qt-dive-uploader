@@ -33,6 +33,8 @@ QVariant QDCDeviceDescriptorListModel::data(const QModelIndex& index, int role) 
             return QVariant::fromValue(descriptor->getQProduct());
         case DescriptionRole:
             return QVariant::fromValue(descriptor->getQDescription());
+        case TransportsRole:
+            return QVariant::fromValue(descriptor->getQTransports());
     }
 
     return QVariant(QVariant::Invalid);

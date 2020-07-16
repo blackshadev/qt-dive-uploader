@@ -49,12 +49,22 @@ dc_context_t *DCContext::getNative()
 
 std::vector<DCDeviceDescriptor *> *DCContext::getDescriptors()
 {
-    if(!descriptors) {
+    if (!descriptors) {
         descriptors = loadDescriptors();
     }
 
     return descriptors;
 }
+
+std::vector<DCTransportInterface *> *DCContext::getTransports()
+{
+    if (!transports) {
+        transports = loadTransports();
+    }
+
+    return transports;
+}
+
 
 std::vector<DCTransportInterface *> *DCContext::loadTransports()
 {

@@ -26,7 +26,7 @@ public:
     void setLogLevel(loglevel_t logLevel);
     dc_context_t *getNative();
     std::vector<DCDeviceDescriptor *> *getDescriptors();
-    std::vector<DCTransportInterface *> *getTransport(TransportType flag);
+    std::vector<DCTransportInterface *> *getTransports();
 protected:
     loglevel_t logLevel = DC_LOGLEVEL_ERROR;
     logfunc_t log;

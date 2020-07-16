@@ -1,4 +1,6 @@
 #include "qdccontext.h"
+#include "../divecomputer/transports/transporttype.h"
+#include "../transports/qdctransport.h"
 #include <QVector>
 
 QDCContext::QDCContext(QObject *parent)
@@ -12,7 +14,7 @@ QDCContext::~QDCContext()
     delete descriptorsModel;
 }
 
-QDCDeviceDescriptorListModel *QDCContext::getQDescriptors()
+QDCDeviceDescriptorListModel *QDCContext::getQDescriptorsListModel()
 {
     if (descriptorsModel) {
         return descriptorsModel;
@@ -26,6 +28,22 @@ QDCDeviceDescriptorListModel *QDCContext::getQDescriptors()
     }
 
     return descriptorsModel;
+}
+
+QDCTransportListModel *QDCContext::getQTransportListModel()
+{
+    if (transportsModel) {
+        return transportsModel;
+    }
+
+    transportsModel = new QDCTransportListModel(this);
+    auto transports = getTransports();
+
+    for(auto descr : *transports) {
+        transportsModel->add((QDCTransport *)descr);
+    }
+
+    return transportsModel;
 }
 
 DCDeviceDescriptor *QDCContext::createDescriptor(dc_descriptor_t *descr)

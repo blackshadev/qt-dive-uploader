@@ -11,6 +11,7 @@ class QDCTransportListModel : QAbstractListModel
 public:
     enum TransportRoles {
         DescriptionRole = Qt::UserRole + 1,
+        TransportRole
     };
     Q_ENUMS(TransportRoles)
     QDCTransportListModel(QObject *parent = 0);
@@ -19,9 +20,11 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     void add(QDCTransport *descr);
+    Q_INVOKABLE void filter(transports_t transports);
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:
+    std::vector<QDCTransport *> allItems;
     std::vector<QDCTransport *> items;
 };
 

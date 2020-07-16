@@ -2,7 +2,7 @@
 #define QDCDEVICEDESCRIPTORLISTMODEL_H
 #include <QObject>
 #include <QAbstractListModel>
-#include "../entities/qdcdevicedescriptor.h"
+#include "../descriptor/qdcdevicedescriptor.h"
 
 class QDCDeviceDescriptorListModel : public QAbstractListModel
 {

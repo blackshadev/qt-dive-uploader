@@ -37,7 +37,7 @@ SOURCES += main.cpp \
     libdivecomputer/qlibdivecomputer.cpp \
     libdivecomputer/dccomputerlist.cpp \
     qtdivecomputer/context/qdccontext.cpp \
-    qtdivecomputer/entities/qdcdevicedescriptor.cpp \
+    qtdivecomputer/descriptor/qdcdevicedescriptor.cpp \
     qtdivecomputer/listmodels/qdcdevicedescriptorlistmodel.cpp \
     qtdivecomputer/listmodels/qdctransportlistmodel.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
@@ -83,7 +83,7 @@ HEADERS += \
     libdivecomputer/qlibdivecomputer.h \
     libdivecomputer/dccomputerlist.h \
     qtdivecomputer/context/qdccontext.h \
-    qtdivecomputer/entities/qdcdevicedescriptor.h \
+    qtdivecomputer/descriptor/qdcdevicedescriptor.h \
     qtdivecomputer/listmodels/qdcdevicedescriptorlistmodel.h \
     qtdivecomputer/listmodels/qdctransportlistmodel.h \
     qtdivecomputer/transports/qdctransport.h \

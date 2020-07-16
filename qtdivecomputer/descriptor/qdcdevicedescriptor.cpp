@@ -20,3 +20,8 @@ QString QDCDeviceDescriptor::getQProduct()
 {
     return QString::fromStdString(getProductName());
 }
+
+QDCTransport::Types QDCDeviceDescriptor::getQTransports()
+{
+    return QDCTransport::translateTransports(getTransports());
+}

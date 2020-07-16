@@ -107,28 +107,10 @@ GridLayout {
     }
 
     Label {
-        text: "Test"
-        Layout.minimumWidth: labelColumnWidth
-        Layout.maximumWidth: labelColumnWidth
-    }
-
-    ComboBox {
-        Layout.fillWidth: true
-
-        model: SortFilterProxyModel {
-            sourceModel: divecomputer.descriptors
-            sortRoleName: "description"
-            sortOrder: "AscendingOrder"
-        }
-        textRole: "description"
-    }
-
-    Label {
         text: "Computer"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
     }
-
 
     ComboBox {
         Layout.fillWidth: true
@@ -136,13 +118,13 @@ GridLayout {
         property bool loaded: false
         id: computerSelection
         editable: true
+
         model: SortFilterProxyModel {
-            sourceModel: libdivecomputer.devices
+            sourceModel: divecomputer.descriptors
             sortRoleName: "description"
             sortOrder: "AscendingOrder"
         }
         textRole: "description"
-        valueRole: "index"
         Component.onCompleted: {
             var idx = computerSelection.find(session.computer);
 
@@ -163,14 +145,15 @@ GridLayout {
                 trans = computerSelection.model.data(idx, ComputerRoles.TransportsRole);
             }
 
-            libdivecomputer.set_available_transports(trans);
+            divecomputer.transports.filter(trans);
+
+            // libdivecomputer.set_available_transports(trans);
 
             if(loaded) {
                 session.computer = comp;
             }
 
         }
-
     }
 
     Label {
@@ -188,9 +171,8 @@ GridLayout {
         property bool loaded: false
         Layout.fillWidth: true
         id: transportSelection
-        model: libdivecomputer.transports
+        model: divecomputer.transports
         textRole: "description"
-        valueRole: "index"
 
         Component.onCompleted: {
             loaded = true;
@@ -209,7 +191,7 @@ GridLayout {
             var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
             if(idx.valid && comp_idx.valid) {
                 var comp = computerSelection.model.data(comp_idx, ComputerRoles.IndexRole);
-                libdivecomputer.update_availble_ports(comp, transport);
+                //libdivecomputer.update_availble_ports(comp, transport);
             }
         }
 
