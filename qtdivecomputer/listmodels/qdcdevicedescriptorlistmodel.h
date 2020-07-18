@@ -16,7 +16,7 @@ public:
         IndexRole,
         TransportsRole,
     };
-    Q_ENUMS(DeviceDescriptorRoles)
+    Q_ENUM(DeviceDescriptorRoles)
     QDCDeviceDescriptorListModel(QObject *parent = 0);
     virtual ~QDCDeviceDescriptorListModel();
 

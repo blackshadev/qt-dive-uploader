@@ -4,7 +4,7 @@
 #include <QAbstractListModel>
 #include "../transports/qdctransport.h"
 
-class QDCTransportListModel : QAbstractListModel
+class QDCTransportListModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -20,7 +20,7 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     void add(QDCTransport *descr);
-    Q_INVOKABLE void filter(transports_t transports);
+    Q_INVOKABLE void filter(QDCTransport::Types transports);
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:

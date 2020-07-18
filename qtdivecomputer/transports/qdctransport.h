@@ -25,6 +25,7 @@ public:
     QString getQDescription();
     Type getQTransport();
     static Types translateTransports(transports_t trans);
+    static transports_t translateTransports(Types trans);
 protected:
     DCTransportInterface *concreteTransport;
 };

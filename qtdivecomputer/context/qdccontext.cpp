@@ -7,6 +7,7 @@ QDCContext::QDCContext(QObject *parent)
     : QObject(parent), DCContext()
 {
     descriptorsModel = NULL;
+    transportsModel = NULL;
 }
 
 QDCContext::~QDCContext()
@@ -39,8 +40,8 @@ QDCTransportListModel *QDCContext::getQTransportListModel()
     transportsModel = new QDCTransportListModel(this);
     auto transports = getTransports();
 
-    for(auto descr : *transports) {
-        transportsModel->add((QDCTransport *)descr);
+    for(auto trans : *transports) {
+        transportsModel->add(new QDCTransport(trans));
     }
 
     return transportsModel;

@@ -36,13 +36,15 @@ void QDCTransportListModel::add(QDCTransport *descr)
     allItems.push_back(descr);
 }
 
-void QDCTransportListModel::filter(transports_t transports)
+void QDCTransportListModel::filter(QDCTransport::Types transportTypes)
 {
     beginResetModel();
+    transports_t transports = QDCTransport::translateTransports(transportTypes);
 
     items.clear();
     for (auto item : allItems) {
-        if (transports & item->getTransportType()) {
+        auto itemTransport = item->getTransportType();
+        if (transports & itemTransport) {
             items.push_back(item);
         }
     }

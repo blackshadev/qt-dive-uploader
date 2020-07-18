@@ -14,6 +14,7 @@
 #include "libdivecomputer/qdivemodel.h"
 #include "jsonrequest.h"
 #include "qtdivecomputer/context/qdccontext.h"
+#include "qtdivecomputer/listmodels/qdcdevicelistmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "LogLevel");
     qmlRegisterType<WriteType>("Libdivecomputer", 0, 1, "WriteTypes");
     qmlRegisterType<QDiveModel>("Libdivecomputer", 0, 1, "DiveModel");
+    qmlRegisterType<QDCDeviceListModel>("Libdivecomputer", 0, 2, "QDCDeviceListModel");
 
     QQmlApplicationEngine engine;
 

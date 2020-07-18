@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.2
 import SortFilterProxyModel 0.1
 import DCComputer 0.1
 import DCTransport 0.1
-import Libdivecomputer 0.1
+import Libdivecomputer 0.2
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Styles 1.4
 import FontAwesome 1.0
@@ -147,12 +147,11 @@ GridLayout {
 
             divecomputer.transports.filter(trans);
 
-            // libdivecomputer.set_available_transports(trans);
-
             if(loaded) {
                 session.computer = comp;
             }
 
+            refreshUI();
         }
     }
 
@@ -191,8 +190,10 @@ GridLayout {
             var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
             if(idx.valid && comp_idx.valid) {
                 var comp = computerSelection.model.data(comp_idx, ComputerRoles.IndexRole);
-                //libdivecomputer.update_availble_ports(comp, transport);
+
             }
+
+            refreshUI();
         }
 
     }
@@ -213,9 +214,10 @@ GridLayout {
         ComboBox {
             Layout.fillWidth: true
             id: sourceSelection
-            model: libdivecomputer.ports
+            model: QDCDeviceListModel {
+                id: devicelist
+            }
             textRole: "description"
-            valueRole: "index"
         }
 
         Button {

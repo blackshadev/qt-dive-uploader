@@ -2,6 +2,7 @@
 #define DCCONTEXT_H
 #include "../descriptor/dcdevicedescriptor.h"
 #include "../transports/dctransportinterface.h"
+#include "../devices/dcdeviceinterface.h"
 #include <libdivecomputer/context.h>
 #include <vector>
 #include <functional>

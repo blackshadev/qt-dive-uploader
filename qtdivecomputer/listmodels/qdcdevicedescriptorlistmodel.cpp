@@ -11,19 +11,20 @@ QDCDeviceDescriptorListModel::~QDCDeviceDescriptorListModel()
 
 QHash<int, QByteArray> QDCDeviceDescriptorListModel::roleNames() const
 {
-        QHash<int, QByteArray> roles;
-        roles[VendorRole] = "vendor";
-        roles[ProductRole] = "product";
-        roles[DescriptionRole] = "description";
-        roles[TransportsRole] = "transports";
-        return roles;
+    QHash<int, QByteArray> roles;
+    roles[VendorRole] = "vendor";
+    roles[ProductRole] = "product";
+    roles[DescriptionRole] = "description";
+    roles[TransportsRole] = "transports";
+    return roles;
 }
 
 QVariant QDCDeviceDescriptorListModel::data(const QModelIndex& index, int role) const
 {
     int i = index.row();
-    if ( i < 0 || i >= items.size())
+    if ( i < 0 || i >= items.size()) {
         return QVariant(QVariant::Invalid);
+    }
 
     QDCDeviceDescriptor* descriptor = items[i];
     switch (role) {

@@ -38,7 +38,9 @@ SOURCES += main.cpp \
     libdivecomputer/dccomputerlist.cpp \
     qtdivecomputer/context/qdccontext.cpp \
     qtdivecomputer/descriptor/qdcdevicedescriptor.cpp \
+    qtdivecomputer/device/qdcdevice.cpp \
     qtdivecomputer/listmodels/qdcdevicedescriptorlistmodel.cpp \
+    qtdivecomputer/listmodels/qdcdevicelistmodel.cpp \
     qtdivecomputer/listmodels/qdctransportlistmodel.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
     serializer/dcdivesampleeventserializer.cpp \
@@ -84,7 +86,9 @@ HEADERS += \
     libdivecomputer/dccomputerlist.h \
     qtdivecomputer/context/qdccontext.h \
     qtdivecomputer/descriptor/qdcdevicedescriptor.h \
+    qtdivecomputer/device/qdcdevice.h \
     qtdivecomputer/listmodels/qdcdevicedescriptorlistmodel.h \
+    qtdivecomputer/listmodels/qdcdevicelistmodel.h \
     qtdivecomputer/listmodels/qdctransportlistmodel.h \
     qtdivecomputer/transports/qdctransport.h \
     serializer/dcdivesampleeventserializer.h \
