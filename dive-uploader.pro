@@ -42,19 +42,16 @@ SOURCES += main.cpp \
     qtdivecomputer/listmodels/qdcloglevellistmodel.cpp \
     qtdivecomputer/listmodels/qdctransportlistmodel.cpp \
     qtdivecomputer/parsers/qdiveparser.cpp \
+    qtdivecomputer/reader/qdcreader.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
     serializer/dcdivesampleeventserializer.cpp \
     serializer/dcdivesampleserializer.cpp \
     serializer/dcdiveserializer.cpp \
     serializer/optionalserializer.cpp \
     sessionstore.cpp \
-    libdivecomputer/writer/divewriter.cpp \
-    libdivecomputer/writer/filewriter.cpp \
     littledivelog/littledivelog.cpp \
     jsonrequest.cpp \
     littledivelog/userinfo.cpp \
-    libdivecomputer/writer/littlelogwriter.cpp \
-    libdivecomputer/writer/jsondivewriter.cpp \
     common/datetime.cpp
 
 HEADERS += \
@@ -87,6 +84,7 @@ HEADERS += \
     qtdivecomputer/listmodels/qdcloglevellistmodel.h \
     qtdivecomputer/listmodels/qdctransportlistmodel.h \
     qtdivecomputer/parsers/qdiveparser.h \
+    qtdivecomputer/reader/qdcreader.h \
     qtdivecomputer/transports/qdctransport.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \
@@ -97,13 +95,9 @@ HEADERS += \
     common/optional.h \
     common/list.h \
     common/list.hpp \
-    libdivecomputer/writer/divewriter.h \
-    libdivecomputer/writer/filewriter.h \
     littledivelog/littledivelog.h \
     jsonrequest.h \
     littledivelog/userinfo.h \
-    libdivecomputer/writer/littlelogwriter.h \
-    libdivecomputer/writer/jsondivewriter.h \
     common/datetime.h
 
 

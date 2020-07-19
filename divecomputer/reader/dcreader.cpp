@@ -14,6 +14,12 @@ DCReader *DCReader::setDevice(DCDevice *d)
     return this;
 }
 
+DCReader *DCReader::setParser(DiveParser *p)
+{
+    parser = p;
+    return this;
+}
+
 DCReader *DCReader::setCallback(dive_callback_t cb)
 {
     callback = cb;
@@ -24,6 +30,7 @@ void DCReader::start()
 {
     if (
         device == NULL ||
+        parser == NULL ||
         callback == NULL
     ) {
         throw std::runtime_error("Not enough parameters. Device, Parser and Callback are required to be set");
@@ -45,5 +52,6 @@ int DCReader::nativeCallback(const unsigned char *data, unsigned int size, const
             fpdata
         }
     };
-    reader->callback(divedata);
+    auto dive = reader->parser->parseDive(divedata);
+    reader->callback(dive);
 }

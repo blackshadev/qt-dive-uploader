@@ -78,44 +78,5 @@ ApplicationWindow {
         }
     }
 
-    Connections {
-        target: libdivecomputer
-        function onSelectDives(writer, dives) {
-
-            function finishCreation() {
-                if (incubator.status === Component.Ready) {
-                    var selectionWindow = incubator.object;
-                    selectionWindow.onCancelled.connect(function() {
-                        stackView.pop();
-                        libdivecomputer.cancel();
-                    });
-                    selectionWindow.onFinished.connect(function() {
-                        writer.selectionDone();
-                        stackView.pop();
-                    });
-                    stackView.push(selectionWindow);
-                } else if (incubator.status === Component.Error) {
-                    console.error(incubator.errorString());
-                }
-            }
-
-            var component = Qt.createComponent("views/SelectionWindow.qml");
-            if(component.status === Component.Error) {
-                console.error(component.errorString());
-                return;
-            }
-
-            var incubator = component.incubateObject(stackView, {
-                diveData: dives
-            });
-
-            if(incubator.status === Component.Ready || incubator.status === Component.Error) {
-                finishCreation();
-            } else {
-                incubator.onStatusChanged = finishCreation;
-            }
-
-        }
-    }
 
 }

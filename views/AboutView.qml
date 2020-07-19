@@ -33,7 +33,7 @@ ColumnLayout {
         }
 
         Label {
-            text: libdivecomputer.version
+            text: "vTODO"
         }
     }
 

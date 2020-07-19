@@ -27,11 +27,11 @@ QVariant QDCDiveListModel::data(const QModelIndex &index, int role) const
     auto dive = items[i];
     switch (role) {
         case DateRole:
-            return QVariant::fromValue(dive->getDisplayDateTime());
+            return QVariant::fromValue(QString::fromStdString(dive->getDisplayDateTime()));
         case DepthRole:
             return QVariant::fromValue(dive->getMaxDepth());
         case TimeRole:
-            return QVariant::fromValue(dive->getDisplayDivetime());
+            return QVariant::fromValue(QString::fromStdString(dive->getDisplayDivetime()));
     }
 }
 
