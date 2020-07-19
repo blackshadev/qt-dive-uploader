@@ -55,7 +55,7 @@ DCDive *DiveParser::parseDive(rawdivedata_t &divedata)
     if(parser == NULL) {
         throw new std::logic_error("Parser not yet initialized, call setDevice first");
     }
-    auto dive = new DCDive();
+    auto dive = createDive();
     dive->setFingerprint(divedata.fingerprint);
 
     dc_parser_set_data(parser, divedata.data, divedata.size);
@@ -137,4 +137,14 @@ inline tank_t DiveParser::parseTank(optional_t<dc_tank_t> pressure, optional_t<d
     }
 
     return tank;
+}
+
+DCDive *DiveParser::createDive()
+{
+    return new DCDive();
+}
+
+DiveSampleParser *DiveParser::createSampleParser()
+{
+    return new DiveSampleParser();
 }

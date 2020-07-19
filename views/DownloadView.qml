@@ -4,8 +4,6 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.2
 import SortFilterProxyModel 0.1
-import DCComputer 0.1
-import DCTransport 0.1
 import Libdivecomputer 0.2
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Styles 1.4
@@ -68,6 +66,21 @@ GridLayout {
         startButton.enabled = isValid(DownloadView.Stages.OutputSelection) && isDownloading == false;
     }
 
+    function refreshDevices() {
+
+        var idx = transportSelection.model.index(transportSelection.currentIndex, 0);
+        var transport = transportSelection.model.data(idx, TransportRoles.TransportRole);
+        var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
+        var descriptor = computerSelection.model.data(comp_idx, DescriptorRoles.DescriptorRole);
+
+        if (idx.valid && comp_idx.valid) {
+            devicelist.loadDevices(transport, descriptor);
+            sourceSelection.currentIndex = 0;
+        } else {
+            devicelist.clear();
+        }
+    }
+
     function ensureJSON(filepath) {
         if(!/\.json$/.test(filepath)) {
             filepath = filepath.replace(/\..*$/, "");
@@ -120,32 +133,34 @@ GridLayout {
         editable: true
 
         model: SortFilterProxyModel {
-            sourceModel: divecomputer.descriptors
+            sourceModel: QDCDescriptorListModel {
+                id: descriptorlist
+                Component.onCompleted: {
+                    descriptorlist.loadDescriptors(dccontext);
+                    var idx = computerSelection.find(session.computer);
+                    if(idx > -1) {
+                        computerSelection.currentIndex = idx;
+                    }
+                    computerSelection.loaded = true;
+                }
+            }
             sortRoleName: "description"
             sortOrder: "AscendingOrder"
         }
         textRole: "description"
-        Component.onCompleted: {
-            var idx = computerSelection.find(session.computer);
-
-            if(idx > -1) {
-                computerSelection.currentIndex = idx;
-            }
-            loaded = true;
-        }
         onCurrentIndexChanged: {
-
             var idx = computerSelection.model.index(computerSelection.currentIndex, 0);
 
             var comp = "";
             var trans = 0;
 
             if(idx.valid) {
-                comp = computerSelection.model.data(idx, ComputerRoles.DescriptionRole);
-                trans = computerSelection.model.data(idx, ComputerRoles.TransportsRole);
+                comp = computerSelection.model.data(idx, DescriptorRoles.DescriptionRole);
+                trans = computerSelection.model.data(idx, DescriptorRoles.TransportsRole);
             }
 
-            divecomputer.transports.filter(trans);
+            transportlist.filter(trans);
+            transportSelection.currentIndex = 0;
 
             if(loaded) {
                 session.computer = comp;
@@ -170,29 +185,25 @@ GridLayout {
         property bool loaded: false
         Layout.fillWidth: true
         id: transportSelection
-        model: divecomputer.transports
-        textRole: "description"
-
-        Component.onCompleted: {
-            loaded = true;
+        model: QDCTransportListModel {
+            id: transportlist
+            Component.onCompleted: {
+                transportlist.loadTransports(dccontext);
+                transportSelection.loaded = true;
+            }
         }
+        textRole: "description"
 
         onCurrentIndexChanged: {
 
             var idx = transportSelection.model.index(transportSelection.currentIndex, 0);
             var value = transportSelection.model.data(idx, TransportRoles.DescriptionRole);
-            var transport = transportSelection.model.data(idx, TransportRoles.TransportRole);
 
             if(loaded && value) {
                 session.transportType = value || "";
             }
 
-            var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
-            if(idx.valid && comp_idx.valid) {
-                var comp = computerSelection.model.data(comp_idx, ComputerRoles.IndexRole);
-
-            }
-
+            refreshDevices();
             refreshUI();
         }
 
@@ -224,22 +235,13 @@ GridLayout {
             text: FontAwesome.refresh
             font.family: FontAwesome.fontFamily
             onClicked: {
-                var idx = transportSelection.model.index(transportSelection.currentIndex, 0);
-                var transport = transportSelection.model.data(idx, TransportRoles.TransportRole);
-
-                var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
-                if(idx.valid && comp_idx.valid) {
-                    var comp = computerSelection.model.data(comp_idx, ComputerRoles.IndexRole);
-                    libdivecomputer.update_availble_ports(comp, transport);
-                }
-
+                refreshDevices();
             }
 
             hoverEnabled: true
             ToolTip.timeout: 5000
             ToolTip.text: "Refresh available source ports"
             ToolTip.visible: hovered
-
         }
 
     }    
@@ -442,50 +444,24 @@ GridLayout {
         }
     }
 
-    Connections {
-        target: libdivecomputer
-        function onReadProgress(current, total) {
-            readProgress.value = current / total;
-        }
+//    Connections {
+//        target: libdivecomputer
+//        function onReadProgress(current, total) {
+//            readProgress.value = current / total;
+//        }
 
-        function onWriteProgress(current, total) {
-            writeProgress.value = current / total;
-        }
+//        function onWriteProgress(current, total) {
+//            writeProgress.value = current / total;
+//        }
 
-        function onStart() {
-            isDownloading = true;
-            refreshUI();
-        }
+//        function onStart() {
+//            isDownloading = true;
+//            refreshUI();
+//        }
 
-        function onFinished() {
-            isDownloading = false;
-            refreshUI();
-        }
+//        function onFinished() {
+//            isDownloading = false;
+//            refreshUI();
+//        }
 
-        function onError(msg) {
-            errorLabel.text = msg;
-        }
-
-        function onTransportChanged() {
-            var idx = transportSelection.find(session.transportType);
-
-            transportSelection.loaded = false;
-
-            if(idx > -1) {
-                transportSelection.currentIndex = idx;
-            } else {
-                transportSelection.currentIndex = 0;
-            }
-
-            transportSelection.loaded = true;
-
-            refreshUI();
-        }
-
-        function onAvailablePortsChanged() {
-            sourceSelection.currentIndex = 0;
-
-            refreshUI();
-        }
-    }
 }

@@ -19,7 +19,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     divecomputer/reader/dcreader.cpp \
-    divecomputer/transports/dctransport.cpp \
     divecomputer/utils/dcstatus.cpp \
     divecomputer/context/dccontext.cpp \
     divecomputer/descriptor/dcdevicedescriptor.cpp \
@@ -30,26 +29,25 @@ SOURCES += main.cpp \
     divecomputer/entities/dcdivesampleevent.cpp \
     divecomputer/parsers/dcdiveparser.cpp \
     divecomputer/parsers/dcdivesampleparser.cpp \
+    divecomputer/transports/dctransport.cpp \
     divecomputer/transports/dcusbhidtransport.cpp \
     divecomputer/transports/transporttype.cpp \
-    libdivecomputer/dcportlist.cpp \
-    libdivecomputer/dctransportlist.cpp \
-    libdivecomputer/qlibdivecomputer.cpp \
-    libdivecomputer/dccomputerlist.cpp \
     qtdivecomputer/context/qdccontext.cpp \
-    qtdivecomputer/descriptor/qdcdevicedescriptor.cpp \
+    qtdivecomputer/descriptor/qdcdescriptor.cpp \
     qtdivecomputer/device/qdcdevice.cpp \
-    qtdivecomputer/listmodels/qdcdevicedescriptorlistmodel.cpp \
+    qtdivecomputer/entities/qdcdive.cpp \
+    qtdivecomputer/listmodels/qdcdescriptorlistmodel.cpp \
     qtdivecomputer/listmodels/qdcdevicelistmodel.cpp \
+    qtdivecomputer/listmodels/qdcdivelistmodel.cpp \
+    qtdivecomputer/listmodels/qdcloglevellistmodel.cpp \
     qtdivecomputer/listmodels/qdctransportlistmodel.cpp \
+    qtdivecomputer/parsers/qdiveparser.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
     serializer/dcdivesampleeventserializer.cpp \
     serializer/dcdivesampleserializer.cpp \
     serializer/dcdiveserializer.cpp \
     serializer/optionalserializer.cpp \
     sessionstore.cpp \
-    libdivecomputer/dcdownloadcontext.cpp \
-    libdivecomputer/dive.cpp \
     libdivecomputer/writer/divewriter.cpp \
     libdivecomputer/writer/filewriter.cpp \
     littledivelog/littledivelog.cpp \
@@ -57,14 +55,12 @@ SOURCES += main.cpp \
     littledivelog/userinfo.cpp \
     libdivecomputer/writer/littlelogwriter.cpp \
     libdivecomputer/writer/jsondivewriter.cpp \
-    libdivecomputer/qdivemodel.cpp \
     common/datetime.cpp
 
 HEADERS += \
     divecomputer/common.h \
     divecomputer/devices/dcdeviceinterface.h \
     divecomputer/reader/dcreader.h \
-    divecomputer/transports/dctransport.h \
     divecomputer/utils//dcstatus.h \
     common/vector.h \
     divecomputer/context/dccontext.h \
@@ -77,27 +73,26 @@ HEADERS += \
     divecomputer/entities/dcdivesampleevent.h \
     divecomputer/parsers/dcdiveparser.h \
     divecomputer/parsers/dcdivesampleparser.h \
+    divecomputer/transports/dctransport.h \
     divecomputer/transports/dctransportinterface.h \
     divecomputer/transports/dcusbhidtransport.h \
     divecomputer/transports/transporttype.h \
-    libdivecomputer/dcportlist.h \
-    libdivecomputer/dctransportlist.h \
-    libdivecomputer/qlibdivecomputer.h \
-    libdivecomputer/dccomputerlist.h \
     qtdivecomputer/context/qdccontext.h \
-    qtdivecomputer/descriptor/qdcdevicedescriptor.h \
+    qtdivecomputer/descriptor/qdcdescriptor.h \
     qtdivecomputer/device/qdcdevice.h \
-    qtdivecomputer/listmodels/qdcdevicedescriptorlistmodel.h \
+    qtdivecomputer/entities/qdcdive.h \
+    qtdivecomputer/listmodels/qdcdescriptorlistmodel.h \
     qtdivecomputer/listmodels/qdcdevicelistmodel.h \
+    qtdivecomputer/listmodels/qdcdivelistmodel.h \
+    qtdivecomputer/listmodels/qdcloglevellistmodel.h \
     qtdivecomputer/listmodels/qdctransportlistmodel.h \
+    qtdivecomputer/parsers/qdiveparser.h \
     qtdivecomputer/transports/qdctransport.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \
     serializer/dcdiveserializer.h \
     serializer/optionalserializer.h \
     sessionstore.h \
-    libdivecomputer/dcdownloadcontext.h \
-    libdivecomputer/dive.h \
     common/list.h \
     common/optional.h \
     common/list.h \
@@ -109,7 +104,6 @@ HEADERS += \
     littledivelog/userinfo.h \
     libdivecomputer/writer/littlelogwriter.h \
     libdivecomputer/writer/jsondivewriter.h \
-    libdivecomputer/qdivemodel.h \
     common/datetime.h
 
 

@@ -3,13 +3,16 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.1
-import DCComputer 0.1
-import Libdivecomputer 0.1
+import Libdivecomputer 0.2
 import QtQuick.Controls.Material 2.12
 import "views"
 
 ApplicationWindow {
     objectName: "appWindow"
+
+    QDCContext {
+        id: dccontext
+    }
 
     Material.theme: Material.Light;
     Material.accent: Material.Blue;

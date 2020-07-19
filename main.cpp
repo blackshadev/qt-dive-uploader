@@ -7,21 +7,21 @@
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QSortFilterProxyModel>
-#include "libdivecomputer/qlibdivecomputer.h"
-#include "libdivecomputer/dccomputerlist.h"
 #include "sessionstore.h"
 #include "littledivelog/littledivelog.h"
-#include "libdivecomputer/qdivemodel.h"
 #include "jsonrequest.h"
 #include "qtdivecomputer/context/qdccontext.h"
 #include "qtdivecomputer/listmodels/qdcdevicelistmodel.h"
+#include "qtdivecomputer/listmodels/qdcdescriptorlistmodel.h"
+#include "qtdivecomputer/listmodels/qdctransportlistmodel.h"
+#include "qtdivecomputer/listmodels/qdcloglevellistmodel.h"
+#include "qtdivecomputer/listmodels/qdcdivelistmodel.h"
+#include "qtdivecomputer/parsers/qdiveparser.h"
 
 int main(int argc, char *argv[])
 {
 
     LittleDiveLog log;
-    QLibDiveComputer dc;
-    QDCContext dccontext;
 
     QString homeFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     QString sessionFilePath = QDir(QDir::cleanPath(homeFolder + QDir::separator() + "LittleDiveLog")).filePath("session.json");
@@ -38,34 +38,26 @@ int main(int argc, char *argv[])
 
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
     QQuickStyle::setStyle("Material");
-    qmlRegisterType<DCComputerList>("DCComputer", 0, 1, "ComputerRoles");
-    qmlRegisterType<DCTransportList>("DCTransport", 0, 1, "TransportRoles");
-    qmlRegisterType<DCPortList>("DCPort", 0, 1, "PortRoles");
-    qmlRegisterType<QLibDiveComputer>("Libdivecomputer", 0, 1, "LogLevel");
-    qmlRegisterType<WriteType>("Libdivecomputer", 0, 1, "WriteTypes");
-    qmlRegisterType<QDiveModel>("Libdivecomputer", 0, 1, "DiveModel");
+    qmlRegisterType<QDCDescriptorListModel>("Libdivecomputer", 0, 2, "DescriptorRoles");
+    qmlRegisterType<QDCTransportListModel>("Libdivecomputer", 0, 2, "TransportRoles");
+    qmlRegisterType<QDCDeviceListModel>("Libdivecomputer", 0, 2, "DeviceRoles");
+    qmlRegisterType<QDCLogLevelListModel>("Libdivecomputer", 0, 2, "LogLevelRoles");
     qmlRegisterType<QDCDeviceListModel>("Libdivecomputer", 0, 2, "QDCDeviceListModel");
+    qmlRegisterType<QDCLogLevelListModel>("Libdivecomputer", 0, 2, "QDCLogLevelListModel");
+    qmlRegisterType<QDCContext>("Libdivecomputer", 0, 2, "QDCContext");
+    qmlRegisterType<QDCTransportListModel>("Libdivecomputer", 0, 2, "QDCTransportListModel");
+    qmlRegisterType<QDCDescriptorListModel>("Libdivecomputer", 0, 2, "QDCDescriptorListModel");
+    qmlRegisterType<QDCDiveListModel>("Libdivecomputer", 0, 2, "QDCDiveListModel");
 
     QQmlApplicationEngine engine;
 
     QPM_INIT(engine)
 
-    dc.bind_littledivelog(&log);
-
-    dc.set_writeTypeAsString(sess.m_data.getWriteType(), WriteType::File);
-
-    dc.connect(&dc, &QLibDiveComputer::writeTypeChanged, [&sess, &dc](WriteType::writetype t) {
-        sess.m_data.setWriteType(dc.get_writeTypeAsString());
-    });
-
-    dc.m_path = sess.m_data.getPath();
     log.set_refresh_token(sess.m_data.getRefreshToken());
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("session", &sess.m_data);
-    ctxt->setContextProperty("libdivecomputer", &dc);
     ctxt->setContextProperty("littledivelog", &log);
-    ctxt->setContextProperty("divecomputer", &dccontext);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

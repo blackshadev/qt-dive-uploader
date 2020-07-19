@@ -14,11 +14,9 @@ public:
     DCReader();
     DCReader *setDevice(DCDevice *d);
     DCReader *setCallback(dive_callback_t cb);
-    DCReader *setParser(DiveParser *p);
     void start();
 private:
     DCDevice *device;
-    DiveParser *parser;
     dive_callback_t callback;
     static int nativeCallback(const unsigned char *data, unsigned int size, const unsigned char *fingerprint, unsigned int fsize, void *userdata);
 };

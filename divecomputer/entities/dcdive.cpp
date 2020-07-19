@@ -61,6 +61,19 @@ unsigned int DCDive::getDivetime()
     return data.divetime;
 }
 
+std::string DCDive::getDisplayDivetime()
+{
+    auto divetime = getDivetime();
+    char buff[9];
+    std::sprintf(
+        buff,
+        "%02d:%02d:%02d",
+        divetime / 60 % 60,
+        divetime % 60
+    );
+    return std::string(buff);
+}
+
 void DCDive::setDivetime(unsigned int time)
 {
     data.divetime = time;

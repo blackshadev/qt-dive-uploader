@@ -2,9 +2,10 @@
 
 QDCDeviceListModel::QDCDeviceListModel(QObject *parent)
     : QAbstractListModel(parent)
-{
+{}
 
-}
+QDCDeviceListModel::~QDCDeviceListModel()
+{}
 
 int QDCDeviceListModel::rowCount(const QModelIndex &parent) const
 {
@@ -41,9 +42,15 @@ void QDCDeviceListModel::clear()
     endResetModel();
 }
 
-void QDCDeviceListModel::loadDevices(DCTransportInterface *transport, DCDeviceDescriptor *descriptor)
+void QDCDeviceListModel::loadDevices(QDCTransport *transport, QDCDescriptor *descriptor)
 {
+    if (!transport || !descriptor) {
+        throw std::runtime_error("Unable to load devices: no valid transport or device");
+    }
+
     beginResetModel();
+
+    clear();
 
     auto devices = transport->getDevices(descriptor);
     for (auto device : *devices) {

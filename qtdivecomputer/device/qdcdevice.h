@@ -17,5 +17,6 @@ public:
 protected:
     DCDeviceInterface *concreteDevice;
 };
+Q_DECLARE_METATYPE(QDCDevice *)
 
 #endif // QDCDEVICE_H

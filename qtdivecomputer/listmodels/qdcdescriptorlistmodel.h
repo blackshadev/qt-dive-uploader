@@ -2,32 +2,34 @@
 #define QDCDEVICEDESCRIPTORLISTMODEL_H
 #include <QObject>
 #include <QAbstractListModel>
-#include "../descriptor/qdcdevicedescriptor.h"
+#include "../descriptor/qdcdescriptor.h"
+#include "../context/qdccontext.h"
 
-class QDCDeviceDescriptorListModel : public QAbstractListModel
+class QDCDescriptorListModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
-    enum DeviceDescriptorRoles {
+    enum DescriptorRoles {
         VendorRole = Qt::UserRole + 1,
         ProductRole,
         DescriptionRole,
-        IndexRole,
         TransportsRole,
+        DescriptorRole
     };
-    Q_ENUM(DeviceDescriptorRoles)
-    QDCDeviceDescriptorListModel(QObject *parent = 0);
-    virtual ~QDCDeviceDescriptorListModel();
+    Q_ENUM(DescriptorRoles)
+    QDCDescriptorListModel(QObject *parent = 0);
+    virtual ~QDCDescriptorListModel();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    void add(QDCDeviceDescriptor *descr);
+    void add(QDCDescriptor *descr);
+    Q_INVOKABLE void loadDescriptors(QDCContext *ctx);
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:
-    std::vector<QDCDeviceDescriptor *> items;
+    std::vector<QDCDescriptor *> items;
 };
-Q_DECLARE_METATYPE(QDCDeviceDescriptorListModel *)
+Q_DECLARE_METATYPE(QDCDescriptorListModel *)
 
 #endif // QDCDEVICEDESCRIPTORLISTMODEL_H

@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QAbstractListModel>
 #include "../transports/qdctransport.h"
+#include "../context/qdccontext.h"
 
 class QDCTransportListModel : public QAbstractListModel
 {
@@ -11,6 +12,7 @@ class QDCTransportListModel : public QAbstractListModel
 public:
     enum TransportRoles {
         DescriptionRole = Qt::UserRole + 1,
+        TransportTypeRole,
         TransportRole
     };
     Q_ENUMS(TransportRoles)
@@ -20,6 +22,7 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     void add(QDCTransport *descr);
+    Q_INVOKABLE void loadTransports(QDCContext *ctx);
     Q_INVOKABLE void filter(QDCTransport::Types transports);
 protected:
     QHash<int, QByteArray> roleNames() const;

@@ -11,6 +11,7 @@ DCContext::DCContext()
     dc_context_new(&context);
     log = NULL;
     dc_context_set_logfunc(context, logfunction, this);
+    setLogLevel(DC_LOGLEVEL_ALL);
 
     descriptors = NULL;
     transports = NULL;

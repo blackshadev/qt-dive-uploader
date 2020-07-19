@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Styles 1.4
+import Libdivecomputer 0.2
 
 ColumnLayout {
 
@@ -18,7 +19,7 @@ ColumnLayout {
         property bool loaded: false
         Layout.fillWidth: true
         id: loglevelSelector
-        model: libdivecomputer.LogLevels
+        model: QDCLogLevelListModel {}
         Component.onCompleted: {
             loaded = true;
             var idx = loglevelSelector.find(libdivecomputer.logLevel);
@@ -27,11 +28,13 @@ ColumnLayout {
             }
         }
 
-        onCurrentTextChanged: {
+        onCurrentValueChanged: {
             if(loaded) {
-                libdivecomputer.logLevel = loglevelSelector.currentText;
+                dccontext.loglevel = loglevelSelector.currentValue;
             }
         }
+        valueRole: "value"
+        textRole: "description"
     }
 
     TextArea {
@@ -51,7 +54,7 @@ ColumnLayout {
     }
 
     Connections {
-        target: libdivecomputer
+        target: dccontext
         function onLog(lvl, msg) { log(lvl, msg); }
     }
 

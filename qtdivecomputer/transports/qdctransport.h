@@ -29,7 +29,7 @@ public:
 protected:
     DCTransportInterface *concreteTransport;
 };
-
+Q_DECLARE_METATYPE(QDCTransport *)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDCTransport::Types)
 
 #endif // QDCTRANSPORT_H

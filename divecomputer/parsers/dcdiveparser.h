@@ -5,6 +5,7 @@
 #include "../entities/dcdive.h"
 #include "../devices/dcdevice.h"
 #include "../common.h"
+#include "dcdivesampleparser.h"
 
 class DiveParser
 {
@@ -16,6 +17,8 @@ protected:
     inline static datetime_t parseDatetime(dc_datetime_t datetime);
     inline static salinity_t parseSalinity(dc_salinity_t salinity);
     inline static tank_t parseTank(optional_t<dc_tank_t> pressure, optional_t<dc_gasmix_t> gasmix);
+    virtual DCDive *createDive();
+    virtual DiveSampleParser *createSampleParser();
 private:
     dc_parser_t *parser;
 };

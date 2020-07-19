@@ -42,6 +42,7 @@ public:
     double getMaxDepth();
     void setMaxDepth(double depth);
     unsigned int getDivetime();
+    std::string getDisplayDivetime();
     void setDivetime(unsigned int time);
     datetime_t getDatetime();
     void setDatetime(datetime_t datetime);

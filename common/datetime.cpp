@@ -2,7 +2,7 @@
 
 
 std::string format_datetime_iso(dc_datetime_t &dt) {
-    char buff[25];
+    char buff[26];
     std::sprintf(
         buff,
         "%04d-%02d-%02dT%02d:%02d:%02d+%02d:%02d",
@@ -20,7 +20,7 @@ std::string format_datetime_iso(dc_datetime_t &dt) {
 
 std::string format_datetime_display(dc_datetime_t &dt) {
 
-    char buff[25];
+    char buff[20];
     std::sprintf(
         buff,
         "%04d-%02d-%02d %02d:%02d:%02d",

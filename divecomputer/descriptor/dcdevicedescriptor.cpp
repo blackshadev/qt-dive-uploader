@@ -1,8 +1,8 @@
 #include "dcdevicedescriptor.h"
 
-DCDeviceDescriptor::DCDeviceDescriptor(dc_descriptor_t *descriptor)
+DCDeviceDescriptor::DCDeviceDescriptor(dc_descriptor_t *descr)
 {
-    this->descriptor = descriptor;
+    descriptor = descr;
 }
 
 DCDeviceDescriptor::~DCDeviceDescriptor()
@@ -21,27 +21,27 @@ std::string DCDeviceDescriptor::getDisplayValue()
 
 const char *DCDeviceDescriptor::getProductName()
 {
-    return dc_descriptor_get_product(this->descriptor);
+    return dc_descriptor_get_product(descriptor);
 }
 
 const char *DCDeviceDescriptor::getVendorName()
 {
-    return dc_descriptor_get_vendor(this->descriptor);
+    return dc_descriptor_get_vendor(descriptor);
 }
 
 unsigned int DCDeviceDescriptor::getModelNumber()
 {
-    return dc_descriptor_get_model(this->descriptor);
+    return dc_descriptor_get_model(descriptor);
 }
 
 dc_family_t DCDeviceDescriptor::getFamilyType()
 {
-    return dc_descriptor_get_type(this->descriptor);
+    return dc_descriptor_get_type(descriptor);
 }
 
 transports_t DCDeviceDescriptor::getTransports()
 {
-    return (transports_t) dc_descriptor_get_transports(this->descriptor);
+    return (transports_t) dc_descriptor_get_transports(descriptor);
 }
 
 dc_descriptor_t *DCDeviceDescriptor::getNative()

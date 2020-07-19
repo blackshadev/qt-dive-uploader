@@ -7,6 +7,9 @@ QDCTransportListModel::QDCTransportListModel(QObject *parent)
 
 QDCTransportListModel::~QDCTransportListModel()
 {
+    for (auto item : items) {
+        delete item;
+    }
 }
 
 int QDCTransportListModel::rowCount(const QModelIndex &parent) const
@@ -24,8 +27,10 @@ QVariant QDCTransportListModel::data(const QModelIndex &index, int role) const
     switch (role) {
         case DescriptionRole:
             return QVariant::fromValue(transport->getQDescription());
-        case TransportRole:
+        case TransportTypeRole:
             return QVariant::fromValue(transport->getQTransport());
+        case TransportRole:
+            return QVariant::fromValue(transport);
     }
 
     return QVariant(QVariant::Invalid);
@@ -34,6 +39,13 @@ QVariant QDCTransportListModel::data(const QModelIndex &index, int role) const
 void QDCTransportListModel::add(QDCTransport *descr)
 {
     allItems.push_back(descr);
+}
+
+void QDCTransportListModel::loadTransports(QDCContext *ctx) {
+    auto transports = ctx->getTransports();
+    for (auto transport : *transports) {
+        add(new QDCTransport(transport, this));
+    }
 }
 
 void QDCTransportListModel::filter(QDCTransport::Types transportTypes)
@@ -56,6 +68,6 @@ QHash<int, QByteArray> QDCTransportListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[DescriptionRole] = "description";
-    roles[TransportRole] = "transport";
+    roles[TransportTypeRole] = "transport";
     return roles;
 }
