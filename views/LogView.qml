@@ -22,10 +22,10 @@ ColumnLayout {
         model: QDCLogLevelListModel {}
         Component.onCompleted: {
             loaded = true;
-            var idx = loglevelSelector.find(libdivecomputer.logLevel);
-            if(idx > -1) {
-                loglevelSelector.currentIndex = idx;
-            }
+//            var idx = loglevelSelector.find(libdivecomputer.logLevel);
+//            if(idx > -1) {
+//                loglevelSelector.currentIndex = idx;
+//            }
         }
 
         onCurrentValueChanged: {

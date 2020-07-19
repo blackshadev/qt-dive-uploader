@@ -325,7 +325,7 @@ GridLayout {
                 }
 
                 session.path = fixedText;
-                libdivecomputer.path = fixedText;
+//                libdivecomputer.path = fixedText;
                 refreshUI();
             }
         }
