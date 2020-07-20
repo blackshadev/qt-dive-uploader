@@ -19,15 +19,15 @@ public:
     DCReader();
     DCReader *setDevice(DCDevice *device);
     DCReader *setParser(DiveParser *parser);
-//    DCReader *setOnDiveCallback(dive_callback_t cb);
-//    DCReader *setOnProgressCallback(progress_callback_t cb);
-    bool isReady();
-    bool isReading();
-    void start();
+
+    virtual bool isReady();
+    bool start();
     void cancel();
     bool isCancelled();
+    void setFingerprint(fingerprint_t fp);
 
 protected:
+    virtual void error(const char *msg);
     virtual void receiveDeviceInfoEvent(dc_event_devinfo_t *devInfo) = 0;
     virtual void receiveProgressEvent(dc_event_progress_t *progress) = 0;
     virtual void receiveWaitingEvent() = 0;
@@ -38,7 +38,6 @@ private:
     DCDevice *device;
     DiveParser *parser;
     bool cancelled = false;
-    bool reading = false;
 
     static int nativeDiveCallback(const unsigned char *data, unsigned int size, const unsigned char *fingerprint, unsigned int fsize, void *userdata);
     static void nativeEventCallback(dc_device_t *device, dc_event_type_t event, const void *data, void *userdata);
