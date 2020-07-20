@@ -56,7 +56,7 @@ void QDCDiveListModel::read(QDCDevice *device)
     QDiveParser parser;
 
     reader.setDevice((DCDevice *)device);
-    reader.setCallback([this, &parser](rawdivedata_t data) {
+    reader.setOnDiveCallback([this, &parser](rawdivedata_t data) {
         auto dive = parser.parseDive(data);
         add((QDCDive *)dive);
     });

@@ -2,10 +2,12 @@
 #include <stdexcept>
 #include <libdivecomputer/device.h>
 
+const unsigned int ALL_EVENTS = DC_EVENT_CLOCK | DC_EVENT_DEVINFO | DC_EVENT_WAITING | DC_EVENT_PROGRESS;
+
 DCReader::DCReader()
 {
     device = NULL;
-    callback = NULL;
+    onDiveCallback = NULL;
 }
 
 DCReader *DCReader::setDevice(DCDevice *d)
@@ -20,28 +22,26 @@ DCReader *DCReader::setParser(DiveParser *p)
     return this;
 }
 
-DCReader *DCReader::setCallback(dive_callback_t cb)
+DCReader *DCReader::setOnDiveCallback(dive_callback_t cb)
 {
-    callback = cb;
+    onDiveCallback = cb;
     return this;
 }
 
 void DCReader::start()
 {
-    if (
-        device == NULL ||
-        parser == NULL ||
-        callback == NULL
-    ) {
-        throw std::runtime_error("Not enough parameters. Device, Parser and Callback are required to be set");
+    if (isReady()) {
+        throw std::runtime_error("Reader not ready: not enough parameters.");
     }
 
     auto dev = device->getNative();
 
-    dc_device_foreach(dev, nativeCallback, this);
+    dc_device_set_events(dev, ALL_EVENTS, nativeEventCallback, this);
+
+    dc_device_foreach(dev, nativeDiveCallback, this);
 }
 
-int DCReader::nativeCallback(const unsigned char *data, unsigned int size, const unsigned char *fpdata, unsigned int fsize, void *userdata)
+int DCReader::nativeDiveCallback(const unsigned char *data, unsigned int size, const unsigned char *fpdata, unsigned int fsize, void *userdata)
 {
     auto reader = (DCReader *)userdata;
     rawdivedata_t divedata = {
@@ -53,5 +53,10 @@ int DCReader::nativeCallback(const unsigned char *data, unsigned int size, const
         }
     };
     auto dive = reader->parser->parseDive(divedata);
-    reader->callback(dive);
+    reader->onDiveCallback(dive);
+}
+
+void DCReader::nativeEventCallback(dc_device_t *device, dc_event_type_t event, const void *data, void *userdata)
+{
+
 }
