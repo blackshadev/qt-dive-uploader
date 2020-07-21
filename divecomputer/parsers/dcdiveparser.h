@@ -6,13 +6,14 @@
 #include "../devices/dcdevice.h"
 #include "../common.h"
 #include "dcdivesampleparser.h"
+#include "dcdiveparserinterface.h"
 
-class DiveParser
+class DCDiveParser : public DCDiveParserInterface
 {
 public:
-    DiveParser();
-    DiveParser *setDevice(DCDevice *device);
-    DCDive *parseDive(rawdivedata_t &data);
+    DCDiveParser();
+    virtual DCDive *parseDive(rawdivedata_t &data);
+    virtual DCDiveParser *setDevice(DCDeviceInterface *device);
 protected:
     inline static datetime_t parseDatetime(dc_datetime_t datetime);
     inline static salinity_t parseSalinity(dc_salinity_t salinity);

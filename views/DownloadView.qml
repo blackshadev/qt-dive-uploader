@@ -63,7 +63,9 @@ GridLayout {
         sourceLabel.visible = isValid(DownloadView.Stages.TransportSelection);
         sourceRow.visible = isValid(DownloadView.Stages.TransportSelection);
 
-        startButton.enabled = isValid(DownloadView.Stages.OutputSelection) && isDownloading == false;
+        var reading = isValid(DownloadView.Stages.OutputSelection);
+
+//        startButton.enabled = isValid(DownloadView.Stages.OutputSelection) && isDownloading == false;
     }
 
     function refreshDevices() {
@@ -363,6 +365,21 @@ GridLayout {
         text: ""
     }
 
+    QDCDiveParser {
+        id: dcparser
+    }
+
+    QDCAsyncReader {
+        id: dcreader
+        parser: dcparser
+        onProgress: {
+           readProgress.value = current / maximum;
+        }
+        onDive: {
+            console.log(dive);
+        }
+    }
+
     RoundButton {
         Layout.alignment: Qt.AlignBottom | Qt.AlignRight
 
@@ -372,7 +389,7 @@ GridLayout {
         font.family: FontAwesome.fontFamily
         font.pointSize: 25
         padding: 20
-        enabled: isValid(DownloadView.Stages.OutputSelection)
+//        enabled: isValid(DownloadView.Stages.OutputSelection) && dcreader.ready
         visible: isDownloading == false
 
         Material.foreground: Material.color(Material.Grey, Material.Shade100)
@@ -399,17 +416,15 @@ GridLayout {
             errorLabel.text = "";
             writeProgress.value = 0;
             readProgress.value = 0;
+            readProgress.visible = true;
+            writeProgress.visible = true;
 
-            var comp_idx = computerSelection.model.index(computerSelection.currentIndex, 0);
-            var port_idx = sourceSelection.model.index(sourceSelection.currentIndex, 0);
+            var idx = devicelist.index(sourceSelection.currentIndex, 0);
+            var dev = devicelist.data(idx, DeviceRoles.DeviceRole);
 
-            libdivecomputer.start_download(
-                sourceSelection.model.data(port_idx, ComputerRoles.IndexRole),
-                computerSelection.model.data(comp_idx, ComputerRoles.IndexRole),
-                selectDives.checked,
-                useFingerprint.checked && littledivelog.isLoggedIn
-            );
-
+            dcreader.device = dev;
+            dcparser.device = dev;
+            dcreader.start()
         }
     }
 

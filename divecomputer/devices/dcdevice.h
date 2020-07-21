@@ -9,10 +9,11 @@ class DCDevice : public DCDeviceInterface
 public:
     DCDevice(DCContext *ctx, DCDeviceDescriptor *descr);
     virtual ~DCDevice();
-    virtual std::string getDescription() = 0;
+    virtual std::string getDescription() override = 0;
     DCContext *getContext() const;
-    DCDeviceDescriptor *getDescriptor() const;
-    dc_device_t *getNative();
+    DCDeviceDescriptor *getDescriptor() const override;
+    dc_device_t *getNative() override;
+    dc_device_t *testgetNative() override;
 protected:
     DCContext *context;
     DCDeviceDescriptor *descriptor;

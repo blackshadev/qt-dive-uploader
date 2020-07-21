@@ -42,6 +42,7 @@ SOURCES += main.cpp \
     qtdivecomputer/listmodels/qdcloglevellistmodel.cpp \
     qtdivecomputer/listmodels/qdctransportlistmodel.cpp \
     qtdivecomputer/parsers/qdiveparser.cpp \
+    qtdivecomputer/reader/qdcasyncreader.cpp \
     qtdivecomputer/reader/qdcreader.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
     serializer/dcdivesampleeventserializer.cpp \
@@ -57,7 +58,9 @@ SOURCES += main.cpp \
 HEADERS += \
     divecomputer/common.h \
     divecomputer/devices/dcdeviceinterface.h \
+    divecomputer/parsers/dcdiveparserinterface.h \
     divecomputer/reader/dcreader.h \
+    divecomputer/reader/dcreaderinterface.h \
     divecomputer/utils//dcstatus.h \
     common/vector.h \
     divecomputer/context/dccontext.h \
@@ -84,6 +87,7 @@ HEADERS += \
     qtdivecomputer/listmodels/qdcloglevellistmodel.h \
     qtdivecomputer/listmodels/qdctransportlistmodel.h \
     qtdivecomputer/parsers/qdiveparser.h \
+    qtdivecomputer/reader/qdcasyncreader.h \
     qtdivecomputer/reader/qdcreader.h \
     qtdivecomputer/transports/qdctransport.h \
     serializer/dcdivesampleeventserializer.h \

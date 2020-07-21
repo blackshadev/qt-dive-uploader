@@ -23,7 +23,6 @@ public:
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     void add(QDCDive *dive);
     Q_INVOKABLE void clear();
-    Q_INVOKABLE void read(QDCDevice *device);
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:

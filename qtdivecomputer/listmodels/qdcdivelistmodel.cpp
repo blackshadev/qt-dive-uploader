@@ -50,23 +50,6 @@ void QDCDiveListModel::clear()
     endResetModel();
 }
 
-void QDCDiveListModel::read(QDCDevice *device)
-{
-    DCReader reader;
-    QDiveParser parser;
-
-    reader.setDevice((DCDevice *)device);
-    reader.setOnDiveCallback([this, &parser](rawdivedata_t data) {
-        auto dive = parser.parseDive(data);
-        add((QDCDive *)dive);
-    });
-
-    beginResetModel();
-    clear();
-    reader.start();
-    endResetModel();
-}
-
 QHash<int, QByteArray> QDCDiveListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;

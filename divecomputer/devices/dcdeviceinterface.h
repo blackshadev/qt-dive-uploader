@@ -8,6 +8,7 @@ class DCDeviceInterface
 public:
     virtual DCDeviceDescriptor *getDescriptor() const = 0;
     virtual dc_device_t *getNative() = 0;
+    virtual dc_device_t *testgetNative() = 0;
     virtual std::string getDescription() = 0;
 };
 

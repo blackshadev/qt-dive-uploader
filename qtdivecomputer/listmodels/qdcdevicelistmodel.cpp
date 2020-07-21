@@ -22,6 +22,8 @@ QVariant QDCDeviceListModel::data(const QModelIndex &index, int role) const
     switch (role) {
         case DescriptionRole:
             return QVariant::fromValue(items[i]->getQDescription());
+        case DeviceRole:
+            return QVariant::fromValue(items[i]);
     }
 }
 

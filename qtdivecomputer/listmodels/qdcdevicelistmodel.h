@@ -13,6 +13,7 @@ class QDCDeviceListModel : public QAbstractListModel
 public:
     enum DeviceRoles {
         DescriptionRole = Qt::UserRole + 1,
+        DeviceRole
     };
     Q_ENUM(DeviceRoles)
     QDCDeviceListModel(QObject *parent = NULL);

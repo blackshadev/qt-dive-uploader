@@ -17,6 +17,8 @@
 #include "qtdivecomputer/listmodels/qdcloglevellistmodel.h"
 #include "qtdivecomputer/listmodels/qdcdivelistmodel.h"
 #include "qtdivecomputer/parsers/qdiveparser.h"
+#include "qtdivecomputer/reader/qdcreader.h"
+#include "qtdivecomputer/reader/qdcasyncreader.h"
 
 int main(int argc, char *argv[])
 {
@@ -48,6 +50,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<QDCTransportListModel>("Libdivecomputer", 0, 2, "QDCTransportListModel");
     qmlRegisterType<QDCDescriptorListModel>("Libdivecomputer", 0, 2, "QDCDescriptorListModel");
     qmlRegisterType<QDCDiveListModel>("Libdivecomputer", 0, 2, "QDCDiveListModel");
+    qmlRegisterType<QDCReader>("Libdivecomputer", 0, 2, "QDCReader");
+    qmlRegisterType<QDCDiveParser>("Libdivecomputer", 0, 2, "QDCDiveParser");
+    qmlRegisterType<QDCAsyncReader>("Libdivecomputer", 0, 2, "QDCAsyncReader");
 
     QQmlApplicationEngine engine;
 

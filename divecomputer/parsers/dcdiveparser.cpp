@@ -36,12 +36,12 @@ inline void setListFields(dc_parser_t* parser, dc_field_type_t length_type, dc_f
     }
 }
 
-DiveParser::DiveParser()
+DCDiveParser::DCDiveParser()
 {
     parser = NULL;
 }
 
-DiveParser *DiveParser::setDevice(DCDevice *device)
+DCDiveParser *DCDiveParser::setDevice(DCDeviceInterface *device)
 {
     if (parser != NULL) {
         dc_parser_destroy(parser);
@@ -50,7 +50,7 @@ DiveParser *DiveParser::setDevice(DCDevice *device)
     return this;
 }
 
-DCDive *DiveParser::parseDive(rawdivedata_t &divedata)
+DCDive *DCDiveParser::parseDive(rawdivedata_t &divedata)
 {
     if(parser == NULL) {
         throw new std::logic_error("Parser not yet initialized, call setDevice first");
@@ -115,17 +115,17 @@ DCDive *DiveParser::parseDive(rawdivedata_t &divedata)
     return dive;
 }
 
-inline datetime_t DiveParser::parseDatetime(dc_datetime_t datetime)
+inline datetime_t DCDiveParser::parseDatetime(dc_datetime_t datetime)
 {
     return (datetime_t)datetime;
 }
 
-inline salinity_t DiveParser::parseSalinity(dc_salinity_t salinity)
+inline salinity_t DCDiveParser::parseSalinity(dc_salinity_t salinity)
 {
     return (salinity_t)salinity;
 }
 
-inline tank_t DiveParser::parseTank(optional_t<dc_tank_t> pressure, optional_t<dc_gasmix_t> gasmix)
+inline tank_t DCDiveParser::parseTank(optional_t<dc_tank_t> pressure, optional_t<dc_gasmix_t> gasmix)
 {
     tank_t tank;
 
@@ -139,12 +139,12 @@ inline tank_t DiveParser::parseTank(optional_t<dc_tank_t> pressure, optional_t<d
     return tank;
 }
 
-DCDive *DiveParser::createDive()
+DCDive *DCDiveParser::createDive()
 {
     return new DCDive();
 }
 
-DiveSampleParser *DiveParser::createSampleParser()
+DiveSampleParser *DCDiveParser::createSampleParser()
 {
     return new DiveSampleParser();
 }

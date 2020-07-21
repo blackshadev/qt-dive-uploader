@@ -1,9 +1,15 @@
 #include "qdiveparser.h"
 
-QDiveParser::QDiveParser(QObject *parent) : QObject(parent), DiveParser()
+QDCDiveParser::QDCDiveParser(QObject *parent) : QObject(parent), DCDiveParser()
 {}
 
-DCDive *QDiveParser::createDive()
+QDCDiveParser *QDCDiveParser::setDevice(QDCDevice *device)
 {
-    return new QDCDive(parent());
+    DCDiveParser::setDevice(device);
+    return this;
+}
+
+DCDive *QDCDiveParser::createDive()
+{
+    return new QDCDive();
 }

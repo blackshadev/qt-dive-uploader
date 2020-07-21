@@ -30,3 +30,8 @@ dc_device_t *QDCDevice::getNative()
 {
     return concreteDevice->getNative();
 }
+
+dc_device_t *QDCDevice::testgetNative()
+{
+    return concreteDevice->getNative();
+}

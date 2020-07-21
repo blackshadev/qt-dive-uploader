@@ -48,3 +48,8 @@ dc_device_t *DCDevice::getNative()
 
     return device;
 }
+
+dc_device_t *DCDevice::testgetNative()
+{
+    return getNative();
+}

@@ -1,30 +1,25 @@
 #ifndef DIVEREADER_H
 #define DIVEREADER_H
 #include "../entities/dcdive.h"
-#include "../devices/dcdevice.h"
-#include "../parsers/dcdiveparser.h"
+#include "../devices/dcdeviceinterface.h"
+#include "../parsers/dcdiveparserinterface.h"
 #include "../common.h"
+#include "dcreaderinterface.h"
 #include <functional>
 
-
-//typedef std::function<void (DCDive* dive)> dive_callback_t;
-//typedef std::function<void (dc_event_progress_t progress)> progress_callback_t;
-//typedef std::function<void (dc_event_clock_t clock)> clock_callback_t;
-//typedef std::function<void ()> waiting_callback_t;
-//typedef std::function<void (dc_event_devinfo_t info)> devinfo_callback_t;
-
-class DCReader
+class DCReader : DCReaderInterface
 {
 public:
     DCReader();
-    DCReader *setDevice(DCDevice *device);
-    DCReader *setParser(DiveParser *parser);
+    virtual DCReader *setDevice(DCDeviceInterface *device) override;
+    virtual DCReader *setParser(DCDiveParserInterface *parser) override;
 
+    virtual void start() override;
+    virtual void cancel();
     virtual bool isReady();
-    bool start();
-    void cancel();
+    virtual void setFingerprint(fingerprint_t fp);
+    void readAll();
     bool isCancelled();
-    void setFingerprint(fingerprint_t fp);
 
 protected:
     virtual void error(const char *msg);
@@ -35,8 +30,8 @@ protected:
     virtual void receiveDive(DCDive *dive) = 0;
 
 private:
-    DCDevice *device;
-    DiveParser *parser;
+    DCDeviceInterface *device;
+    DCDiveParserInterface *parser;
     bool cancelled = false;
 
     static int nativeDiveCallback(const unsigned char *data, unsigned int size, const unsigned char *fingerprint, unsigned int fsize, void *userdata);

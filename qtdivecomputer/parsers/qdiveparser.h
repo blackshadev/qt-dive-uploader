@@ -3,15 +3,18 @@
 #include <QObject>
 #include "../divecomputer/parsers/dcdiveparser.h"
 #include "../entities/qdcdive.h"
+#include "../device/qdcdevice.h"
 
-class QDiveParser : public QObject, public DiveParser
+class QDCDiveParser : public QObject, public DCDiveParser
 {
     Q_OBJECT
+    Q_PROPERTY(QDCDevice *device WRITE setDevice)
 public:
-    QDiveParser(QObject *parent = NULL);
+    QDCDiveParser(QObject *parent = NULL);
+    QDCDiveParser *setDevice(QDCDevice *device);
 protected:
     DCDive *createDive() override;
 };
-Q_DECLARE_METATYPE(QDiveParser *)
+Q_DECLARE_METATYPE(QDCDiveParser *)
 
 #endif // QDCDIVEPARSER_H
