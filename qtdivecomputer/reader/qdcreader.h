@@ -20,7 +20,7 @@ public:
 
     Q_INVOKABLE virtual void setFingerprint(fingerprint_t data) override;
 
-    void error(const char *msg) override;
+    void receiveError(const char *msg) override;
     void receiveDeviceInfoEvent(dc_event_devinfo_t *devInfo) override;
     void receiveProgressEvent(dc_event_progress_t *progress) override;
     void receiveWaitingEvent() override;

@@ -17,6 +17,8 @@ QDCReader *QDCReader::setParser(DCDiveParserInterface *p)
 
 void QDCReader::start()
 {
+
+    qInfo() << "QDCReader::start " << QThread::currentThreadId();
     DCReader::start();
 }
 
@@ -30,32 +32,33 @@ void QDCReader::cancel()
     DCReader::cancel();
 }
 
-void QDCReader::error(const char *msg)
+void QDCReader::receiveError(const char *msg)
 {
-    emit error(QString(msg));
+//    emit error(QString(msg));
 }
 
 void QDCReader::receiveDeviceInfoEvent(dc_event_devinfo_t *devInfo)
 {
-    emit deviceInfo(devInfo->model, devInfo->serial, devInfo->firmware);
+//    emit deviceInfo(devInfo->model, devInfo->serial, devInfo->firmware);
 }
 
 void QDCReader::receiveProgressEvent(dc_event_progress_t *data)
 {
+    qInfo() << data->current;
     emit progress(data->current, data->maximum);
 }
 
 void QDCReader::receiveWaitingEvent()
 {
-    emit waiting();
+//    emit waiting();
 }
 
 void QDCReader::receiveClockEvent(dc_event_clock_t *data)
 {
-    emit clock(data->devtime, data->systime);
+//    emit clock(data->devtime, data->systime);
 }
 
 void QDCReader::receiveDive(DCDive *data)
 {
-    emit dive((QDCDive *)data);
+//    emit dive((QDCDive *)data);
 }

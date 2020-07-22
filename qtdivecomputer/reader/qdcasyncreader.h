@@ -28,9 +28,10 @@ signals:
     void clock(unsigned int deviceClock, dc_ticks_t systime);
     void waiting();
     void error(QString msg);
+    void startWork();
 
 private:
-    QThread workerThread;
+    QThread *workerThread;
     DCDeviceInterface* device;
     DCDiveParserInterface* parser;
     QDCReader* reader;

@@ -1,6 +1,7 @@
 #include "dcreader.h"
 #include <stdexcept>
 #include <libdivecomputer/device.h>
+#include <QThread>
 
 const unsigned int ALL_EVENTS = DC_EVENT_CLOCK | DC_EVENT_DEVINFO | DC_EVENT_WAITING | DC_EVENT_PROGRESS | DC_EVENT_VENDOR;
 
@@ -8,6 +9,7 @@ DCReader::DCReader()
 {
     device = NULL;
     parser = NULL;
+    cancelled = false;
 }
 
 DCReader *DCReader::setDevice(DCDeviceInterface *d)
@@ -31,7 +33,7 @@ void DCReader::start()
 {
 
     if (!isReady()) {
-        error("Reader not ready.");
+        receiveError("Reader not ready.");
         return;
     }
 
@@ -43,10 +45,12 @@ void DCReader::readAll()
 {
     auto dev = device->getNative();
 
+    qInfo() << "readAll" << QThread::currentThreadId();
     dc_device_set_cancel(dev, nativeCancelCallback, this);
     dc_device_set_events(dev, ALL_EVENTS, nativeEventCallback, this);
 
     dc_device_foreach(dev, nativeDiveCallback, this);
+    qInfo() << "done";
 }
 
 void DCReader::cancel()
@@ -65,7 +69,7 @@ void DCReader::setFingerprint(fingerprint_t fp)
     dc_device_set_fingerprint(dev, fp.data, fp.size);
 }
 
-void DCReader::error(const char *msg)
+void DCReader::receiveError(const char *msg)
 {
     throw std::runtime_error(msg);
 }

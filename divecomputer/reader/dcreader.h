@@ -22,7 +22,7 @@ public:
     bool isCancelled();
 
 protected:
-    virtual void error(const char *msg);
+    virtual void receiveError(const char *msg);
     virtual void receiveDeviceInfoEvent(dc_event_devinfo_t *devInfo) = 0;
     virtual void receiveProgressEvent(dc_event_progress_t *progress) = 0;
     virtual void receiveWaitingEvent() = 0;
@@ -32,7 +32,7 @@ protected:
 private:
     DCDeviceInterface *device;
     DCDiveParserInterface *parser;
-    bool cancelled = false;
+    bool cancelled;
 
     static int nativeDiveCallback(const unsigned char *data, unsigned int size, const unsigned char *fingerprint, unsigned int fsize, void *userdata);
     static void nativeEventCallback(dc_device_t *device, dc_event_type_t event, const void *data, void *userdata);

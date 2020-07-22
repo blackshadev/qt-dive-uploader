@@ -343,7 +343,13 @@ GridLayout {
     }
 
 
-    LDLProgressBar{
+//    LDLProgressBar{
+//        visible: isDownloading
+//        id: readProgress
+//        Layout.columnSpan: 2
+//        Layout.fillWidth: true
+//    }
+    ProgressBar{
         visible: isDownloading
         id: readProgress
         Layout.columnSpan: 2
@@ -374,9 +380,13 @@ GridLayout {
         parser: dcparser
         onProgress: {
            readProgress.value = current / maximum;
+           console.info(readProgress.value);
         }
         onDive: {
             console.log(dive);
+        }
+        onError: {
+            console.error(msg);
         }
     }
 
@@ -416,8 +426,7 @@ GridLayout {
             errorLabel.text = "";
             writeProgress.value = 0;
             readProgress.value = 0;
-            readProgress.visible = true;
-            writeProgress.visible = true;
+            isDownloading = true;
 
             var idx = devicelist.index(sourceSelection.currentIndex, 0);
             var dev = devicelist.data(idx, DeviceRoles.DeviceRole);
