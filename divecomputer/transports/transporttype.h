@@ -21,6 +21,7 @@ enum TransportType {
 transports_t operator|(TransportType a, TransportType b);
 transports_t operator|(transports_t a, TransportType b);
 transports_t operator|(TransportType a, transports_t b);
+transports_t& operator|=(transports_t& a, TransportType b);
 bool operator&(transports_t a, TransportType b);
 const char* transportTypeToString(TransportType t);
 transports_t translateTransportsTypes(dc_transport_t transport);

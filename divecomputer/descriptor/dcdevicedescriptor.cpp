@@ -41,7 +41,7 @@ dc_family_t DCDeviceDescriptor::getFamilyType()
 
 transports_t DCDeviceDescriptor::getTransports()
 {
-    return (transports_t) dc_descriptor_get_transports(descriptor);
+    return translateTransportsTypes(dc_descriptor_get_transports(descriptor));
 }
 
 dc_descriptor_t *DCDeviceDescriptor::getNative()

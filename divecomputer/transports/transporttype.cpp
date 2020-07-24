@@ -33,6 +33,11 @@ const char *transportTypeToString(TransportType t)
     }
 }
 
+transports_t& operator|=(transports_t &a, TransportType b)
+{
+    return a = a | b;
+}
+
 bool operator&(transports_t a, TransportType b)
 {
     return static_cast<unsigned int>(a) & 1 << static_cast<unsigned int>(b);
@@ -47,27 +52,25 @@ transports_t translateTransportsTypes(unsigned int transport)
 {
     transports_t transports = 0;
     if (transport & DC_TRANSPORT_BLE) {
-        transports = transports | TransportType::BLE;
+        transports |= TransportType::BLE;
     }
     if (transport & DC_TRANSPORT_BLUETOOTH) {
-        transports = transports | TransportType::Bluetooth;
+        transports |= TransportType::Bluetooth;
     }
     if (transport & DC_TRANSPORT_USB) {
-        transports = transports | TransportType::USB;
+        transports |= TransportType::USB;
     }
     if (transport & DC_TRANSPORT_USBHID) {
-        transports = transports | TransportType::USBHID;
+        transports |= TransportType::USBHID;
     }
     if (transport & DC_TRANSPORT_IRDA) {
-        transports = transports | TransportType::IRDA;
+        transports |= TransportType::IRDA;
     }
     if (transport & DC_TRANSPORT_SERIAL) {
-        transports = transports | TransportType::Serial;
+        transports |= TransportType::Serial;
     }
     return transports;
 }
-
-
 
 const TransportType allTypes[TRANSPORTS_COUNT] = {
     TransportType::BLE,
