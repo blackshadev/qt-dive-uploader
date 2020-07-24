@@ -57,6 +57,7 @@ SOURCES += main.cpp \
 
 HEADERS += \
     divecomputer/common.h \
+    divecomputer/context/dccontextinterface.h \
     divecomputer/devices/dcdeviceinterface.h \
     divecomputer/parsers/dcdiveparserinterface.h \
     divecomputer/reader/dcreader.h \

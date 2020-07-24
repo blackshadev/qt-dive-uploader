@@ -3,14 +3,7 @@
 
 QDCContext::QDCContext(QObject *parent)
     : QObject(parent), DCContext()
-{
-    setLogFunction([this](logdata_t data) {
-        QString loglevel = logLevelToString(translateLogLevel(data.loglevel));
-        QString msg = data.msg;
-
-        emit log(loglevel, msg);
-    });
-}
+{}
 
 QDCContext::~QDCContext()
 {}
@@ -20,17 +13,49 @@ DCDeviceDescriptor *QDCContext::createDescriptor(dc_descriptor_t *descr)
     return new QDCDescriptor(descr, this);
 }
 
+void QDCContext::log(logdata_t logdata)
+{
+    DCContext::log(logdata);
+    auto ll = translateLogLevel(logdata.loglevel);
+    log(
+        logLevelToString(ll),
+        QString(logdata.msg)
+    );
+}
+
 void QDCContext::setQLogLevel(QDCContext::LogLevel ll)
 {
     loglevel_t _ll = translateLogLevel(ll);
     setLogLevel(_ll);
     emit loglevelChanged(ll);
-    emit log(logLevelToString(ll), "Loglevel changed");
+
+    QString msg = "Loglevel changed to ";
+    msg.append(logLevelToString(ll));
+    log(logLevelToString(ll), msg);
+}
+
+void QDCContext::log(QString loglevel, QString msg)
+{
+    emit message(loglevel, msg);
 }
 
 QDCContext::LogLevel QDCContext::getQLogLevel()
 {
     return translateLogLevel(logLevel);
+}
+
+QDCContext *QDCContext::clone()
+{
+    return clone(NULL);
+}
+
+QDCContext *QDCContext::clone(QObject *parent)
+{
+    auto ctx = new QDCContext(parent);
+    ctx->setLogLevel(logLevel);
+    ctx->connect(ctx, SIGNAL(message(QString, QString)), this, SIGNAL(message(QString, QString)));
+    ctx->connect(this, SIGNAL(loglevelChanged(LogLevel)), this, SLOT(setQLogLevel(LogLevel)));
+    return ctx;
 }
 
 QDCContext::LogLevel QDCContext::translateLogLevel(loglevel_t ll)

@@ -9,6 +9,7 @@ DCReader::DCReader()
 {
     device = NULL;
     parser = NULL;
+    context = NULL;
     cancelled = false;
 }
 
@@ -18,18 +19,24 @@ DCReader *DCReader::setDevice(DCDeviceInterface *d)
     return this;
 }
 
-DCReader *DCReader::setParser(DCDiveParserInterface*p)
+DCReader *DCReader::setParser(DCDiveParserInterface *p)
 {
     parser = p;
     return this;
 }
 
-bool DCReader::isReady()
+DCReader *DCReader::setContext(DCContextInterface *ctx)
 {
-    return parser != NULL && device != NULL;
+    context = ctx;
+    return this;
 }
 
-void DCReader::start()
+bool DCReader::isReady()
+{
+    return parser != NULL && device != NULL && context != NULL;
+}
+
+void DCReader::startReading()
 {
 
     if (!isReady()) {
@@ -43,14 +50,15 @@ void DCReader::start()
 
 void DCReader::readAll()
 {
-    auto dev = device->getNative();
 
-    qInfo() << "readAll" << QThread::currentThreadId();
+    auto dev = device->getNative(context);
+
     dc_device_set_cancel(dev, nativeCancelCallback, this);
     dc_device_set_events(dev, ALL_EVENTS, nativeEventCallback, this);
 
     dc_device_foreach(dev, nativeDiveCallback, this);
-    qInfo() << "done";
+
+    receiveFinished();
 }
 
 void DCReader::cancel()
@@ -65,7 +73,7 @@ bool DCReader::isCancelled()
 
 void DCReader::setFingerprint(fingerprint_t fp)
 {
-    auto dev = device->getNative();
+    auto dev = device->getNative(context);
     dc_device_set_fingerprint(dev, fp.data, fp.size);
 }
 

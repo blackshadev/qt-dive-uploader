@@ -15,11 +15,15 @@ QDCReader *QDCReader::setParser(DCDiveParserInterface *p)
     return this;
 }
 
-void QDCReader::start()
+QDCReader *QDCReader::setContext(DCContextInterface *ctx)
 {
+    DCReader::setContext(ctx);
+    return this;
+}
 
-    qInfo() << "QDCReader::start " << QThread::currentThreadId();
-    DCReader::start();
+void QDCReader::startReading()
+{
+    DCReader::startReading();
 }
 
 void QDCReader::setFingerprint(fingerprint_t data)
@@ -34,31 +38,35 @@ void QDCReader::cancel()
 
 void QDCReader::receiveError(const char *msg)
 {
-//    emit error(QString(msg));
+    emit error(QString(msg));
 }
 
 void QDCReader::receiveDeviceInfoEvent(dc_event_devinfo_t *devInfo)
 {
-//    emit deviceInfo(devInfo->model, devInfo->serial, devInfo->firmware);
+    emit deviceInfo(devInfo->model, devInfo->serial, devInfo->firmware);
 }
 
 void QDCReader::receiveProgressEvent(dc_event_progress_t *data)
 {
-    qInfo() << data->current;
     emit progress(data->current, data->maximum);
 }
 
 void QDCReader::receiveWaitingEvent()
 {
-//    emit waiting();
+    emit waiting();
 }
 
 void QDCReader::receiveClockEvent(dc_event_clock_t *data)
 {
-//    emit clock(data->devtime, data->systime);
+    emit clock(data->devtime, data->systime);
 }
 
 void QDCReader::receiveDive(DCDive *data)
 {
-//    emit dive((QDCDive *)data);
+    emit dive((QDCDive *)data);
+}
+
+void QDCReader::receiveFinished()
+{
+    emit finished();
 }

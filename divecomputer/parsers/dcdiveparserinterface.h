@@ -8,6 +8,7 @@ class DCDiveParserInterface
 {
 public:
     virtual DCDiveParserInterface *setDevice(DCDeviceInterface *device) = 0;
+    virtual DCDiveParserInterface *setContext(DCContextInterface *context) = 0;
     virtual DCDive *parseDive(rawdivedata_t &data) = 0;
 
 };

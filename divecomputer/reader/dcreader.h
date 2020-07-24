@@ -5,6 +5,7 @@
 #include "../parsers/dcdiveparserinterface.h"
 #include "../common.h"
 #include "dcreaderinterface.h"
+#include "../context/dccontextinterface.h"
 #include <functional>
 
 class DCReader : DCReaderInterface
@@ -13,8 +14,9 @@ public:
     DCReader();
     virtual DCReader *setDevice(DCDeviceInterface *device) override;
     virtual DCReader *setParser(DCDiveParserInterface *parser) override;
+    virtual DCReader *setContext(DCContextInterface *ctx) override;
 
-    virtual void start() override;
+    virtual void startReading() override;
     virtual void cancel();
     virtual bool isReady();
     virtual void setFingerprint(fingerprint_t fp);
@@ -28,10 +30,12 @@ protected:
     virtual void receiveWaitingEvent() = 0;
     virtual void receiveClockEvent(dc_event_clock_t *clock) = 0;
     virtual void receiveDive(DCDive *dive) = 0;
+    virtual void receiveFinished() = 0;
 
-private:
     DCDeviceInterface *device;
     DCDiveParserInterface *parser;
+    DCContextInterface *context;
+private:
     bool cancelled;
 
     static int nativeDiveCallback(const unsigned char *data, unsigned int size, const unsigned char *fingerprint, unsigned int fsize, void *userdata);

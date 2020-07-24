@@ -1,26 +1,23 @@
 #ifndef DCDEVICE_H
 #define DCDEVICE_H
-#include "../context/dccontext.h"
 #include "dcdeviceinterface.h"
 #include <libdivecomputer/device.h>
 
 class DCDevice : public DCDeviceInterface
 {
 public:
-    DCDevice(DCContext *ctx, DCDeviceDescriptor *descr);
+    DCDevice(DCDeviceDescriptor *descr);
     virtual ~DCDevice();
     virtual std::string getDescription() override = 0;
-    DCContext *getContext() const;
     DCDeviceDescriptor *getDescriptor() const override;
-    dc_device_t *getNative() override;
-    dc_device_t *testgetNative() override;
+    dc_device_t *getNative(DCContextInterface *ctx) override;
+
 protected:
-    DCContext *context;
+    virtual dc_iostream_t *getNativeStream(DCContextInterface *ctx);
+    virtual dc_iostream_t *createNativeStream(DCContextInterface *ctx) = 0;
     DCDeviceDescriptor *descriptor;
-    dc_iostream_t *stream;
+    dc_iostream_t *iostream;
     dc_device_t *device;
-    virtual dc_iostream_t *loadNativeStream() = 0;
-    dc_iostream_t *getNativeStream();
 };
 
 #endif // DCDEVICE_H

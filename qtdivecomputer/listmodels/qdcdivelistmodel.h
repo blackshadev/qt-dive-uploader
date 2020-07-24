@@ -21,7 +21,8 @@ public:
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    void add(QDCDive *dive);
+public slots:
+    Q_INVOKABLE void add(QDCDive *dive);
     Q_INVOKABLE void clear();
 protected:
     QHash<int, QByteArray> roleNames() const;

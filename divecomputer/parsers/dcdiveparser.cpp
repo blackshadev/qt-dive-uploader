@@ -39,21 +39,41 @@ inline void setListFields(dc_parser_t* parser, dc_field_type_t length_type, dc_f
 DCDiveParser::DCDiveParser()
 {
     parser = NULL;
+    sampleParser = NULL;
 }
 
-DCDiveParser *DCDiveParser::setDevice(DCDeviceInterface *device)
+DCDiveParser::~DCDiveParser()
 {
-    if (parser != NULL) {
-        dc_parser_destroy(parser);
+    if (sampleParser) {
+        delete sampleParser;
+        sampleParser = NULL;
     }
-    dc_parser_new(&parser, device->getNative());
+    if (parser) {
+        dc_parser_destroy(parser);
+        parser = NULL;
+    }
+}
+
+DCDiveParser *DCDiveParser::setDevice(DCDeviceInterface *dev)
+{
+    reset();
+    device = dev;
+    return this;
+}
+
+DCDiveParser *DCDiveParser::setContext(DCContextInterface *ctx)
+{
+    context = ctx;
     return this;
 }
 
 DCDive *DCDiveParser::parseDive(rawdivedata_t &divedata)
 {
-    if(parser == NULL) {
-        throw new std::logic_error("Parser not yet initialized, call setDevice first");
+    if (!initialized) {
+        initialize();
+    }
+    if (parser == NULL) {
+        throw new std::runtime_error("Parser not yet initialized, call setDevice first");
     }
     auto dive = createDive();
     dive->setFingerprint(divedata.fingerprint);
@@ -100,7 +120,6 @@ DCDive *DCDiveParser::parseDive(rawdivedata_t &divedata)
         dive->addTank(tank);
     }
 
-    auto sampleParser = new DiveSampleParser();
     sampleParser->setCallback([dive](DCDiveSample *sample) {
         dive->addSample(sample);
     });
@@ -148,3 +167,35 @@ DiveSampleParser *DCDiveParser::createSampleParser()
 {
     return new DiveSampleParser();
 }
+
+void DCDiveParser::initialize()
+{
+    if (initialized) {
+        throw std::runtime_error("Parser already initialized");
+    }
+    if (!context || !device) {
+        throw std::runtime_error("Unable to initialize parser, some properties are missing");
+    }
+
+    sampleParser = createSampleParser();
+    dc_parser_new(&parser, device->getNative(context));
+    initialized = true;
+}
+
+void DCDiveParser::reset()
+{
+    if (!initialized) {
+        return;
+    }
+
+    if (sampleParser) {
+        delete sampleParser;
+        sampleParser = NULL;
+    }
+    if (parser) {
+        dc_parser_destroy(parser);
+        parser = NULL;
+    }
+    initialized = false;
+}
+

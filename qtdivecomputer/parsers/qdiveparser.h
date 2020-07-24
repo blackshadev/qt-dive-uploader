@@ -4,14 +4,15 @@
 #include "../divecomputer/parsers/dcdiveparser.h"
 #include "../entities/qdcdive.h"
 #include "../device/qdcdevice.h"
+#include "../context/qdccontext.h"
 
 class QDCDiveParser : public QObject, public DCDiveParser
 {
     Q_OBJECT
     Q_PROPERTY(QDCDevice *device WRITE setDevice)
+    Q_PROPERTY(QDCContext *context WRITE setContext)
 public:
     QDCDiveParser(QObject *parent = NULL);
-    QDCDiveParser *setDevice(QDCDevice *device);
 protected:
     DCDive *createDive() override;
 };

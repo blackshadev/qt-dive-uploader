@@ -17,7 +17,7 @@ std::vector<DCDeviceInterface *> *DCUSBHIDTransport::getDevices(DCDeviceDescript
     auto devices = new std::vector<DCDeviceInterface *>();
     auto status = dc_usbhid_iterator_new(&iter, context->getNative(), descriptor->getNative());
     while (dc_iterator_next(iter, &device) == DC_STATUS_SUCCESS) {
-        devices->push_back((DCDeviceInterface *)new DCUSBHIDDevice(context, descriptor, device));
+        devices->push_back((DCDeviceInterface *)new DCUSBHIDDevice(descriptor, device));
     }
     dc_iterator_free(iter);
 

@@ -1,6 +1,6 @@
 #include "dcusbhiddevice.h"
 
-DCUSBHIDDevice::DCUSBHIDDevice(DCContext *ctx, DCDeviceDescriptor *descr, dc_usbhid_device_t *dev) : DCDevice(ctx, descr)
+DCUSBHIDDevice::DCUSBHIDDevice(DCDeviceDescriptor *descr, dc_usbhid_device_t *dev) : DCDevice(descr)
 {
     device = dev;
 }
@@ -20,9 +20,9 @@ std::string DCUSBHIDDevice::getDescription()
     return std::string(buff);
 }
 
-dc_iostream_t *DCUSBHIDDevice::loadNativeStream()
+dc_iostream_t *DCUSBHIDDevice::createNativeStream(DCContextInterface *ctx)
 {
     dc_iostream_t *stream;
-    dc_usbhid_open(&stream, context->getNative(), device);
+    dc_usbhid_open(&stream, ctx->getNative(), device);
     return stream;
 }

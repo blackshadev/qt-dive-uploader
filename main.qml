@@ -12,6 +12,7 @@ ApplicationWindow {
 
     QDCContext {
         id: dccontext
+        loglevel: LogLevel.Warning
     }
 
     Material.theme: Material.Light;

@@ -22,17 +22,25 @@ public:
     Q_ENUM(LogLevel)
 
     QDCContext(QObject *parent = NULL);
-    ~QDCContext();
+    virtual ~QDCContext();
     DCDeviceDescriptor *createDescriptor(dc_descriptor_t *descr) override;
-    void setQLogLevel(LogLevel ll);
+    void log(logdata_t logdata) override;
+
     LogLevel getQLogLevel();
+    QDCContext *clone() override;
+    QDCContext *clone(QObject *parent);
 
     static loglevel_t translateLogLevel(LogLevel ll);
     static LogLevel translateLogLevel(loglevel_t ll);
     static QString logLevelToString(LogLevel ll);
+
+public slots:
+    void setQLogLevel(LogLevel ll);
+    void log(QString loglevel, QString msg);
+
 signals:
     void loglevelChanged(LogLevel ll);
-    void log(QString loglevel, QString msg);
+    void message(QString loglevel, QString msg);
 
 };
 Q_DECLARE_METATYPE(QDCContext *)

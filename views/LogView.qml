@@ -22,10 +22,10 @@ ColumnLayout {
         model: QDCLogLevelListModel {}
         Component.onCompleted: {
             loaded = true;
-//            var idx = loglevelSelector.find(libdivecomputer.logLevel);
-//            if(idx > -1) {
-//                loglevelSelector.currentIndex = idx;
-//            }
+            var idx = loglevelSelector.find(dccontext.loglevel);
+            if(idx > -1) {
+                loglevelSelector.currentIndex = idx;
+            }
         }
 
         onCurrentValueChanged: {
@@ -55,7 +55,7 @@ ColumnLayout {
 
     Connections {
         target: dccontext
-        function onLog(lvl, msg) { log(lvl, msg); }
+        function onMessage(lvl, msg) { log(lvl, msg); }
     }
 
 }

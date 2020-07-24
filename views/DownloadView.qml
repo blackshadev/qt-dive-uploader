@@ -343,13 +343,7 @@ GridLayout {
     }
 
 
-//    LDLProgressBar{
-//        visible: isDownloading
-//        id: readProgress
-//        Layout.columnSpan: 2
-//        Layout.fillWidth: true
-//    }
-    ProgressBar{
+    LDLProgressBar{
         visible: isDownloading
         id: readProgress
         Layout.columnSpan: 2
@@ -371,22 +365,30 @@ GridLayout {
         text: ""
     }
 
+    QDCDiveListModel {
+        id: dcdivelist
+    }
+
     QDCDiveParser {
         id: dcparser
+        context: dccontext
     }
 
     QDCAsyncReader {
         id: dcreader
         parser: dcparser
+        context: dccontext
         onProgress: {
            readProgress.value = current / maximum;
-           console.info(readProgress.value);
         }
         onDive: {
-            console.log(dive);
+            dcdivelist.add(dive);
         }
         onError: {
             console.error(msg);
+        }
+        onFinished: {
+            isDownloading = false;
         }
     }
 
@@ -433,7 +435,7 @@ GridLayout {
 
             dcreader.device = dev;
             dcparser.device = dev;
-            dcreader.start()
+            dcreader.startReading()
         }
     }
 
@@ -452,28 +454,8 @@ GridLayout {
         Material.foreground: Material.color(Material.Grey, Material.Shade100)
 
         onClicked: {
-            libdivecomputer.cancel();
+            dcreader.cancel();
         }
     }
-
-//    Connections {
-//        target: libdivecomputer
-//        function onReadProgress(current, total) {
-//            readProgress.value = current / total;
-//        }
-
-//        function onWriteProgress(current, total) {
-//            writeProgress.value = current / total;
-//        }
-
-//        function onStart() {
-//            isDownloading = true;
-//            refreshUI();
-//        }
-
-//        function onFinished() {
-//            isDownloading = false;
-//            refreshUI();
-//        }
 
 }

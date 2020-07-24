@@ -9,9 +9,8 @@
 DCContext::DCContext()
 {
     dc_context_new(&context);
-    log = NULL;
+    logfunc = NULL;
     dc_context_set_logfunc(context, logfunction, this);
-    setLogLevel(DC_LOGLEVEL_ALL);
 
     descriptors = NULL;
     transports = NULL;
@@ -25,11 +24,12 @@ DCContext::~DCContext()
     if(transports) {
         FREE_VECTOR_PTR(transports)
     }
+    dc_context_free(context);
 }
 
 void DCContext::setLogFunction(logfunc_t logFunc)
 {
-    log = logFunc;
+    logfunc = logFunc;
 }
 
 inline dc_loglevel_t translateLogLevel(loglevel_t loglevel)
@@ -46,6 +46,21 @@ void DCContext::setLogLevel(loglevel_t level)
 dc_context_t *DCContext::getNative()
 {
     return context;
+}
+
+void DCContext::log(logdata_t logdata)
+{
+    if (logfunc) {
+        logfunc(logdata);
+    }
+}
+
+DCContext *DCContext::clone()
+{
+    auto ctx = new DCContext();
+    ctx->setLogLevel(logLevel);
+    ctx->setLogFunction(logfunc);
+    return ctx;
 }
 
 std::vector<DCDeviceDescriptor *> *DCContext::getDescriptors()
@@ -106,9 +121,6 @@ void DCContext::logfunction(
     void *userdata
 ) {
     auto ctx = (DCContext *)userdata;
-    if (ctx->log == NULL) {
-        return;
-    }
 
     logdata_t logdata;
     logdata.function = function;

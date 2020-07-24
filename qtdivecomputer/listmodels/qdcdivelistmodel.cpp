@@ -37,7 +37,9 @@ QVariant QDCDiveListModel::data(const QModelIndex &index, int role) const
 
 void QDCDiveListModel::add(QDCDive *dive)
 {
+    beginResetModel();
     items.push_back(dive);
+    endResetModel();
 }
 
 void QDCDiveListModel::clear()

@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<QDCLogLevelListModel>("Libdivecomputer", 0, 2, "LogLevelRoles");
     qmlRegisterType<QDCDeviceListModel>("Libdivecomputer", 0, 2, "QDCDeviceListModel");
     qmlRegisterType<QDCLogLevelListModel>("Libdivecomputer", 0, 2, "QDCLogLevelListModel");
+    qmlRegisterType<QDCContext>("Libdivecomputer", 0, 2, "LogLevel");
     qmlRegisterType<QDCContext>("Libdivecomputer", 0, 2, "QDCContext");
     qmlRegisterType<QDCTransportListModel>("Libdivecomputer", 0, 2, "QDCTransportListModel");
     qmlRegisterType<QDCDescriptorListModel>("Libdivecomputer", 0, 2, "QDCDescriptorListModel");
@@ -65,8 +66,9 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("littledivelog", &log);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    if (engine.rootObjects().isEmpty())
+    if (engine.rootObjects().isEmpty()) {
         return -1;
+    }
 
     app.connect(&app, &QGuiApplication::lastWindowClosed, &app, [=]() {
         JsonRequest::stop();

@@ -2,19 +2,18 @@
 
 QDCAsyncReader::QDCAsyncReader()
 {
-
     qInfo() << "Construct " << QThread::currentThreadId();
     workerThread = new QThread;
     reader = new QDCReader;
     reader->moveToThread(workerThread);
-    reader->connect(this, SIGNAL(startWork()), reader, SLOT(start()));
+    reader->connect(this, SIGNAL(startWork()), reader, SLOT(startReading()));
     reader->connect(reader, SIGNAL(progress(unsigned int, unsigned int)), this, SIGNAL(progress(unsigned int, unsigned int)));
-    reader->connect(reader, &QDCReader::clock, this, &QDCAsyncReader::clock);
-    reader->connect(reader, &QDCReader::progress, this, &QDCAsyncReader::progress);
-    reader->connect(reader, &QDCReader::deviceInfo, this, &QDCAsyncReader::deviceInfo);
-    reader->connect(reader, &QDCReader::waiting, this, &QDCAsyncReader::waiting);
-    reader->connect(reader, &QDCReader::dive, this, &QDCAsyncReader::dive);
+    reader->connect(reader, SIGNAL(clock(unsigned int, dc_ticks_t)), this, SIGNAL(clock(unsigned int, dc_ticks_t)));
+    reader->connect(reader, SIGNAL(deviceInfo(unsigned int, unsigned int, unsigned int)), this, SIGNAL(deviceInfo(unsigned int, unsigned int, unsigned int)));
+    reader->connect(reader, SIGNAL(waiting()), this, SIGNAL(waiting()));
+    reader->connect(reader, SIGNAL(dive(QDCDive *)), this, SIGNAL(dive(QDCDive *)));
     reader->connect(reader, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
+    reader->connect(reader, SIGNAL(finished()), this, SIGNAL(finished()));
     reader->moveToThread(workerThread);
     workerThread->start();
 }
@@ -41,8 +40,20 @@ DCReaderInterface *QDCAsyncReader::setParser(DCDiveParserInterface *p)
     return this;
 }
 
-void QDCAsyncReader::start()
+DCReaderInterface *QDCAsyncReader::setContext(DCContextInterface *c)
+{
+    context = c;
+    reader->setContext(context);
+    return this;
+}
+
+void QDCAsyncReader::startReading()
 {
     emit startWork();
+}
+
+void QDCAsyncReader::cancel()
+{
+    reader->cancel();
 }
 

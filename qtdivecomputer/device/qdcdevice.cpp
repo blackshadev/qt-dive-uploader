@@ -26,12 +26,8 @@ QString QDCDevice::getQDescription()
     return QString::fromStdString(concreteDevice->getDescription());
 }
 
-dc_device_t *QDCDevice::getNative()
+dc_device_t *QDCDevice::getNative(DCContextInterface *ctx)
 {
-    return concreteDevice->getNative();
+    return concreteDevice->getNative(ctx);
 }
 
-dc_device_t *QDCDevice::testgetNative()
-{
-    return concreteDevice->getNative();
-}

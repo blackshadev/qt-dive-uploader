@@ -5,6 +5,11 @@ DiveSampleParser::DiveSampleParser()
     currentSample = NULL;
 }
 
+DiveSampleParser::~DiveSampleParser()
+{
+
+}
+
 void DiveSampleParser::setCallback(sampleparser_callback fn)
 {
     callback = fn;
