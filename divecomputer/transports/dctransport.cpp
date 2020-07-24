@@ -1,6 +1,6 @@
 #include "dctransport.h"
 
-DCTransport2::DCTransport2(DCContext *ctx)
+DCTransport::DCTransport(DCContextInterface *ctx)
 {
     context = ctx;
 }

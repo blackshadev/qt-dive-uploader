@@ -8,10 +8,6 @@ QDCContext::QDCContext(QObject *parent)
 QDCContext::~QDCContext()
 {}
 
-DCDeviceDescriptor *QDCContext::createDescriptor(dc_descriptor_t *descr)
-{
-    return new QDCDescriptor(descr, this);
-}
 
 void QDCContext::log(logdata_t logdata)
 {
@@ -42,20 +38,6 @@ void QDCContext::log(QString loglevel, QString msg)
 QDCContext::LogLevel QDCContext::getQLogLevel()
 {
     return translateLogLevel(logLevel);
-}
-
-QDCContext *QDCContext::clone()
-{
-    return clone(NULL);
-}
-
-QDCContext *QDCContext::clone(QObject *parent)
-{
-    auto ctx = new QDCContext(parent);
-    ctx->setLogLevel(logLevel);
-    ctx->connect(ctx, SIGNAL(message(QString, QString)), this, SIGNAL(message(QString, QString)));
-    ctx->connect(this, SIGNAL(loglevelChanged(LogLevel)), this, SLOT(setQLogLevel(LogLevel)));
-    return ctx;
 }
 
 QDCContext::LogLevel QDCContext::translateLogLevel(loglevel_t ll)

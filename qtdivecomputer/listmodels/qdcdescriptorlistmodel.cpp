@@ -1,4 +1,5 @@
 #include "qdcdescriptorlistmodel.h"
+#include "../../common/vector.h"
 
 QDCDescriptorListModel::QDCDescriptorListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -6,6 +7,8 @@ QDCDescriptorListModel::QDCDescriptorListModel(QObject *parent)
 
 QDCDescriptorListModel::~QDCDescriptorListModel()
 {
+    FREE_VECTOR_ITEMS(items)
+            items.clear();
 }
 
 QHash<int, QByteArray> QDCDescriptorListModel::roleNames() const
@@ -51,13 +54,16 @@ void QDCDescriptorListModel::add(QDCDescriptor *descr)
 void QDCDescriptorListModel::loadDescriptors(QDCContext *ctx)
 {
     beginResetModel();
-
-    auto descriptors = ctx->getDescriptors();
     items.clear();
+    dc_iterator_t *iter;
+    dc_descriptor_t *descr;
 
-    for (auto descr : *descriptors) {
-        add((QDCDescriptor *)descr);
+    dc_descriptor_iterator(&iter);
+    while (dc_iterator_next(iter, &descr) == DC_STATUS_SUCCESS) {
+        items.push_back(new QDCDescriptor(descr, this));
     }
+
+    dc_iterator_free(iter);
 
     endResetModel();
 }

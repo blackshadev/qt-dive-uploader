@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.12
-import Libdivecomputer 0.1
+import Libdivecomputer 0.2
 import "../components"
 
 ColumnLayout {
@@ -14,7 +14,7 @@ ColumnLayout {
     signal cancelled();
     signal finished();
 
-    property DiveModel diveData
+    property QDCDiveListModel diveData
     property variant columnWidths: {
         "checkbox": 32,
         "datetime": 200,
@@ -147,7 +147,6 @@ ColumnLayout {
 
         delegate: ItemDelegate {
             width: parent.width
-//                height: 32
             topPadding: 8
 
             checkable: true

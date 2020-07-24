@@ -23,12 +23,9 @@ public:
 
     QDCContext(QObject *parent = NULL);
     virtual ~QDCContext();
-    DCDeviceDescriptor *createDescriptor(dc_descriptor_t *descr) override;
     void log(logdata_t logdata) override;
 
     LogLevel getQLogLevel();
-    QDCContext *clone() override;
-    QDCContext *clone(QObject *parent);
 
     static loglevel_t translateLogLevel(LogLevel ll);
     static LogLevel translateLogLevel(loglevel_t ll);

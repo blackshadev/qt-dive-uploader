@@ -1,4 +1,5 @@
 #include "qdctransportlistmodel.h"
+#include "../divecomputer/transports/dctransportfactory.h"
 
 QDCTransportListModel::QDCTransportListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -42,10 +43,21 @@ void QDCTransportListModel::add(QDCTransport *descr)
 }
 
 void QDCTransportListModel::loadTransports(QDCContext *ctx) {
-    auto transports = ctx->getTransports();
-    for (auto transport : *transports) {
-        add(new QDCTransport(transport, this));
+    DCTransportFactory factory;
+    factory.setContext(ctx);
+    auto allTransports = getAllTransportTypes();
+    auto supportedTypes = getSupportedTransports(ctx);
+
+    for (int iX = 0; iX < TRANSPORTS_COUNT; iX++) {
+        auto transportType = allTransports[iX];
+        if(supportedTypes & transportType) {
+            auto transport = factory.create(transportType);
+            if (transport) {
+                add(new QDCTransport(transport, this));
+            }
+        }
     }
+
 }
 
 void QDCTransportListModel::filter(QDCTransport::Types transportTypes)

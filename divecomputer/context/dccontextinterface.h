@@ -14,7 +14,6 @@ class DCContextInterface
 public:
     virtual dc_context_t *getNative() = 0;
     virtual void log(logdata_t logdata) = 0;
-    virtual DCContextInterface *clone() = 0;
 };
 
 #endif // DCCONTECTINTERFACE_H

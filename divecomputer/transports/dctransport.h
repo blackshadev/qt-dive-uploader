@@ -1,14 +1,14 @@
 #ifndef DCTRANSPORT_H
 #define DCTRANSPORT_H
 #include "dctransportinterface.h"
-#include "../context/dccontext.h"
+#include "../context/dccontextinterface.h"
 
-class DCTransport2 : public DCTransportInterface
+class DCTransport : public DCTransportInterface
 {
 public:
-    DCTransport2(DCContext *);
+    DCTransport(DCContextInterface *);
 protected:
-    DCContext *context;
+    DCContextInterface *context;
 };
 
 #endif // DCTRANSPORT_H

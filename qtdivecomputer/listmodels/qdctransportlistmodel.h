@@ -29,6 +29,7 @@ protected:
 private:
     std::vector<QDCTransport *> allItems;
     std::vector<QDCTransport *> items;
+    static DCTransportInterface *createTransport(TransportType typ);
 };
 
 #endif // QDCTRANSPORTLISTMODEL_H

@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     divecomputer/reader/dcreader.cpp \
+    divecomputer/transports/dctransportfactory.cpp \
     divecomputer/utils/dcstatus.cpp \
     divecomputer/context/dccontext.cpp \
     divecomputer/descriptor/dcdevicedescriptor.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
     divecomputer/parsers/dcdiveparserinterface.h \
     divecomputer/reader/dcreader.h \
     divecomputer/reader/dcreaderinterface.h \
+    divecomputer/transports/dctransportfactory.h \
     divecomputer/utils//dcstatus.h \
     common/vector.h \
     divecomputer/context/dccontext.h \

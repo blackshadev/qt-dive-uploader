@@ -28,6 +28,7 @@ public:
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:
+    DCContextInterface *context;
     std::vector<QDCDescriptor *> items;
 };
 Q_DECLARE_METATYPE(QDCDescriptorListModel *)
