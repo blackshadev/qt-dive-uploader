@@ -29,7 +29,7 @@ public:
 
     static loglevel_t translateLogLevel(LogLevel ll);
     static LogLevel translateLogLevel(loglevel_t ll);
-    static QString logLevelToString(LogLevel ll);
+    Q_INVOKABLE static QString logLevelToString(LogLevel ll);
 
 public slots:
     void setQLogLevel(LogLevel ll);

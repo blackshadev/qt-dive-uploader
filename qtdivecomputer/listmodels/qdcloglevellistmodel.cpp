@@ -2,12 +2,12 @@
 
 QDCLogLevelListModel::QDCLogLevelListModel(QObject *parent)
     : items {
-          QDCContext::LogLevel::All,
-          QDCContext::LogLevel::Info,
           QDCContext::LogLevel::None,
-          QDCContext::LogLevel::Debug,
           QDCContext::LogLevel::Error,
-          QDCContext::LogLevel::Warning
+          QDCContext::LogLevel::Warning,
+          QDCContext::LogLevel::Info,
+          QDCContext::LogLevel::Debug,
+          QDCContext::LogLevel::All,
     }
 {}
 

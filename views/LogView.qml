@@ -21,11 +21,10 @@ ColumnLayout {
         id: loglevelSelector
         model: QDCLogLevelListModel {}
         Component.onCompleted: {
+            var current = dccontext.logLevelToString(dccontext.loglevel);
+            var idx = loglevelSelector.find(current);
+            loglevelSelector.currentIndex = idx;
             loaded = true;
-            var idx = loglevelSelector.find(dccontext.loglevel);
-            if(idx > -1) {
-                loglevelSelector.currentIndex = idx;
-            }
         }
 
         onCurrentValueChanged: {
