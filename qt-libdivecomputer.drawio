@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-07-25T11:36:28.398Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36" etag="_3QVZoR52YJUii-0Swro" version="13.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2020-07-25T11:37:26.459Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36" etag="o3tYBkGYll4WGyae31yK" version="13.5.3" type="github">
   <diagram id="l0Hb1Kvt9UqNzEm9A9QA" name="Page-1">
     <mxGraphModel dx="2622" dy="796" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -370,21 +370,21 @@
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="G_5eRwRaQk3gY31ZSDMp-6" target="PpLzL-J6AhNf8Rzvoqyl-77">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="260" y="700" />
+              <mxPoint x="267.5" y="800" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="G_5eRwRaQk3gY31ZSDMp-6" value="DCReader" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
-          <mxGeometry x="40" y="830" width="650" height="20" as="geometry" />
+          <mxGeometry x="47.5" y="930" width="650" height="20" as="geometry" />
         </mxCell>
         <mxCell id="G_5eRwRaQk3gY31ZSDMp-7" value="void setContext(DCContext *)" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
-          <mxGeometry x="60" y="850" width="200" height="20" as="geometry" />
+          <mxGeometry x="67.5" y="950" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="G_5eRwRaQk3gY31ZSDMp-9" value="void&amp;nbsp; setDevice(DCDevice* device)" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
-          <mxGeometry x="60" y="870" width="200" height="20" as="geometry" />
+          <mxGeometry x="67.5" y="970" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="G_5eRwRaQk3gY31ZSDMp-10" value="void startReading()" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-3" vertex="1">
-          <mxGeometry x="60" y="910" width="200" height="20" as="geometry" />
+          <mxGeometry x="67.5" y="1010" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-3" source="PpLzL-J6AhNf8Rzvoqyl-4" target="ltwnF_Ncu5DMhvB-tiFt-11">
           <mxGeometry relative="1" as="geometry" />
@@ -393,19 +393,19 @@
           <mxGeometry x="17.5" y="70" width="230" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-15" value="void&amp;nbsp; setParser(DCParser* parser)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="60" y="890" width="200" height="20" as="geometry" />
+          <mxGeometry x="67.5" y="990" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-16" value="void cancel()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="60" y="930" width="200" height="20" as="geometry" />
+          <mxGeometry x="67.5" y="1030" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-17" value="void setFingerprint(fp_data_t)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="60" y="950" width="200" height="20" as="geometry" />
+          <mxGeometry x="67.5" y="1050" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-18" value="void readAll()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="60" y="970" width="200" height="20" as="geometry" />
+          <mxGeometry x="67.5" y="1070" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-19" value="void&amp;nbsp;receiveError(const char *)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="270" y="850" width="200" height="20" as="geometry" />
+          <mxGeometry x="277.5" y="950" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-20" value="dc_iostream_t* createNativeStream()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
           <mxGeometry x="32.5" y="620" width="200" height="20" as="geometry" />
@@ -414,22 +414,22 @@
           <mxGeometry x="32.5" y="580" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-22" value="receiveDeviceInfoEvent(&lt;br&gt;dc_event_devinfo_t)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="270" y="870" width="200" height="30" as="geometry" />
+          <mxGeometry x="277.5" y="970" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-23" value="receiveProgressEvent(&lt;br&gt;dc_event_progress_t)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="270" y="900" width="200" height="30" as="geometry" />
+          <mxGeometry x="277.5" y="1000" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-24" value="receiveWaitingEvent()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="270" y="930" width="200" height="20" as="geometry" />
+          <mxGeometry x="277.5" y="1030" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-25" value="receiveClockEvent(&lt;br&gt;dc_event_clock_t)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="270" y="950" width="200" height="30" as="geometry" />
+          <mxGeometry x="277.5" y="1050" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-26" value="receiveDive(DCDive *)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="490" y="850" width="200" height="20" as="geometry" />
+          <mxGeometry x="497.5" y="950" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-27" value="receiveFinished()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="490" y="870" width="200" height="20" as="geometry" />
+          <mxGeometry x="497.5" y="970" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-60" value="void setContext(DCContextInterface*)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
           <mxGeometry x="275" y="1180" width="200" height="30" as="geometry" />
@@ -465,22 +465,22 @@
           <mxGeometry x="42.5" y="1190" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-77" value="DCReaderInterface" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="15" y="690" width="215" height="20" as="geometry" />
+          <mxGeometry x="22.5" y="790" width="215" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-78" value="void setContext(DCContext *)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="30" y="710" width="200" height="20" as="geometry" />
+          <mxGeometry x="37.5" y="810" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-79" value="void&amp;nbsp; setDevice(DCDevice* device)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="30" y="730" width="200" height="20" as="geometry" />
+          <mxGeometry x="37.5" y="830" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-80" value="void&amp;nbsp; setParser(DCParser* parser)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="30" y="750" width="200" height="20" as="geometry" />
+          <mxGeometry x="37.5" y="850" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-81" value="void startReading()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="30" y="770" width="200" height="20" as="geometry" />
+          <mxGeometry x="37.5" y="870" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-82" value="void cancel()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-3">
-          <mxGeometry x="30" y="790" width="200" height="20" as="geometry" />
+          <mxGeometry x="37.5" y="890" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="ltwnF_Ncu5DMhvB-tiFt-4" value="QT specific" style="swimlane;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="-550" y="390" width="550" height="1350" as="geometry" />
@@ -800,8 +800,8 @@
         <mxCell id="PpLzL-J6AhNf8Rzvoqyl-87" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PpLzL-J6AhNf8Rzvoqyl-28" target="G_5eRwRaQk3gY31ZSDMp-6">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="50" y="1100" />
-              <mxPoint x="50" y="1230" />
+              <mxPoint x="10" y="1100" />
+              <mxPoint x="10" y="1330" />
             </Array>
           </mxGeometry>
         </mxCell>
