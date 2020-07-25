@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-07-25T18:45:29.437Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36" etag="4CpHi6SbI48yVSNi1YXN" version="13.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2020-07-25T18:46:25.172Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36" etag="FErmbBpklunZpcptd3Kn" version="13.5.3" type="github">
   <diagram id="l0Hb1Kvt9UqNzEm9A9QA" name="Page-1">
     <mxGraphModel dx="2873" dy="896" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -816,7 +816,7 @@
         <mxCell id="Yi1RsBnDBWCXkwgNJwWb-21" value="QDCLittlelogWriter" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
           <mxGeometry x="50" y="1780" width="220" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-22" value="setSomething" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-22" value="setSomething()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
           <mxGeometry x="70" y="1820" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="Yi1RsBnDBWCXkwgNJwWb-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="ltwnF_Ncu5DMhvB-tiFt-4" source="Yi1RsBnDBWCXkwgNJwWb-23" target="Yi1RsBnDBWCXkwgNJwWb-15">
