@@ -9,7 +9,6 @@ public:
     DCDevice(DCDeviceDescriptor *descr);
     virtual ~DCDevice();
     virtual std::string getDescription() override = 0;
-    DCDeviceDescriptor *getDescriptor() const override;
     dc_device_t *getNative(DCContextInterface *ctx) override;
 
 protected:

@@ -9,12 +9,12 @@ class QDCTransport : public QObject, public DCTransportInterface
     Q_PROPERTY(QString description READ getQDescription CONSTANT)
 public:
     enum Type {
-        USB = 2 << TransportType::USB,
-        USBHID = 2 << TransportType::USBHID,
-        Serial = 2 << TransportType::Serial,
-        Bluetooth = 2 << TransportType::Bluetooth,
-        IRDA = 2 << TransportType::IRDA,
-        BLE  = 2 << TransportType::BLE
+        USB = 1 << TransportType::USB,
+        USBHID = 1 << TransportType::USBHID,
+        Serial = 1 << TransportType::Serial,
+        Bluetooth = 1 << TransportType::Bluetooth,
+        IRDA = 1 << TransportType::IRDA,
+        BLE  = 1 << TransportType::BLE
     };
     Q_DECLARE_FLAGS(Types, Type)
     Q_FLAG(Types)

@@ -10,7 +10,6 @@ class QDCDevice : public QObject, public DCDeviceInterface
 public:
     QDCDevice(DCDeviceInterface *concreteType, QObject *parent = NULL);
     virtual ~QDCDevice();
-    DCDeviceDescriptor *getDescriptor() const override;
     std::string getDescription() override;
     QString getQDescription();
     dc_device_t *getNative(DCContextInterface *ctx) override;

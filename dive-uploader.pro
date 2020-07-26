@@ -46,6 +46,8 @@ SOURCES += main.cpp \
     qtdivecomputer/reader/qdcasyncreader.cpp \
     qtdivecomputer/reader/qdcreader.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
+    qtdivecomputer/writers/qdcfilewriter.cpp \
+    qtdivecomputer/writers/qdcwriter.cpp \
     serializer/dcdivesampleeventserializer.cpp \
     serializer/dcdivesampleserializer.cpp \
     serializer/dcdiveserializer.cpp \
@@ -80,6 +82,7 @@ HEADERS += \
     divecomputer/transports/dctransportinterface.h \
     divecomputer/transports/dcusbhidtransport.h \
     divecomputer/transports/transporttype.h \
+    divecomputer/writers/dcwriterinterface.h \
     qtdivecomputer/context/qdccontext.h \
     qtdivecomputer/descriptor/qdcdescriptor.h \
     qtdivecomputer/device/qdcdevice.h \
@@ -93,6 +96,8 @@ HEADERS += \
     qtdivecomputer/reader/qdcasyncreader.h \
     qtdivecomputer/reader/qdcreader.h \
     qtdivecomputer/transports/qdctransport.h \
+    qtdivecomputer/writers/qdcfilewriter.h \
+    qtdivecomputer/writers/qdcwriter.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \
     serializer/dcdiveserializer.h \

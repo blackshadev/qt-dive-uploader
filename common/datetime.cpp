@@ -33,3 +33,10 @@ std::string format_datetime_display(dc_datetime_t &dt) {
     );
     return std::string(buff);
 }
+
+dc_datetime_t datetime_now()
+{
+    dc_datetime_t dt_now;
+    dc_datetime_localtime(&dt_now, dc_datetime_now());
+    return dt_now;
+}

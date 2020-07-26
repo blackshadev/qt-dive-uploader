@@ -11,11 +11,6 @@ QDCDevice::~QDCDevice()
     delete concreteDevice;
 }
 
-DCDeviceDescriptor *QDCDevice::getDescriptor() const
-{
-    return  concreteDevice->getDescriptor();
-}
-
 std::string QDCDevice::getDescription()
 {
     return concreteDevice->getDescription();

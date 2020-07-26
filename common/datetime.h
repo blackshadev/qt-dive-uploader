@@ -6,7 +6,9 @@
 
 #define GET_TIMEZONE(X) ((X == DC_TIMEZONE_NONE) ? 0 : X)
 
+dc_datetime_t datetime_now();
 std::string format_datetime_iso(dc_datetime_t &dt);
 std::string format_datetime_display(dc_datetime_t &dt);
+
 
 #endif // DATETIME_H

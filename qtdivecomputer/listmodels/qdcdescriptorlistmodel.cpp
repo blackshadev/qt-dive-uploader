@@ -55,6 +55,8 @@ void QDCDescriptorListModel::loadDescriptors(QDCContext *ctx)
 {
     beginResetModel();
     items.clear();
+
+    // TODO: All DC stuff should be present in the DC layer
     dc_iterator_t *iter;
     dc_descriptor_t *descr;
 

@@ -17,11 +17,6 @@ DCDevice::~DCDevice()
     }
 }
 
-DCDeviceDescriptor *DCDevice::getDescriptor() const
-{
-    return descriptor;
-}
-
 dc_device_t *DCDevice::getNative(DCContextInterface *ctx)
 {
     if (!device) {
