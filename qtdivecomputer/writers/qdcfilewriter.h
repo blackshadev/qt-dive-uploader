@@ -9,7 +9,7 @@
 class QDCFileWriter : public QDCWriter
 {
     Q_OBJECT
-    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
 public:
     QDCFileWriter(QObject *parent = NULL);
     void setPath(QString p);
@@ -21,6 +21,7 @@ private:
     DCDiveSerializer serializer;
     QString path;
     QJsonObject object;
+    QJsonArray dives;
     QFile file;
 
 signals:
