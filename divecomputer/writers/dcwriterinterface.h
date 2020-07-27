@@ -7,11 +7,11 @@
 class DCWriterInterface
 {
 public:
-    virtual void add(DCDive *dive) = 0;
+    virtual void write(DCDive *dive) = 0;
     virtual void start() = 0;
     virtual void end() = 0;
     virtual void setDescriptor(DCDeviceDescriptor *descr) = 0;
-    virtual void setDevice(DCDeviceInterface *dev) = 0;
+    virtual void setDevice(DeviceData dev) = 0;
 };
 
 #endif // DCWRITERINTERFACE_H

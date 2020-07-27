@@ -13,6 +13,7 @@ public:
     virtual unsigned int getModelNumber() = 0;
     virtual dc_family_t getFamilyType() = 0;
     virtual transports_t getTransports() = 0;
+
 };
 
 #endif // DEVICEDESCRIPTORINTERFACE_H

@@ -1,8 +1,15 @@
 #ifndef QDCDEVICE_H
 #define QDCDEVICE_H
-
 #include <QObject>
 #include "../divecomputer/devices/dcdeviceinterface.h"
+
+struct QDeviceData : public DeviceData {
+    Q_GADGET
+    Q_PROPERTY(unsigned int model MEMBER model)
+    Q_PROPERTY(unsigned int serial MEMBER serial)
+    Q_PROPERTY(unsigned int firmware MEMBER firmware)
+};
+Q_DECLARE_METATYPE(QDeviceData)
 
 class QDCDevice : public QObject, public DCDeviceInterface
 {

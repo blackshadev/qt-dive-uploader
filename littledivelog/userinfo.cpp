@@ -14,7 +14,7 @@ UserInfo::~UserInfo()
 
 }
 
-void UserInfo::add_computer(QJsonObject obj)
+void UserInfo::addComputer(QJsonObject obj)
 {
     auto comp = new t_user_computer;
     int comp_id = obj["computer_id"].toInt();
@@ -27,7 +27,7 @@ void UserInfo::add_computer(QJsonObject obj)
     m_computers[serial] = comp;
 }
 
-t_user_computer* UserInfo::get_computer(uint serial)
+t_user_computer* UserInfo::getComputer(uint serial)
 {
     auto data = m_computers.find(serial);
     return data == m_computers.end() ? NULL : data->second;

@@ -21,7 +21,7 @@ public:
     QDCReader *setParser(DCDiveParserInterface *p) override;
     QDCReader *setContext(DCContextInterface *ctx) override;
 
-    Q_INVOKABLE virtual void setFingerprint(fingerprint_t data) override;
+    Q_INVOKABLE virtual void setFingerprint(QByteArray data);
 
     void receiveError(const char *msg) override;
     void receiveDeviceInfoEvent(dc_event_devinfo_t *devInfo) override;
@@ -38,7 +38,7 @@ signals:
     void isReadyChanged();
     void dive(QDCDive *dive);
     void progress(unsigned int current, unsigned int maximum);
-    void deviceInfo(unsigned int model, unsigned int serial, unsigned int firmware);
+    void deviceInfo(QDeviceData data);
     void clock(unsigned int deviceClock, dc_ticks_t systime);
     void waiting();
     void error(QString msg);

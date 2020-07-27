@@ -18,7 +18,7 @@ QString QDCFileWriter::getPath()
     return path;
 }
 
-void QDCFileWriter::add(DCDive *dive)
+void QDCFileWriter::write(DCDive *dive)
 {
     QJsonObject diveObject;
     serializer.serialize(diveObject, dive);
@@ -32,7 +32,6 @@ void QDCFileWriter::end()
     QJsonDocument document(object);
     file.write(document.toJson());
     file.close();
-
 }
 
 void QDCFileWriter::start()
@@ -44,6 +43,7 @@ void QDCFileWriter::start()
     dives.empty();
     auto dt_now = datetime_now();
     object["readtime"] = QString::fromStdString(format_datetime_iso(dt_now));
+    object["computer"] = getComputerAsJson();
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         auto error = file.error();
@@ -51,6 +51,18 @@ void QDCFileWriter::start()
         errorText.append(error);
         throw std::runtime_error(errorText.toStdString());
     }
+}
+
+QJsonObject QDCFileWriter::getComputerAsJson()
+{
+    QJsonObject json;
+    json["serial"] =  (int)(device.serial);
+    json["vendor"] = descriptor->getQVendor();
+    json["model"] = (int)(descriptor->getModelNumber());
+    json["type"] = (int)(descriptor->getFamilyType());
+    json["name"] = descriptor->getQDescription();
+
+    return json;
 }
 
 

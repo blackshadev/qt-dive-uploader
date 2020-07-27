@@ -30,8 +30,8 @@ public:
     int m_computer_count;
     int m_buddy_count;
     int m_tag_count;
-    t_user_computer* get_computer(uint serial);
-    void add_computer(QJsonObject comp);
+    t_user_computer* getComputer(uint serial);
+    void addComputer(QJsonObject comp);
 protected:
     std::map<uint, t_user_computer*> m_computers;
 };

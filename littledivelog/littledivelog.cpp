@@ -110,7 +110,7 @@ void LittleDiveLog::fetch_user_computers(std::function<void()> callback) {
 
             for(auto val : arr) {
                 auto obj = val.toObject();
-                m_user_info->add_computer(obj);
+                m_user_info->addComputer(obj);
             }
 
             callback();

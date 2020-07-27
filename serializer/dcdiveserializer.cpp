@@ -78,7 +78,7 @@ QString DCDiveSerializer::serializeFingerprint(fingerprint_t &fingerprint)
     return QByteArray(
         reinterpret_cast<const char *>(fingerprint.data),
         fingerprint.size
-    );
+    ).toBase64();
 }
 
 const char *DCDiveSerializer::serializeDivemode(divemode_t &divemode)

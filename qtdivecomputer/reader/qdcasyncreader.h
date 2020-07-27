@@ -28,7 +28,7 @@ public:
 signals:
     void dive(QDCDive *dive);
     void progress(unsigned int current, unsigned int maximum);
-    void deviceInfo(unsigned int model, unsigned int serial, unsigned int firmware);
+    void deviceInfo(QDeviceData data);
     void clock(unsigned int deviceClock, dc_ticks_t systime);
     void waiting();
     void error(QString msg);

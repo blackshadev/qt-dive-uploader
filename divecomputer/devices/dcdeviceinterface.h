@@ -4,6 +4,13 @@
 #include "../descriptor/dcdevicedescriptor.h"
 #include <libdivecomputer/device.h>
 
+struct DeviceData {
+public:
+    unsigned int model;
+    unsigned int serial;
+    unsigned int firmware;
+};
+
 class DCDeviceInterface
 {
 public:

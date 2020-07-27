@@ -14,10 +14,11 @@ public:
     QDCFileWriter(QObject *parent = NULL);
     void setPath(QString p);
     QString getPath();
-    void add(DCDive *dive) override;
+    void write(DCDive *dive) override;
     void end() override;
     void start() override;
 private:
+    QJsonObject getComputerAsJson();
     DCDiveSerializer serializer;
     QString path;
     QJsonObject object;
@@ -27,5 +28,6 @@ private:
 signals:
     void pathChanged(QString path);
 };
+Q_DECLARE_METATYPE(QDCFileWriter *)
 
 #endif // QDCFILEWRITER_H

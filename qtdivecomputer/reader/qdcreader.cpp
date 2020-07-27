@@ -26,9 +26,13 @@ void QDCReader::startReading()
     DCReader::startReading();
 }
 
-void QDCReader::setFingerprint(fingerprint_t data)
+void QDCReader::setFingerprint(QByteArray data)
 {
-    DCReader::setFingerprint(data);
+    fingerprint_t fp;
+    fp.data = (unsigned char *)data.data();
+    fp.size = data.size();
+
+    DCReader::setFingerprint(fp);
 }
 
 void QDCReader::cancel()
@@ -43,7 +47,12 @@ void QDCReader::receiveError(const char *msg)
 
 void QDCReader::receiveDeviceInfoEvent(dc_event_devinfo_t *devInfo)
 {
-    emit deviceInfo(devInfo->model, devInfo->serial, devInfo->firmware);
+    QDeviceData devData;
+    devData.model = devInfo->model;
+    devData.serial = devInfo->serial;
+    devData.firmware = devInfo->firmware;
+
+    emit deviceInfo(devData);
 }
 
 void QDCReader::receiveProgressEvent(dc_event_progress_t *data)

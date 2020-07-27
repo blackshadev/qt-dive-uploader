@@ -48,6 +48,7 @@ SOURCES += main.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
     qtdivecomputer/writers/qdcfilewriter.cpp \
     qtdivecomputer/writers/qdcwriter.cpp \
+    qtdivecomputer/writers/qdcwritercontroller.cpp \
     serializer/dcdivesampleeventserializer.cpp \
     serializer/dcdivesampleserializer.cpp \
     serializer/dcdiveserializer.cpp \
@@ -98,6 +99,7 @@ HEADERS += \
     qtdivecomputer/transports/qdctransport.h \
     qtdivecomputer/writers/qdcfilewriter.h \
     qtdivecomputer/writers/qdcwriter.h \
+    qtdivecomputer/writers/qdcwritercontroller.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \
     serializer/dcdiveserializer.h \

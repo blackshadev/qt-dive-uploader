@@ -155,14 +155,17 @@ GridLayout {
 
             var comp = "";
             var trans = 0;
+            var descr;
 
             if(idx.valid) {
                 comp = computerSelection.model.data(idx, DescriptorRoles.DescriptionRole);
                 trans = computerSelection.model.data(idx, DescriptorRoles.TransportsRole);
+                descr = computerSelection.model.data(idx, DescriptorRoles.DescriptorRole);
             }
 
             transportlist.filter(trans);
             transportSelection.currentIndex = 0;
+            dcwriter.descriptor = descr;
 
             if(loaded) {
                 session.computer = comp;
@@ -327,7 +330,7 @@ GridLayout {
                 }
 
                 session.path = fixedText;
-//                libdivecomputer.path = fixedText;
+                dcfilewriter.path = fixedText;
                 refreshUI();
             }
         }
@@ -341,7 +344,6 @@ GridLayout {
 
         }
     }
-
 
     LDLProgressBar{
         visible: isDownloading
@@ -357,16 +359,11 @@ GridLayout {
         Layout.fillWidth: true
     }
 
-
     Label {
         Layout.fillWidth: true
         id: errorLabel
         color: "red"
         text: ""
-    }
-
-    QDCDiveListModel {
-        id: dcdivelist
     }
 
     QDCDiveParser {
@@ -380,15 +377,33 @@ GridLayout {
         context: dccontext
         onProgress: {
            readProgress.value = current / maximum;
+            dcwriter.setMaximum(maximum);
         }
         onDive: {
-            dcdivelist.add(dive);
+            dcwriter.write(dive);
         }
         onError: {
             console.error(msg);
         }
         onFinished: {
             isDownloading = false;
+            dcwriter.end();
+        }
+        onDeviceInfo: {
+            dcwriter.device = data;
+            dcwriter.start();
+        }
+    }
+
+    QDCFileWriter {
+        id: dcfilewriter
+    }
+
+    QDCWriterController {
+        id: dcwriter
+        writer: dcfilewriter
+        onProgress: {
+            writeProgress.value = current / maximum;
         }
     }
 
@@ -435,6 +450,7 @@ GridLayout {
 
             dcreader.device = dev;
             dcparser.device = dev;
+
             dcreader.startReading()
         }
     }
