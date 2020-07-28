@@ -180,7 +180,7 @@ ColumnLayout {
 
                 Text {
                     Layout.preferredWidth: columnWidths['datetime']
-                    text: datetime
+                    text: date
                     horizontalAlignment: Text.AlignLeft
                 }
 

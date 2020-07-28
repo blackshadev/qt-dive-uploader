@@ -27,10 +27,10 @@ public:
     void setDevice(DeviceData dev) override;
     void setDescriptor(DCDeviceDescriptor *descr) override;
     void setDescriptor(QDCDescriptor *descr);
-    void setMaximum(unsigned int);
     unsigned int getMaximum();
     void setCurrent(unsigned int);
     unsigned int getCurrent();
+    void setMaximum(unsigned int);
 public slots:
     void write(DCDive *dive) override;
     void write(QDCDive *dive);

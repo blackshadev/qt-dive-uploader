@@ -371,27 +371,47 @@ GridLayout {
         context: dccontext
     }
 
+    QDCSelectionProxy {
+
+        id: selectionProxy
+        onShow: {
+            var component = Qt.createComponent("SelectionWindow.qml");
+            if(component.status === Component.Error) {
+                console.error(component.errorString());
+                return;
+            }
+
+            var incubator = component.incubateObject(stackView, {
+                diveData: selectionProxy.model
+            });
+        }
+        onHide: {
+            var item = stackView.pop();
+            console.log(item);
+        }
+    }
+
     QDCAsyncReader {
         id: dcreader
         parser: dcparser
         context: dccontext
         onProgress: {
            readProgress.value = current / maximum;
-            dcwriter.setMaximum(maximum);
+            dcwriter.maximum = maximum;
         }
         onDive: {
-            dcwriter.write(dive);
+            selectionProxy.write(dive);
         }
         onError: {
             console.error(msg);
         }
         onFinished: {
             isDownloading = false;
-            dcwriter.end();
+            selectionProxy.end();
         }
         onDeviceInfo: {
             dcwriter.device = data;
-            dcwriter.start();
+            selectionProxy.start();
         }
     }
 

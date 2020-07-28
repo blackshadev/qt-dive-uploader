@@ -54,7 +54,6 @@ ApplicationWindow {
                 id: loginView
             }
         }
-
     }
 
     Component.onCompleted: {
@@ -62,7 +61,6 @@ ApplicationWindow {
             stackView.push(loginViewComp);
         }
     }
-
 
     Connections {
         target: littledivelog

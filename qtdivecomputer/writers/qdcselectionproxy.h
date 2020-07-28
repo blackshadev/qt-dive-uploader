@@ -9,18 +9,29 @@
 class QDCSelectionProxy : public QObject, public DCWriterInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QDCDiveListModel * model READ model CONSTANT)
+    Q_PROPERTY(QDCDiveListModel *model READ getModel CONSTANT)
 public:
     QDCSelectionProxy(QObject *parent = NULL);
+    QDCDiveListModel *getModel();
+public slots:
     void start() override;
     void setDevice(DeviceData dev) override;
     void setDescriptor(DCDeviceDescriptor *descr) override;
     void write(DCDive *dive) override;
+    void write(QDCDive *dive);
     void end() override;
-public slots:
+    void done();
+    void cancel();
     void select(QDCDive *dive);
     void deselect(QDCDive *dive);
+signals:
+    void show();
+    void hide();
+    void cancelled();
+    void finished(QList<QDCDive *> *);
 private:
+    void populateSelected();
+    QList<QDCDive *> selected;
     QDCDiveListModel divesModel;
 };
 

@@ -15,7 +15,7 @@ public:
         DateRole = Qt::UserRole + 1,
         DepthRole,
         TimeRole,
-        SelectionRole,
+        SelectedRole,
     };
     Q_ENUM(DiveRoles)
     QDCDiveListModel(QObject *parent = NULL);
@@ -23,11 +23,13 @@ public:
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    std::vector<QDCDive *> *getData();
 public slots:
     void add(QDCDive *dive);
     void clear();
     void select(QDCDive *dive);
     void deselect(QDCDive *dive);
+    bool isSelected(QDCDive *dive) const;
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:
