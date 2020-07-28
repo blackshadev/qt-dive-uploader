@@ -32,6 +32,8 @@ QVariant QDCDiveListModel::data(const QModelIndex &index, int role) const
             return QVariant::fromValue(dive->getMaxDepth());
         case TimeRole:
             return QVariant::fromValue(QString::fromStdString(dive->getDisplayDivetime()));
+        case SelectionRole:
+            return QVariant::fromValue(selected.find(dive) != selected.end());
     }
 }
 
@@ -39,6 +41,7 @@ void QDCDiveListModel::add(QDCDive *dive)
 {
     beginResetModel();
     items.push_back(dive);
+    selected.insert(dive);
     endResetModel();
 }
 
@@ -52,11 +55,22 @@ void QDCDiveListModel::clear()
     endResetModel();
 }
 
+void QDCDiveListModel::select(QDCDive *dive)
+{
+    selected.insert(dive);
+}
+
+void QDCDiveListModel::deselect(QDCDive *dive)
+{
+    selected.erase(dive);
+}
+
 QHash<int, QByteArray> QDCDiveListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[DateRole] = "date";
     roles[DepthRole] = "depth";
     roles[TimeRole] = "time";
+    roles[SelectionRole] = "selection";
     return roles;
 }

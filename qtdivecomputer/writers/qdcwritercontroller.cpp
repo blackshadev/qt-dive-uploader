@@ -102,6 +102,11 @@ unsigned int QDCWriterController::getCurrent()
     return current;
 }
 
+bool QDCWriterController::getSelect()
+{
+    return select;
+}
+
 void QDCWriterController::process(DCDive *dive)
 {
     writer->write(dive);

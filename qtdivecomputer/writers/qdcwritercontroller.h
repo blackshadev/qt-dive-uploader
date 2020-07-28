@@ -27,18 +27,19 @@ public:
     void setDevice(DeviceData dev) override;
     void setDescriptor(DCDeviceDescriptor *descr) override;
     void setDescriptor(QDCDescriptor *descr);
+    void setMaximum(unsigned int);
+    unsigned int getMaximum();
+    void setCurrent(unsigned int);
+    unsigned int getCurrent();
 public slots:
     void write(DCDive *dive) override;
     void write(QDCDive *dive);
     void start() override;
     void end() override;
-    void setMaximum(unsigned int);
-    unsigned int getMaximum();
-    void setCurrent(unsigned int);
-    unsigned int getCurrent();
 signals:
     void progress(unsigned int current, unsigned int maximum);
     void finished();
+    void selectChanged(bool select);
 protected:
     virtual void process(DCDive *dive);
     void run() override;
@@ -47,6 +48,7 @@ protected:
     DCWriterInterface *writer = NULL;
     QDCDescriptor *descriptor = NULL;
 private:
+    bool select = false;
     bool running = false;
     bool ended = false;
     QMutex mutex;

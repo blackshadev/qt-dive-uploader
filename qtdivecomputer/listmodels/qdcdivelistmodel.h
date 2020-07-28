@@ -2,6 +2,7 @@
 #define QDCDIVELISTMODEL_H
 #include <QObject>
 #include <QAbstractListModel>
+#include <set>
 #include "../entities/qdcdive.h"
 #include "../device/qdcdevice.h"
 
@@ -13,7 +14,8 @@ public:
     enum DiveRoles {
         DateRole = Qt::UserRole + 1,
         DepthRole,
-        TimeRole
+        TimeRole,
+        SelectionRole,
     };
     Q_ENUM(DiveRoles)
     QDCDiveListModel(QObject *parent = NULL);
@@ -22,12 +24,15 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 public slots:
-    Q_INVOKABLE void add(QDCDive *dive);
-    Q_INVOKABLE void clear();
+    void add(QDCDive *dive);
+    void clear();
+    void select(QDCDive *dive);
+    void deselect(QDCDive *dive);
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:
     std::vector<QDCDive *> items;
+    std::set<QDCDive *> selected;
 };
 Q_DECLARE_METATYPE(QDCDiveListModel *)
 
