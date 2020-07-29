@@ -55,6 +55,24 @@ ApplicationWindow {
             }
         }
     }
+    Component {
+        id: selectionViewComp
+        SelectionWindow {
+            id: selectionView
+            diveData: selectionProxy.model
+        }
+
+    }
+
+    QDCSelectionProxy {
+        id: selectionProxy
+        onShow: {
+            stackView.push(selectionViewComp);
+        }
+        onHide: {
+            stackView.pop();
+        }
+    }
 
     Component.onCompleted: {
         if(!littledivelog.isLoggedIn) {

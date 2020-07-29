@@ -22,8 +22,8 @@ ColumnLayout {
         "depth": 100
     }
 
-    id: mainView
-    anchors.fill: parent
+    id: selectionLayout
+    Layout.fillWidth: true
     spacing: 0
 
     Rectangle {
@@ -42,7 +42,7 @@ ColumnLayout {
                     text: "Select all"
                     Material.elevation: 0
                     onClicked: {
-                        diveData.setSelectedAll(true);
+                        diveData.selectAll();
                     }
                 }
 
@@ -52,7 +52,7 @@ ColumnLayout {
                     text: "Deselect all"
                     Material.elevation: 0
                     onClicked: {
-                        diveData.setSelectedAll(false);
+                        diveData.deselectAll();
                     }
                 }
 
@@ -83,7 +83,7 @@ ColumnLayout {
             Text {
                 Layout.leftMargin: 10
                 Layout.topMargin: 5
-                text: diveData ? "Selected " + diveData.selectedDiveCount + " / " + diveData.rowCount() : "No dive data"
+                text: diveData ? "Selected " + diveData.selectedCount + " / " + diveData.rowCount() : "No dive data"
             }
         }
     }
@@ -160,7 +160,7 @@ ColumnLayout {
 
 
             onClicked: {
-                diveData.setSelected(index, !selected);
+                diveData.toggle(dive, !selected);
             }
 
             contentItem: RowLayout {
@@ -172,7 +172,7 @@ ColumnLayout {
                     Layout.margins: 0
                     checked: selected
                     onCheckedChanged: {
-                        diveData.setSelected(index, checked);
+                        diveData.toggle(dive, checked);
                     }
                     Layout.preferredWidth: columnWidths['checkbox']
 

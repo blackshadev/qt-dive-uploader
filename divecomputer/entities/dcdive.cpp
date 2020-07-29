@@ -68,6 +68,7 @@ std::string DCDive::getDisplayDivetime()
     std::sprintf(
         buff,
         "%02d:%02d:%02d",
+        divetime / (60 * 60),
         divetime / 60 % 60,
         divetime % 60
     );

@@ -371,26 +371,6 @@ GridLayout {
         context: dccontext
     }
 
-    QDCSelectionProxy {
-
-        id: selectionProxy
-        onShow: {
-            var component = Qt.createComponent("SelectionWindow.qml");
-            if(component.status === Component.Error) {
-                console.error(component.errorString());
-                return;
-            }
-
-            var incubator = component.incubateObject(stackView, {
-                diveData: selectionProxy.model
-            });
-        }
-        onHide: {
-            var item = stackView.pop();
-            console.log(item);
-        }
-    }
-
     QDCAsyncReader {
         id: dcreader
         parser: dcparser
