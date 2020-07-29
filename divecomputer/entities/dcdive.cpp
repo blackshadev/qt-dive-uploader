@@ -92,7 +92,7 @@ void DCDive::setDatetime(datetime_t datetime)
 
 std::string DCDive::getDisplayDateTime()
 {
-    return format_datetime_iso((dc_datetime_t&)data.datetime);
+    return format_datetime_display((dc_datetime_t&)data.datetime);
 }
 
 std::string DCDive::getISODateTime()

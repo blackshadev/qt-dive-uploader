@@ -40,7 +40,7 @@ void QDCWriterController::setDescriptor(QDCDescriptor *descr)
 
 void QDCWriterController::start()
 {
-    if (running) {
+    if (isBusy) {
         throw std::runtime_error("Already running");
     }
     if (!writer || !device.serial || !descriptor) {
@@ -50,6 +50,7 @@ void QDCWriterController::start()
     writer->setDevice(device);
     writer->setDescriptor(descriptor);
 
+    emit started();
     QThread::start();
 }
 
@@ -72,6 +73,11 @@ void QDCWriterController::end()
     queueNotEmpty.wakeAll();
 }
 
+void QDCWriterController::cancel()
+{
+    end();
+}
+
 void QDCWriterController::setMaximum(unsigned int max)
 {
     if (maximum == max) {
@@ -80,6 +86,21 @@ void QDCWriterController::setMaximum(unsigned int max)
 
     maximum = max;
     emit progress(current, maximum);
+}
+
+bool QDCWriterController::getBusy()
+{
+    return isBusy;
+}
+
+void QDCWriterController::setBusy(bool b)
+{
+    if (isBusy == b) {
+        return;
+    }
+
+    isBusy = b;
+    emit isBusyChanged();
 }
 
 unsigned int QDCWriterController::getMaximum()

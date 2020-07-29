@@ -60,8 +60,13 @@ ApplicationWindow {
         SelectionWindow {
             id: selectionView
             diveData: selectionProxy.model
+            onFinished: {
+                selectionProxy.done();
+            }
+            onCancelled: {
+                selectionProxy.cancel();
+            }
         }
-
     }
 
     QDCSelectionProxy {
@@ -84,7 +89,6 @@ ApplicationWindow {
         target: littledivelog
         function onLoggedStateChanged(isLoggedIn) {
             if(isLoggedIn) {
-                libdivecomputer.writeType = WriteTypes.LittleLog;
                 stackView.pop();
             } else {
                 stackView.push(loginViewComp);

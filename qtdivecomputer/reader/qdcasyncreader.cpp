@@ -13,6 +13,7 @@ QDCAsyncReader::QDCAsyncReader()
     reader->connect(reader, SIGNAL(dive(QDCDive *)), this, SIGNAL(dive(QDCDive *)));
     reader->connect(reader, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
     reader->connect(reader, SIGNAL(finished()), this, SIGNAL(finished()));
+    reader->connect(reader, SIGNAL(isBusyChanged()), this, SIGNAL(isBusyChanged()));
     reader->moveToThread(workerThread);
     workerThread->start();
 }
@@ -45,6 +46,12 @@ DCReaderInterface *QDCAsyncReader::setContext(DCContextInterface *c)
     reader->setContext(context);
     return this;
 }
+
+bool QDCAsyncReader::getIsBusy()
+{
+    return reader->getIsBusy();
+}
+
 
 void QDCAsyncReader::startReading()
 {

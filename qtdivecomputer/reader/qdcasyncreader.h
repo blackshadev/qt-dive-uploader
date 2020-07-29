@@ -15,6 +15,8 @@ class QDCAsyncReader : public QObject, public DCReaderInterface
     Q_PROPERTY(QDCDevice *device WRITE setDevice)
     Q_PROPERTY(QDCDiveParser *parser WRITE setParser)
     Q_PROPERTY(QDCContext *context WRITE setContext)
+    Q_PROPERTY(bool isBusy READ getIsBusy NOTIFY isBusyChanged)
+
 public:
     QDCAsyncReader();
     ~QDCAsyncReader();
@@ -22,8 +24,11 @@ public:
     DCReaderInterface *setDevice(DCDeviceInterface *device) override;
     DCReaderInterface *setParser(DCDiveParserInterface *parser) override;
     DCReaderInterface *setContext(DCContextInterface *context) override;
-    Q_INVOKABLE void startReading() override;
-    Q_INVOKABLE void cancel() override;
+    bool getIsBusy();
+
+public slots:
+    void startReading() override;
+    void cancel() override;
 
 signals:
     void dive(QDCDive *dive);
@@ -34,8 +39,10 @@ signals:
     void error(QString msg);
     void finished();
     void startWork();
+    void isBusyChanged();
 
 private:
+    bool isBusy = false;
     QThread *workerThread;
     DCDeviceInterface* device;
     DCDiveParserInterface* parser;

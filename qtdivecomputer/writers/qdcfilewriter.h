@@ -16,6 +16,7 @@ public:
     QString getPath();
     void write(DCDive *dive) override;
     void end() override;
+    void cancel() override;
     void start() override;
 private:
     QJsonObject getComputerAsJson();
@@ -23,8 +24,6 @@ private:
     QString path;
     QJsonObject object;
     QJsonArray dives;
-    QFile file;
-
 signals:
     void pathChanged(QString path);
 };

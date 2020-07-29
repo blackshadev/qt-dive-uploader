@@ -30,7 +30,7 @@ ColumnLayout {
         z: 3
         Layout.fillWidth: true
         height: 85
-        color: "transparent"
+        color: app.color
 
         ColumnLayout {
 
@@ -63,7 +63,7 @@ ColumnLayout {
                     Material.background: Material.color(Material.Blue)
                     Material.theme: Material.Dark
                     onClicked: {
-                        mainView.finished();
+                        selectionLayout.finished();
                     }
                 }
 
@@ -75,7 +75,7 @@ ColumnLayout {
                     Material.background: Material.color(Material.Blue)
                     Material.theme: Material.Dark
                     onClicked: {
-                        mainView.cancelled();
+                        selectionLayout.cancelled();
                     }
                 }
             }

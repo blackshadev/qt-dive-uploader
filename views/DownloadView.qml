@@ -11,7 +11,11 @@ import FontAwesome 1.0
 import "../components"
 
 GridLayout {
-    property bool isDownloading: false
+    property bool isDownloading: dcreader.isBusy
+    property bool isWriting: dcwriter.isBusy
+    property bool isSelecting: selectionProxy.isBusy
+    property bool isBusy: isDownloading || isWriting || isSelecting;
+    property variant writeTarget: selectDives.checked ? selectionProxy : dcwriter;
 
     Layout.fillWidth: true
     columns: 2
@@ -63,9 +67,7 @@ GridLayout {
         sourceLabel.visible = isValid(DownloadView.Stages.TransportSelection);
         sourceRow.visible = isValid(DownloadView.Stages.TransportSelection);
 
-        var reading = isValid(DownloadView.Stages.OutputSelection);
-
-//        startButton.enabled = isValid(DownloadView.Stages.OutputSelection) && isDownloading == false;
+        startButton.enabled = isValid(DownloadView.Stages.OutputSelection);
     }
 
     function refreshDevices() {
@@ -133,6 +135,7 @@ GridLayout {
         property bool loaded: false
         id: computerSelection
         editable: true
+        enabled: !isBusy
 
         model: SortFilterProxyModel {
             sourceModel: QDCDescriptorListModel {
@@ -166,6 +169,7 @@ GridLayout {
             transportlist.filter(trans);
             transportSelection.currentIndex = 0;
             dcwriter.descriptor = descr;
+            selectionProxy.descriptor = descr;
 
             if(loaded) {
                 session.computer = comp;
@@ -190,6 +194,7 @@ GridLayout {
         property bool loaded: false
         Layout.fillWidth: true
         id: transportSelection
+        enabled: !isBusy
         model: QDCTransportListModel {
             id: transportlist
             Component.onCompleted: {
@@ -230,6 +235,7 @@ GridLayout {
         ComboBox {
             Layout.fillWidth: true
             id: sourceSelection
+            enabled: !isBusy
             model: QDCDeviceListModel {
                 id: devicelist
             }
@@ -242,8 +248,10 @@ GridLayout {
             onClicked: {
                 refreshDevices();
             }
+            enabled: !isBusy
 
             hoverEnabled: true
+
             ToolTip.timeout: 5000
             ToolTip.text: "Refresh available source ports"
             ToolTip.visible: hovered
@@ -259,6 +267,7 @@ GridLayout {
 
     CheckBox {
         id: selectDives
+        enabled: !isBusy
         Component.onCompleted: {
             checked = session.selectDives;
         }
@@ -277,6 +286,7 @@ GridLayout {
     CheckBox {
         visible: littledivelog.isLoggedIn
         id: useFingerprint
+        enabled: !isBusy
         Component.onCompleted: {
             checked = session.useFingerprint;
         }
@@ -298,12 +308,19 @@ GridLayout {
         RadioButton {
             text: "File"
             id: fileRadio
+            enabled: !isBusy
+            onCheckedChanged: {
+                refreshUI();
+            }
         }
 
         RadioButton {
             text: "LittleLog"
             id: llRadio
-            enabled: littledivelog.userInfo !== null
+            enabled: !isBusy && littledivelog.userInfo !== null
+            onCheckedChanged: {
+                refreshUI();
+            }
         }
     }
 
@@ -323,6 +340,7 @@ GridLayout {
 
             id: filePath
             text: session.path
+            enabled: !isBusy
             onTextChanged: {
                 var fixedText = ensureJSON(filePath.text);
                 if(filePath.text !== fixedText) {
@@ -338,22 +356,22 @@ GridLayout {
         Button {
             Material.elevation: 0
             text: "Browse..."
+            enabled: !isBusy
             onClicked: {
                 fileDialog.open();
             }
-
         }
     }
 
     LDLProgressBar{
-        visible: isDownloading
+        visible: isBusy
         id: readProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
     }
 
     LDLProgressBar {
-        visible: isDownloading
+        visible: isBusy
         id: writeProgress
         Layout.columnSpan: 2
         Layout.fillWidth: true
@@ -376,24 +394,48 @@ GridLayout {
         parser: dcparser
         context: dccontext
         onProgress: {
-           readProgress.value = current / maximum;
+            readProgress.value = current / maximum;
             dcwriter.maximum = maximum;
         }
         onDive: {
-            selectionProxy.write(dive);
+            writeTarget.write(dive);
         }
         onError: {
             console.error(msg);
         }
         onFinished: {
-            isDownloading = false;
-            selectionProxy.end();
+            writeTarget.end();
         }
         onDeviceInfo: {
             dcwriter.device = data;
-            selectionProxy.start();
+            selectionProxy.device = data;
+            writeTarget.start();
         }
     }
+
+    Connections {
+        target: selectionProxy
+        function onStarted() {
+            isSelecting = true;
+        }
+        function onFinished(selected) {
+
+            dcwriter.start();
+
+
+            for (let iX = 0; iX < selected.length; iX++) {
+                dcwriter.write(selected[iX]);
+            }
+
+            dcwriter.end();
+
+            isSelecting = false;
+        }
+        function onCancelled() {
+            isSelecting = false;
+        }
+    }
+
 
     QDCFileWriter {
         id: dcfilewriter
@@ -404,6 +446,12 @@ GridLayout {
         writer: dcfilewriter
         onProgress: {
             writeProgress.value = current / maximum;
+        }
+        onStarted: {
+            isWriting = true;
+        }
+        onFinished: {
+            isWriting = false;
         }
     }
 
@@ -416,8 +464,8 @@ GridLayout {
         font.family: FontAwesome.fontFamily
         font.pointSize: 25
         padding: 20
-//        enabled: isValid(DownloadView.Stages.OutputSelection) && dcreader.ready
-        visible: isDownloading == false
+        visible: !isDownloading
+        enabled: isValid(DownloadView.Stages.OutputSelection)
 
         Material.foreground: Material.color(Material.Grey, Material.Shade100)
 
@@ -443,7 +491,6 @@ GridLayout {
             errorLabel.text = "";
             writeProgress.value = 0;
             readProgress.value = 0;
-            isDownloading = true;
 
             var idx = devicelist.index(sourceSelection.currentIndex, 0);
             var dev = devicelist.data(idx, DeviceRoles.DeviceRole);
@@ -464,7 +511,7 @@ GridLayout {
         font.family: FontAwesome.fontFamily
         font.pointSize: 25
         padding: 20
-        visible: isDownloading == true
+        visible: isDownloading
 
         Material.background: Material.Red
         Material.foreground: Material.color(Material.Grey, Material.Shade100)
@@ -473,5 +520,4 @@ GridLayout {
             dcreader.cancel();
         }
     }
-
 }

@@ -18,6 +18,7 @@ class QDCWriterController : public QThread, public DCWriterInterface
     Q_PROPERTY(QDeviceData device WRITE setDevice)
     Q_PROPERTY(QDCDescriptor *descriptor WRITE setDescriptor)
     Q_PROPERTY(QDCWriter *writer WRITE setWriter)
+    Q_PROPERTY(bool isBusy READ getBusy NOTIFY isBusyChanged)
 
 public:
     QDCWriterController(QObject *parent = NULL);
@@ -31,15 +32,20 @@ public:
     void setCurrent(unsigned int);
     unsigned int getCurrent();
     void setMaximum(unsigned int);
+    bool getBusy();
+    void setBusy(bool b);
 public slots:
     void write(DCDive *dive) override;
     void write(QDCDive *dive);
     void start() override;
     void end() override;
+    void cancel() override;
 signals:
     void progress(unsigned int current, unsigned int maximum);
     void finished();
+    void started();
     void selectChanged(bool select);
+    void isBusyChanged();
 protected:
     virtual void process(DCDive *dive);
     void run() override;
@@ -48,8 +54,7 @@ protected:
     DCWriterInterface *writer = NULL;
     QDCDescriptor *descriptor = NULL;
 private:
-    bool select = false;
-    bool running = false;
+    bool isBusy = false;
     bool ended = false;
     QMutex mutex;
     QWaitCondition queueNotEmpty;

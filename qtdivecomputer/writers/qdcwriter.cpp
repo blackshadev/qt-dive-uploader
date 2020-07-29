@@ -25,3 +25,18 @@ void QDCWriter::setDescriptor(QDCDescriptor *descr)
 {
     descriptor = descr;
 }
+
+bool QDCWriter::getBusy()
+{
+    return isBusy;
+}
+
+void QDCWriter::setBusy(bool b)
+{
+    if (isBusy == b) {
+        return;
+    }
+
+    isBusy = b;
+    emit isBusyChanged();
+}

@@ -23,6 +23,11 @@ QDCReader *QDCReader::setContext(DCContextInterface *ctx)
 
 void QDCReader::startReading()
 {
+    if (isBusy) {
+        throw std::runtime_error("Already reading");
+    }
+
+    setIsBusy(true);
     DCReader::startReading();
 }
 
@@ -32,7 +37,26 @@ void QDCReader::setFingerprint(QByteArray data)
     fp.data = (unsigned char *)data.data();
     fp.size = data.size();
 
+    setFingerprint(fp);
+}
+
+void QDCReader::setIsBusy(bool b)
+{
+    if (isBusy == b) {
+        return;
+    }
+    isBusy = b;
+    emit isBusyChanged();
+}
+
+void QDCReader::setFingerprint(fingerprint_t fp)
+{
     DCReader::setFingerprint(fp);
+}
+
+bool QDCReader::getIsBusy()
+{
+    return isBusy;
 }
 
 void QDCReader::cancel()
@@ -78,4 +102,5 @@ void QDCReader::receiveDive(DCDive *data)
 void QDCReader::receiveFinished()
 {
     emit finished();
+    setIsBusy(false);
 }

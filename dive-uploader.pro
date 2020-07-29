@@ -18,6 +18,7 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
+    common/numeric.cpp \
     divecomputer/reader/dcreader.cpp \
     divecomputer/transports/dctransportfactory.cpp \
     divecomputer/utils/dcstatus.cpp \
@@ -61,6 +62,7 @@ SOURCES += main.cpp \
     common/datetime.cpp
 
 HEADERS += \
+    common/numeric.h \
     divecomputer/common.h \
     divecomputer/context/dccontextinterface.h \
     divecomputer/devices/dcdeviceinterface.h \

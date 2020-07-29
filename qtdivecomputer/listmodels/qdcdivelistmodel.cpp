@@ -1,6 +1,7 @@
 #include "qdcdivelistmodel.h"
 #include "../parsers/qdiveparser.h"
 #include "../divecomputer/reader/dcreader.h"
+#include "../common/numeric.h"
 
 QDCDiveListModel::QDCDiveListModel(QObject *parent) : QAbstractListModel(parent)
 {
@@ -29,7 +30,7 @@ QVariant QDCDiveListModel::data(const QModelIndex &index, int role) const
         case DateRole:
             return QVariant::fromValue(QString::fromStdString(dive->getDisplayDateTime()));
         case DepthRole:
-            return QVariant::fromValue(dive->getMaxDepth());
+            return QVariant::fromValue(QString::fromStdString(formatFloat(dive->getMaxDepth())));
         case TimeRole:
             return QVariant::fromValue(QString::fromStdString(dive->getDisplayDivetime()));
         case SelectedRole:

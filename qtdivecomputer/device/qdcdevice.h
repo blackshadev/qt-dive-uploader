@@ -8,6 +8,9 @@ struct QDeviceData : public DeviceData {
     Q_PROPERTY(unsigned int model MEMBER model)
     Q_PROPERTY(unsigned int serial MEMBER serial)
     Q_PROPERTY(unsigned int firmware MEMBER firmware)
+public:
+    QDeviceData();
+    QDeviceData(const struct DeviceData&);
 };
 Q_DECLARE_METATYPE(QDeviceData)
 
