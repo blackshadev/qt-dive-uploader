@@ -31,6 +31,7 @@ protected:
     virtual void receiveClockEvent(dc_event_clock_t *clock) = 0;
     virtual void receiveDive(DCDive *dive) = 0;
     virtual void receiveFinished() = 0;
+    virtual void receiveCancelled() = 0;
 
     DCDeviceInterface *device;
     DCDiveParserInterface *parser;

@@ -104,3 +104,9 @@ void QDCReader::receiveFinished()
     emit finished();
     setIsBusy(false);
 }
+
+void QDCReader::receiveCancelled()
+{
+    emit cancelled();
+    setIsBusy(false);
+}

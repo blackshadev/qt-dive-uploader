@@ -37,6 +37,7 @@ signals:
     void clock(unsigned int deviceClock, dc_ticks_t systime);
     void waiting();
     void error(QString msg);
+    void cancelled();
     void finished();
     void startWork();
     void isBusyChanged();

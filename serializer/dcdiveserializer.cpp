@@ -8,10 +8,26 @@ void DCDiveSerializer::serialize(QJsonObject &json, DCDive *dive)
     auto fingerprintData = dive->getFingerprint();
     json["fingerprint"] = serializeFingerprint(fingerprintData);
     json["max_depth"] = dive->getMaxDepth();
-    json["min_temperature"] = dive->getMinTemperature();
-    json["max_temperature"] = dive->getMaxTemperature();
-    json["surface_temperature"] = dive->getSurfaceTemperature();
-    json["atmospheric_pressure"] = dive->getAtmosphericPressure();
+
+    auto minTemp = dive->getMinTemperature();
+    if (minTemp.has_value) {
+        json["min_temperature"] = minTemp.value;
+    }
+
+    auto maxTemp = dive->getMaxTemperature();
+    if (maxTemp.has_value) {
+        json["max_temperature"] = maxTemp.value;
+    }
+
+    auto surfaceTemp = dive->getSurfaceTemperature();
+    if (surfaceTemp.has_value) {
+        json["surface_temperature"] = surfaceTemp.value;
+    }
+
+    auto atmosPressure =  dive->getAtmosphericPressure();
+    if (atmosPressure.has_value) {
+        json["atmospheric_pressure"] = atmosPressure.value;
+    }
 
     auto divemode = dive->getDivemode();
     if (divemode.has_value) {

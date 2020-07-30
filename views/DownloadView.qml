@@ -401,7 +401,10 @@ GridLayout {
             writeTarget.write(dive);
         }
         onError: {
-            console.error(msg);
+            errorLabel.text = msg;
+        }
+        onCancelled: {
+            writeTarget.cancel();
         }
         onFinished: {
             writeTarget.end();

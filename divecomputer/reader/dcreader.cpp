@@ -58,6 +58,11 @@ void DCReader::readAll()
 
     dc_device_foreach(dev, nativeDiveCallback, this);
 
+    if (cancelled) {
+        receiveCancelled();
+        return;
+    }
+
     receiveFinished();
 }
 

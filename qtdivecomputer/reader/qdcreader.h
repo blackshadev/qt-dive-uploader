@@ -28,6 +28,7 @@ public:
     void receiveClockEvent(dc_event_clock_t *clock) override;
     void receiveDive(DCDive *dive) override;
     void receiveFinished() override;
+    void receiveCancelled() override;
     void setFingerprint(fingerprint_t data) override;
     bool getIsBusy();
 public slots:
@@ -44,6 +45,7 @@ signals:
     void waiting();
     void error(QString msg);
     void finished();
+    void cancelled();
 protected:
     void setIsBusy(bool b);
 private:

@@ -19,6 +19,22 @@ inline dc_status_t setField(dc_parser_t* parser, dc_field_type_t type, std::func
     return st;
 }
 
+inline void emptyDCData(dc_tank_t &tank)
+{
+    tank.type = DC_TANKVOLUME_NONE;
+    tank.gasmix = 0;
+    tank.volume = 0;
+    tank.endpressure = 0;
+    tank.workpressure = 0;
+    tank.beginpressure = 0;
+}
+inline void emptyDCData(dc_gasmix_t &mix)
+{
+    mix.helium = 0;
+    mix.oxygen = 0;
+    mix.nitrogen = 0;
+}
+
 template <typename TData>
 inline void setListFields(dc_parser_t* parser, dc_field_type_t length_type, dc_field_type_t data_type,  std::function<void(TData)> addItem)
 {
@@ -30,6 +46,7 @@ inline void setListFields(dc_parser_t* parser, dc_field_type_t length_type, dc_f
     }
 
     TData data;
+    emptyDCData(data);
     for (unsigned int i = 0; i < count; i++) {
         _getField(parser, data_type, &data, i);
         addItem(data);
@@ -191,7 +208,7 @@ void DCDiveParser::finalize(DCDive *dive)
 
 template<typename TIterator>
 void findPressureSample(
-        double *out,
+        double &out,
         unsigned int iTank,
         TIterator sampleStart,
         TIterator sampleEnd
@@ -201,7 +218,7 @@ void findPressureSample(
         sample = *it;
         for(auto const& pressure: *(sample->getPressures())) {
             if(pressure.tank == iTank) {
-                *out = pressure.pressure;
+                out = pressure.pressure;
                 return;
             }
         }
@@ -210,11 +227,10 @@ void findPressureSample(
 
 void DCDiveParser::fixTankPressuresFromSamples(DCDive *dive)
 {
+    auto samples = dive->getSamples();
+    auto tanks = dive->getTanks();
 
-    auto samples = *(dive->getSamples());
-    auto tanks = *(dive->getTanks());
-
-    if (!samples.size()) {
+    if (!samples->size()) {
         return;
     }
 
@@ -222,19 +238,24 @@ void DCDiveParser::fixTankPressuresFromSamples(DCDive *dive)
     unsigned int iTank = 0;
     DCDiveSample *sample;
 
-    for (iTank = 0; iTank < tanks.size(); iTank++) {
-        auto tank = tanks[iTank];
-        if (!tank.pressures.has_value) {
+    for (iTank = 0; iTank < tanks->size(); iTank++) {
+        tank_t* tank = tanks[iTank].data();
+
+        if (!tank->pressures.has_value) {
             continue;
         }
 
-        if(tank.pressures.value.beginpressure == 0) {
-            findPressureSample(&tank.pressures.value.beginpressure, iTank, samples.begin(), samples.end());
+        auto fixBeginPressure = tank->pressures.has_value || tank->pressures.value.beginpressure == 0;
+        auto fixEndPressure = tank->pressures.has_value || tank->pressures.value.endpressure == 0;
+
+        if (fixBeginPressure) {
+            findPressureSample(tank->pressures.value.beginpressure, iTank, samples->begin(), samples->end());
         }
 
-        if(tank.pressures.value.endpressure == 0) {
-            findPressureSample(&tank.pressures.value.endpressure, iTank, samples.rbegin(), samples.rend());
+        if (fixEndPressure) {
+            findPressureSample(tank->pressures.value.endpressure, iTank, samples->rbegin(), samples->rend());
         }
+        tank->pressures.has_value = true;
     }
 }
 

@@ -14,6 +14,7 @@ QDCAsyncReader::QDCAsyncReader()
     reader->connect(reader, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
     reader->connect(reader, SIGNAL(finished()), this, SIGNAL(finished()));
     reader->connect(reader, SIGNAL(isBusyChanged()), this, SIGNAL(isBusyChanged()));
+    reader->connect(reader, SIGNAL(cancelled()), this, SIGNAL(cancelled()));
     reader->moveToThread(workerThread);
     workerThread->start();
 }
