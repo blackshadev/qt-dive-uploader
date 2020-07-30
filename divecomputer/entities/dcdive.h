@@ -39,6 +39,7 @@ public:
     ~DCDive();
     fingerprint_t getFingerprint();
     void setFingerprint(fingerprint_t fp);
+    void setFingerprint(rawfingerprint_t fp);
     double getMaxDepth();
     void setMaxDepth(double depth);
     unsigned int getDivetime();

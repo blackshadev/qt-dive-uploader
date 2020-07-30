@@ -42,8 +42,12 @@ fingerprint_t DCDive::getFingerprint()
 
 void DCDive::setFingerprint(fingerprint_t fp)
 {
-    data.fingerprint.data = fp.data;
-    data.fingerprint.size = fp.size;
+    data.fingerprint = fp;
+}
+
+void DCDive::setFingerprint(rawfingerprint_t fp)
+{
+    data.fingerprint = fp;
 }
 
 double DCDive::getMaxDepth()

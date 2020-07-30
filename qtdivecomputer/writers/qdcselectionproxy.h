@@ -13,6 +13,7 @@ class QDCSelectionProxy : public QObject, public DCWriterInterface
     Q_PROPERTY(QDeviceData device WRITE setDevice)
     Q_PROPERTY(QDCDescriptor *descriptor WRITE setDescriptor)
     Q_PROPERTY(bool isBusy READ getBusy NOTIFY isBusyChanged)
+    Q_PROPERTY(QList<QDCDive *> selected READ getSelected)
 
 public:
     QDCSelectionProxy(QObject *parent = NULL);
@@ -34,15 +35,15 @@ public slots:
     void cancel();
     void select(QDCDive *dive);
     void deselect(QDCDive *dive);
+    QList<QDCDive *> getSelected();
 signals:
     void show();
     void hide();
     void started();
     void cancelled();
-    void finished(QList<QDCDive *> *selected);
+    void finished();
     void isBusyChanged();
 private:
-    void populateSelected();
     QList<QDCDive *> selected;
     QDCDiveListModel divesModel;
     QDCDescriptor *descriptor;
@@ -51,5 +52,6 @@ private:
     void ensureNotBusy();
     void ensureBusy();
 };
+Q_DECLARE_METATYPE(QList<QDCDive *>)
 
 #endif // QDCSELECTIONPROXY_H

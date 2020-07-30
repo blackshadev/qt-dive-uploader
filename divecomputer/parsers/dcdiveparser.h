@@ -23,12 +23,14 @@ protected:
     virtual DCDive *createDive();
     virtual DiveSampleParser *createSampleParser();
     virtual void initialize();
+    virtual void finalize(DCDive *dive);
     DiveSampleParser *sampleParser;
     DCDeviceInterface *device;
     DCContextInterface *context;
     dc_parser_t *parser;
     bool initialized = false;
 private:
+    void fixTankPressuresFromSamples(DCDive *dive);
     void reset();
 };
 

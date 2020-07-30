@@ -128,8 +128,10 @@ DCDive *DCDiveParser::parseDive(rawdivedata_t &divedata)
         auto sampleParser = (DiveSampleParser *)userdata;
         sampleParser->addSample({ type, value });
     }, sampleParser);
-    
+
     sampleParser->finalize();
+
+    finalize(dive);
 
     return dive;
 }
@@ -180,6 +182,60 @@ void DCDiveParser::initialize()
     sampleParser = createSampleParser();
     dc_parser_new(&parser, device->getNative(context));
     initialized = true;
+}
+
+void DCDiveParser::finalize(DCDive *dive)
+{
+    fixTankPressuresFromSamples(dive);
+}
+
+template<typename TIterator>
+void findPressureSample(
+        double *out,
+        unsigned int iTank,
+        TIterator sampleStart,
+        TIterator sampleEnd
+) {
+    DCDiveSample *sample;
+    for(TIterator it = sampleStart; it != sampleEnd; ++it) {
+        sample = *it;
+        for(auto const& pressure: *(sample->getPressures())) {
+            if(pressure.tank == iTank) {
+                *out = pressure.pressure;
+                return;
+            }
+        }
+    }
+}
+
+void DCDiveParser::fixTankPressuresFromSamples(DCDive *dive)
+{
+
+    auto samples = *(dive->getSamples());
+    auto tanks = *(dive->getTanks());
+
+    if (!samples.size()) {
+        return;
+    }
+
+    const unsigned int tankCount = dive->getTanks()->size();
+    unsigned int iTank = 0;
+    DCDiveSample *sample;
+
+    for (iTank = 0; iTank < tanks.size(); iTank++) {
+        auto tank = tanks[iTank];
+        if (!tank.pressures.has_value) {
+            continue;
+        }
+
+        if(tank.pressures.value.beginpressure == 0) {
+            findPressureSample(&tank.pressures.value.beginpressure, iTank, samples.begin(), samples.end());
+        }
+
+        if(tank.pressures.value.endpressure == 0) {
+            findPressureSample(&tank.pressures.value.endpressure, iTank, samples.rbegin(), samples.rend());
+        }
+    }
 }
 
 void DCDiveParser::reset()

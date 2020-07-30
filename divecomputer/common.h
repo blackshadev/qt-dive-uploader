@@ -1,16 +1,26 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-typedef struct {
+struct rawfingerprint_t {
     unsigned int size;
     const unsigned char *data;
-} fingerprint_t;
+};
 
-typedef struct {
+struct fingerprint_t {
+    unsigned int size;
+    unsigned char *data;
+public:
+    fingerprint_t();
+    ~fingerprint_t();
+    void operator=(const fingerprint_t &fp );
+    void operator=(const rawfingerprint_t &fp );
+};
+
+struct rawdivedata_t {
     unsigned int size;
     const unsigned char* data;
-    fingerprint_t fingerprint;
-} rawdivedata_t;
+    rawfingerprint_t fingerprint;
+};
 
 
 #endif // COMMON_H

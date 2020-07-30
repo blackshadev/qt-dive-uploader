@@ -75,9 +75,7 @@ void QDCSelectionProxy::done()
 {
     setBusy(false);
     emit hide();
-
-    populateSelected();
-    emit finished(&selected);
+    emit finished();
 }
 
 void QDCSelectionProxy::cancel()
@@ -105,13 +103,17 @@ void QDCSelectionProxy::deselect(QDCDive *dive)
     divesModel.deselect(dive);
 }
 
-void QDCSelectionProxy::populateSelected()
+QList<QDCDive *> QDCSelectionProxy::getSelected()
 {
+
     selected.clear();
     auto data = divesModel.getData();
     for(auto dive : *data) {
-        selected.push_back(dive);
+        if (divesModel.isSelected(dive)) {
+            selected.push_back(dive);
+        }
     }
+    return selected;
 }
 
 void QDCSelectionProxy::ensureNotBusy()

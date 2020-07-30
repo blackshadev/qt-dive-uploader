@@ -14,22 +14,24 @@ void DCDiveSampleSerializer::serialize(QJsonObject &obj, DCDiveSample *sample)
 
     if (sample->getPressures()->size()) {
         QJsonArray pressArr;
-        obj["Pressure"] = pressArr;
         for (auto press : *(sample->getPressures())) {
             QJsonObject presObj;
             presObj["Tank"] = (int)press.tank;
             presObj["Pressure"] = press.pressure;
             pressArr.append(presObj);
         }
+
+        obj["Pressure"] = pressArr;
     }
 
     if (sample->getEvents()->size()) {
         QJsonArray eventsArr;
-        obj["Events"] = eventsArr;
         for (auto event : *(sample->getEvents())) {
             QJsonObject eventObj;
             eventSerializer.serialize(eventObj, event);
             eventsArr.append(eventObj);
         }
+
+        obj["Events"] = eventsArr;
     }
 }

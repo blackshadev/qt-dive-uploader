@@ -47,6 +47,7 @@ void QDCWriterController::start()
         throw std::runtime_error("Unable to start writing, invalid argument.");
     }
 
+    setCurrent(0);
     writer->setDevice(device);
     writer->setDescriptor(descriptor);
 

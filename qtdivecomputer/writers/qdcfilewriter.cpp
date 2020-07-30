@@ -30,6 +30,8 @@ void QDCFileWriter::write(DCDive *dive)
 
 void QDCFileWriter::end()
 {
+    object["dives"] = dives;
+
     QFile file;
     file.setFileName(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -63,7 +65,6 @@ void QDCFileWriter::start()
     auto dt_now = datetime_now();
     object["readtime"] = QString::fromStdString(format_datetime_iso(dt_now));
     object["computer"] = getComputerAsJson();
-    object["dives"] = dives;
 }
 
 QJsonObject QDCFileWriter::getComputerAsJson()

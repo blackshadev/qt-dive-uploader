@@ -418,10 +418,12 @@ GridLayout {
         function onStarted() {
             isSelecting = true;
         }
-        function onFinished(selected) {
+        function onFinished() {
 
+            var selected = selectionProxy.selected;
+
+            dcwriter.maximum = selected.length;
             dcwriter.start();
-
 
             for (let iX = 0; iX < selected.length; iX++) {
                 dcwriter.write(selected[iX]);
@@ -435,7 +437,6 @@ GridLayout {
             isSelecting = false;
         }
     }
-
 
     QDCFileWriter {
         id: dcfilewriter

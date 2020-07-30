@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     common/numeric.cpp \
+    divecomputer/common.cpp \
     divecomputer/reader/dcreader.cpp \
     divecomputer/transports/dctransportfactory.cpp \
     divecomputer/utils/dcstatus.cpp \

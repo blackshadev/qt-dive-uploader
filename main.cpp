@@ -22,6 +22,7 @@
 #include "qtdivecomputer/writers/qdcfilewriter.h"
 #include "qtdivecomputer/writers/qdcwritercontroller.h"
 #include "qtdivecomputer/writers/qdcselectionproxy.h"
+#include <QList>
 
 int main(int argc, char *argv[])
 {

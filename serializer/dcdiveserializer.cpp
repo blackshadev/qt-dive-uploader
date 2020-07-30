@@ -26,28 +26,27 @@ void DCDiveSerializer::serialize(QJsonObject &json, DCDive *dive)
     }
 
     QJsonArray tanksArray;
-    json["tanks"] = tanksArray;
     for (auto tank : *(dive->getTanks())) {
         QJsonObject tankObj;
         serializeTank(tankObj, tank);
         tanksArray.append(tankObj);
     }
+    json["tanks"] = tanksArray;
 
     QJsonArray samples;
-    json["samples"] = samples;
     for (auto sample : *(dive->getSamples())) {
         QJsonObject sampleObj;
         sampleSerializer.serialize(sampleObj, sample);
+        samples.append(sampleObj);
     }
+    json["samples"] = samples;
 
 }
 
 void DCDiveSerializer::serializeTank(QJsonObject &tankObj, tank_t &tank)
 {
-    QJsonObject presObj;
-    tankObj["pressure"] = presObj;
-
     if (tank.pressures.has_value) {
+        QJsonObject presObj;
         tankObj["volume"] = tank.pressures.value.volume;
 
         presObj["begin"] = tank.pressures.value.beginpressure;
@@ -64,6 +63,7 @@ void DCDiveSerializer::serializeTank(QJsonObject &tankObj, tank_t &tank)
                 presObj["type"] = "bar";
             break;
         }
+        tankObj["pressure"] = presObj;
     }
 
     if (tank.gasmix.has_value) {
