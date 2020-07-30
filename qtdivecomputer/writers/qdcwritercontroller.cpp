@@ -15,7 +15,17 @@ QDCWriterController::~QDCWriterController()
 
 void QDCWriterController::setWriter(QDCWriter *w)
 {
+    if (writer != NULL) {
+        disconnect(writer, NULL, this, NULL);
+    }
+
     writer = w;
+    connect(w, &QDCWriter::isWriteReadyChanged, this, [=]() {
+        mutex.lock();
+        queueNotEmpty.wakeAll();
+        mutex.unlock();
+    });
+    connect(w, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
 }
 
 void QDCWriterController::setDevice(QDeviceData dev)
@@ -104,6 +114,11 @@ void QDCWriterController::setBusy(bool b)
     emit isBusyChanged();
 }
 
+bool QDCWriterController::isWriteReady()
+{
+    return writer->isWriteReady();
+}
+
 unsigned int QDCWriterController::getMaximum()
 {
     return maximum;
@@ -133,6 +148,12 @@ void QDCWriterController::process(DCDive *dive)
 void QDCWriterController::run()
 {
     writer->start();
+
+    mutex.lock();
+    while (!isWriteReady()) {
+        queueNotEmpty.wait(&mutex);
+    }
+    mutex.unlock();
 
     DCDive *dive;
     while (!ended || !queue.isEmpty()) {

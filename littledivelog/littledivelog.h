@@ -31,6 +31,7 @@ public:
     void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(JsonResponse)> callback, bool retry = true, QObject* parent = NULL);
     UserInfo* m_user_info = NULL;
     void fetch_user_data();
+    bool hasUserData();
 signals:
     void error(QString msg);
     void loggedStateChanged(bool isLoggedIn);

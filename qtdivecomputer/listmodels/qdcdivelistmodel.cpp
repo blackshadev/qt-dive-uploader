@@ -1,7 +1,7 @@
 #include "qdcdivelistmodel.h"
 #include "../parsers/qdiveparser.h"
 #include "../divecomputer/reader/dcreader.h"
-#include "../common/numeric.h"
+#include "../divecomputer/utils/numeric.h"
 
 QDCDiveListModel::QDCDiveListModel(QObject *parent) : QAbstractListModel(parent)
 {

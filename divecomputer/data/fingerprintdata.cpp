@@ -1,4 +1,4 @@
-#include "common.h"
+#include "fingerprintdata.h"
 #include <cstring>
 
 fingerprint_t::fingerprint_t()

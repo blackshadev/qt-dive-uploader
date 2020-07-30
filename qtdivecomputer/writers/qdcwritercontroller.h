@@ -34,24 +34,27 @@ public:
     void setMaximum(unsigned int);
     bool getBusy();
     void setBusy(bool b);
+    bool isWriteReady() override;
 public slots:
     void write(DCDive *dive) override;
     void write(QDCDive *dive);
     void start() override;
     void end() override;
     void cancel() override;
+
 signals:
     void progress(unsigned int current, unsigned int maximum);
     void finished();
     void started();
     void selectChanged(bool select);
     void isBusyChanged();
+    void error(QString msg);
 protected:
     virtual void process(DCDive *dive);
     void run() override;
 
     DeviceData device;
-    DCWriterInterface *writer = NULL;
+    QDCWriter *writer = NULL;
     QDCDescriptor *descriptor = NULL;
 private:
     bool isBusy = false;

@@ -18,8 +18,8 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
-    common/numeric.cpp \
-    divecomputer/common.cpp \
+    divecomputer/utils/numeric.cpp \
+    divecomputer/data/fingerprintdata.cpp \
     divecomputer/reader/dcreader.cpp \
     divecomputer/transports/dctransportfactory.cpp \
     divecomputer/utils/dcstatus.cpp \
@@ -49,9 +49,11 @@ SOURCES += main.cpp \
     qtdivecomputer/reader/qdcreader.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
     qtdivecomputer/writers/qdcfilewriter.cpp \
+    qtdivecomputer/writers/qdclittledivelogwriter.cpp \
     qtdivecomputer/writers/qdcselectionproxy.cpp \
     qtdivecomputer/writers/qdcwriter.cpp \
     qtdivecomputer/writers/qdcwritercontroller.cpp \
+    serializer/dcdivecomputerserializer.cpp \
     serializer/dcdivesampleeventserializer.cpp \
     serializer/dcdivesampleserializer.cpp \
     serializer/dcdiveserializer.cpp \
@@ -60,18 +62,20 @@ SOURCES += main.cpp \
     littledivelog/littledivelog.cpp \
     jsonrequest.cpp \
     littledivelog/userinfo.cpp \
-    common/datetime.cpp
+    divecomputer/utils/datetime.cpp
 
 HEADERS += \
-    common/numeric.h \
-    divecomputer/common.h \
+    divecomputer/utils/numeric.h \
+    divecomputer/data/rawfingerprintdata.h \
+    divecomputer/data/rawdivedata.h \
+    divecomputer/data/fingerprintdata.h \
     divecomputer/context/dccontextinterface.h \
     divecomputer/devices/dcdeviceinterface.h \
     divecomputer/parsers/dcdiveparserinterface.h \
     divecomputer/reader/dcreader.h \
     divecomputer/reader/dcreaderinterface.h \
     divecomputer/transports/dctransportfactory.h \
-    divecomputer/utils//dcstatus.h \
+    divecomputer/utils/dcstatus.h \
     common/vector.h \
     divecomputer/context/dccontext.h \
     divecomputer/descriptor/dcdevicedescriptor.h \
@@ -102,9 +106,11 @@ HEADERS += \
     qtdivecomputer/reader/qdcreader.h \
     qtdivecomputer/transports/qdctransport.h \
     qtdivecomputer/writers/qdcfilewriter.h \
+    qtdivecomputer/writers/qdclittledivelogwriter.h \
     qtdivecomputer/writers/qdcselectionproxy.h \
     qtdivecomputer/writers/qdcwriter.h \
     qtdivecomputer/writers/qdcwritercontroller.h \
+    serializer/dcdivecomputerserializer.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \
     serializer/dcdiveserializer.h \
@@ -117,7 +123,7 @@ HEADERS += \
     littledivelog/littledivelog.h \
     jsonrequest.h \
     littledivelog/userinfo.h \
-    common/datetime.h
+    divecomputer/utils/datetime.h
 
 
 RESOURCES += qml.qrc

@@ -2,7 +2,7 @@
 #define DCDIVEPARSERINTERFACE_H
 #include "../devices/dcdeviceinterface.h"
 #include "../entities/dcdive.h"
-
+#include "../data/rawdivedata.h"
 
 class DCDiveParserInterface
 {

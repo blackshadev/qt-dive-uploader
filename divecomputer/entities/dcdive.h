@@ -5,7 +5,7 @@
 #include "libdivecomputer/datetime.h"
 #include "../common/optional.h"
 #include "../common/list.h"
-#include "../common.h"
+#include "../data/fingerprintdata.h"
 #include "dcdivesample.h"
 #include <vector>
 #include <string>

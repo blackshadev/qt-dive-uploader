@@ -1,5 +1,5 @@
 #include "qdcfilewriter.h"
-#include "common/datetime.h"
+#include "../divecomputer/utils/datetime.h"
 #include <QJsonDocument>
 
 QDCFileWriter::QDCFileWriter(QObject *parent)
@@ -10,6 +10,7 @@ void QDCFileWriter::setPath(QString p)
 {
     path = p;
     emit pathChanged(p);
+    emit isReadyChanged();
 }
 
 QString QDCFileWriter::getPath()
@@ -24,7 +25,7 @@ void QDCFileWriter::write(DCDive *dive)
     }
 
     QJsonObject diveObject;
-    serializer.serialize(diveObject, dive);
+    diveSerializer.serialize(diveObject, dive);
     dives.append(diveObject);
 }
 
@@ -44,12 +45,12 @@ void QDCFileWriter::end()
     QJsonDocument document(object);
     file.write(document.toJson());
     file.close();
-    setBusy(false);
+    setIsBusy(false);
 }
 
 void QDCFileWriter::cancel()
 {
-    setBusy(false);
+    setIsBusy(false);
 }
 
 void QDCFileWriter::start()
@@ -57,26 +58,25 @@ void QDCFileWriter::start()
     if (isBusy) {
         throw std::runtime_error("Already started");
     }
-    setBusy(true);
+    setIsBusy(true);
 
     dives = QJsonArray();
     object = QJsonObject();
 
     auto dt_now = datetime_now();
     object["readtime"] = QString::fromStdString(format_datetime_iso(dt_now));
-    object["computer"] = getComputerAsJson();
+
+    QJsonObject computerObject;
+    computerSerializer.serialize(computerObject, device, descriptor);
+    object["computer"] = computerObject;
+
+    readyForWrites();
 }
 
-QJsonObject QDCFileWriter::getComputerAsJson()
+bool QDCFileWriter::isReady()
 {
-    QJsonObject json;
-    json["serial"] =  (int)(device.serial);
-    json["vendor"] = descriptor->getQVendor();
-    json["model"] = (int)(descriptor->getModelNumber());
-    json["type"] = (int)(descriptor->getFamilyType());
-    json["name"] = descriptor->getQDescription();
-
-    return json;
+    return !path.isEmpty();
 }
+
 
 

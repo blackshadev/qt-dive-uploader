@@ -4,7 +4,7 @@
 #include <libdivecomputer/descriptor.h>
 #include "../entities/dcdive.h"
 #include "../devices/dcdevice.h"
-#include "../common.h"
+#include "../data/rawdivedata.h"
 #include "dcdivesampleparser.h"
 #include "dcdiveparserinterface.h"
 

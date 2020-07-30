@@ -99,6 +99,11 @@ void LittleDiveLog::fetch_user_data()
     );
 }
 
+bool LittleDiveLog::hasUserData()
+{
+    return m_user_info != NULL;
+}
+
 void LittleDiveLog::fetch_user_computers(std::function<void()> callback) {
 
     request(

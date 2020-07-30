@@ -5,6 +5,7 @@
 #include <QFile>
 #include "qdcwriter.h"
 #include "serializer/dcdiveserializer.h"
+#include "serializer/dcdivecomputerserializer.h"
 
 class QDCFileWriter : public QDCWriter
 {
@@ -18,9 +19,11 @@ public:
     void end() override;
     void cancel() override;
     void start() override;
+    bool isReady() override;
 private:
     QJsonObject getComputerAsJson();
-    DCDiveSerializer serializer;
+    DCDiveSerializer diveSerializer;
+    DCDiveComputerSerializer computerSerializer;
     QString path;
     QJsonObject object;
     QJsonArray dives;

@@ -3,7 +3,7 @@
 #include "../entities/dcdive.h"
 #include "../devices/dcdeviceinterface.h"
 #include "../parsers/dcdiveparserinterface.h"
-#include "../common.h"
+#include "../data/fingerprintdata.h"
 #include "dcreaderinterface.h"
 #include "../context/dccontextinterface.h"
 #include <functional>

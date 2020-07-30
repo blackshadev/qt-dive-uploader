@@ -25,6 +25,7 @@ public:
     void setDescriptor(DCDeviceDescriptor *descr) override;
     void setBusy(bool st);
     bool getBusy();
+    bool isWriteReady() override;
 
 public slots:
     void start() override;

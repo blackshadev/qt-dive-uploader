@@ -11,7 +11,8 @@ class QDCWriter : public QObject, public DCWriterInterface
     Q_OBJECT
     Q_PROPERTY(QDeviceData device WRITE setDevice)
     Q_PROPERTY(QDCDescriptor *descriptor WRITE setDescriptor)
-    Q_PROPERTY(bool isBusy READ getBusy NOTIFY isBusyChanged)
+    Q_PROPERTY(bool isBusy READ getIsBusy NOTIFY isBusyChanged)
+    Q_PROPERTY(bool isReady READ isReady NOTIFY isReadyChanged)
 
 public:
     QDCWriter(QObject *parent = NULL);
@@ -19,14 +20,21 @@ public:
     void setDevice(DeviceData dev) override;
     void setDescriptor(DCDeviceDescriptor *descr) override;
     void setDescriptor(QDCDescriptor *descr);
-    void setBusy(bool busy);
+    void setIsBusy(bool busy);
+    virtual bool isReady() = 0;
+    bool isWriteReady() override;
 signals:
     void isBusyChanged();
+    void isReadyChanged();
+    void isWriteReadyChanged();
+    void error(QString msg);
 protected:
-    bool getBusy();
+    void readyForWrites();
+    bool getIsBusy();
     DeviceData device;
     QDCDescriptor *descriptor = NULL;
     bool isBusy = false;
+    bool writeReady = false;
 };
 
 #endif // QDCWRITER_H
