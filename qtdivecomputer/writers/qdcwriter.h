@@ -24,15 +24,19 @@ public:
     virtual bool isReady() = 0;
     bool isWriteReady() override;
 signals:
+    void written();
     void isBusyChanged();
     void isReadyChanged();
     void isWriteReadyChanged();
     void error(QString msg);
+    void progress(unsigned int current, unsigned int maximum);
 protected:
-    void readyForWrites();
+    void writeCompleted();
+    void setWriteReady(bool state);
     bool getIsBusy();
     DeviceData device;
     QDCDescriptor *descriptor = NULL;
+private:
     bool isBusy = false;
     bool writeReady = false;
 };

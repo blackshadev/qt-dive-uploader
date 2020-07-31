@@ -20,13 +20,15 @@ QString QDCFileWriter::getPath()
 
 void QDCFileWriter::write(DCDive *dive)
 {
-    if (!isBusy) {
+    if (!getIsBusy()) {
         throw std::runtime_error("Not yet started");
     }
 
     QJsonObject diveObject;
     diveSerializer.serialize(diveObject, dive);
     dives.append(diveObject);
+
+    writeCompleted();
 }
 
 void QDCFileWriter::end()
@@ -55,7 +57,7 @@ void QDCFileWriter::cancel()
 
 void QDCFileWriter::start()
 {
-    if (isBusy) {
+    if (getIsBusy()) {
         throw std::runtime_error("Already started");
     }
     setIsBusy(true);
@@ -70,13 +72,14 @@ void QDCFileWriter::start()
     computerSerializer.serialize(computerObject, device, descriptor);
     object["computer"] = computerObject;
 
-    readyForWrites();
+    setWriteReady(true);
 }
 
 bool QDCFileWriter::isReady()
 {
     return !path.isEmpty();
 }
+
 
 
 

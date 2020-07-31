@@ -46,8 +46,14 @@ bool QDCWriter::isWriteReady()
     return writeReady;
 }
 
-void QDCWriter::readyForWrites()
+void QDCWriter::writeCompleted()
 {
-    writeReady = true;
+    emit written();
+    setWriteReady(true);
+}
+
+void QDCWriter::setWriteReady(bool state)
+{
+    writeReady = state;
     emit isWriteReadyChanged();
 }

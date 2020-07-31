@@ -29,9 +29,9 @@ public:
     void setDescriptor(DCDeviceDescriptor *descr) override;
     void setDescriptor(QDCDescriptor *descr);
     unsigned int getMaximum();
-    void setCurrent(unsigned int);
-    unsigned int getCurrent();
     void setMaximum(unsigned int);
+    unsigned int getCurrent();
+    void setCurrent(unsigned int);
     bool getBusy();
     void setBusy(bool b);
     bool isWriteReady() override;
@@ -45,6 +45,7 @@ public slots:
 signals:
     void progress(unsigned int current, unsigned int maximum);
     void finished();
+    void cancelled();
     void started();
     void selectChanged(bool select);
     void isBusyChanged();
@@ -58,12 +59,16 @@ protected:
     QDCDescriptor *descriptor = NULL;
 private:
     bool isBusy = false;
-    bool ended = false;
-    QMutex mutex;
-    QWaitCondition queueNotEmpty;
-    QQueue<DCDive *> queue;
+    bool isEnded = false;
+    bool isCancelled = false;
     unsigned int current = 0;
     unsigned int maximum = 0;
+    QMutex mutex;
+    QWaitCondition queueNotEmpty;
+    QWaitCondition readyForNextWrite;
+    QQueue<DCDive *> queue;
+    void waitForWriteReady(QMutex *mutex);
+    void waitForQueueNotEmpty(QMutex *mutex);
 };
 
 #endif // QDCWRITERCONTROLLER_H

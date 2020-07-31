@@ -277,6 +277,43 @@ GridLayout {
     }
 
     Label {
+        text: "Output Type"
+        Layout.minimumWidth: labelColumnWidth
+        Layout.maximumWidth: labelColumnWidth
+    }
+
+    RowLayout {
+        id: outputType
+        Layout.fillWidth: true
+
+        RadioButton {
+            checked: session.writeType == "File"
+            text: "File"
+            id: fileRadio
+            enabled: !isBusy
+            onCheckedChanged: {
+                if (checked) {
+                    session.writeType = "File";
+                }
+                refreshUI();
+            }
+        }
+
+        RadioButton {
+            text: "LittleLog"
+            checked: session.writeType == "Littlelog"
+            id: llRadio
+            enabled: !isBusy && littledivelog.userInfo !== null
+            onCheckedChanged: {
+                if (checked) {
+                    session.writeType = "Littlelog";
+                }
+                refreshUI();
+            }
+        }
+    }
+
+    Label {
         visible: littledivelog.isLoggedIn
         text: "Only download new dives"
         Layout.minimumWidth: labelColumnWidth
@@ -292,35 +329,6 @@ GridLayout {
         }
         onCheckStateChanged: {
             session.onlyNewDives = checked;
-        }
-    }
-
-    Label {
-        text: "Output Type"
-        Layout.minimumWidth: labelColumnWidth
-        Layout.maximumWidth: labelColumnWidth
-    }
-
-    RowLayout {
-        id: outputType
-        Layout.fillWidth: true
-
-        RadioButton {
-            text: "File"
-            id: fileRadio
-            enabled: !isBusy
-            onCheckedChanged: {
-                refreshUI();
-            }
-        }
-
-        RadioButton {
-            text: "LittleLog"
-            id: llRadio
-            enabled: !isBusy && littledivelog.userInfo !== null
-            onCheckedChanged: {
-                refreshUI();
-            }
         }
     }
 
@@ -445,9 +453,14 @@ GridLayout {
         id: dcfilewriter
     }
 
+    QDCLittleDiveLogWriter{
+        id: dclittlelogwriter
+        divelog: littledivelog
+    }
+
     QDCWriterController {
         id: dcwriter
-        writer: dcfilewriter
+        writer: fileRadio.checked ? dcfilewriter : llRadio.checked ? dclittlelogwriter : null;
         onProgress: {
             writeProgress.value = current / maximum;
         }

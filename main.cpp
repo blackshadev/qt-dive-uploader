@@ -20,6 +20,7 @@
 #include "qtdivecomputer/reader/qdcreader.h"
 #include "qtdivecomputer/reader/qdcasyncreader.h"
 #include "qtdivecomputer/writers/qdcfilewriter.h"
+#include "qtdivecomputer/writers/qdclittledivelogwriter.h"
 #include "qtdivecomputer/writers/qdcwritercontroller.h"
 #include "qtdivecomputer/writers/qdcselectionproxy.h"
 #include <QList>
@@ -59,6 +60,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<QDCDiveParser>("Libdivecomputer", 0, 2, "QDCDiveParser");
     qmlRegisterType<QDCAsyncReader>("Libdivecomputer", 0, 2, "QDCAsyncReader");
     qmlRegisterType<QDCFileWriter>("Libdivecomputer", 0, 2, "QDCFileWriter");
+    qmlRegisterType<QDCLittleDiveLogWriter>("Libdivecomputer", 0, 2, "QDCLittleDiveLogWriter");
     qmlRegisterType<QDCWriterController>("Libdivecomputer", 0, 2, "QDCWriterController");
     qmlRegisterType<QDCSelectionProxy>("Libdivecomputer", 0, 2, "QDCSelectionProxy");
     qRegisterMetaType<QDeviceData>();

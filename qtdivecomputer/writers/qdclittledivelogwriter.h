@@ -12,7 +12,7 @@
 class QDCLittleDiveLogWriter : public QDCWriter
 {
     Q_OBJECT
-    Q_PROPERTY(LittleDiveLog *littledivelog READ getLittleDiveLog WRITE setLittleDiveLog)
+    Q_PROPERTY(LittleDiveLog *divelog READ getDiveLog WRITE setDiveLog)
 
 public:
     QDCLittleDiveLogWriter(QObject *parent = NULL);
@@ -21,14 +21,17 @@ public:
     void cancel() override;
     void start() override;
     bool isReady() override;
-    LittleDiveLog *getLittleDiveLog();
-    void setLittleDiveLog(LittleDiveLog *dl);
+    LittleDiveLog *getDiveLog();
+    void setDiveLog(LittleDiveLog *dl);
+    void setWriting();
 private:
     DCDiveSerializer diveSerializer;
     DCDiveComputerSerializer computerSerializer;
     LittleDiveLog *divelog = NULL;
     int ldComputerId;
+    bool isWriting = false;
 signals:
+    void isWriteReadyChanged();
 
 };
 Q_DECLARE_METATYPE(QDCLittleDiveLogWriter *)

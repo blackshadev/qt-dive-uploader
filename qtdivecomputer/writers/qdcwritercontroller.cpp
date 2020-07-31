@@ -21,10 +21,18 @@ void QDCWriterController::setWriter(QDCWriter *w)
 
     writer = w;
     connect(w, &QDCWriter::isWriteReadyChanged, this, [=]() {
+        if (!isWriteReady()) {
+            return;
+        }
+
         mutex.lock();
-        queueNotEmpty.wakeAll();
+        readyForNextWrite.wakeAll();
         mutex.unlock();
     });
+    connect(w, &QDCWriter::written, this, [=]() {
+        setCurrent(getCurrent() + 1);
+    });
+
     connect(w, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
 }
 
@@ -57,7 +65,11 @@ void QDCWriterController::start()
         throw std::runtime_error("Unable to start writing, invalid argument.");
     }
 
+    isCancelled = false;
+    isEnded = false;
+
     setCurrent(0);
+
     writer->setDevice(device);
     writer->setDescriptor(descriptor);
 
@@ -80,23 +92,16 @@ void QDCWriterController::write(QDCDive *dive)
 
 void QDCWriterController::end()
 {
-    ended = true;
+    isEnded = true;
     queueNotEmpty.wakeAll();
+    readyForNextWrite.wakeAll();
 }
 
 void QDCWriterController::cancel()
 {
-    end();
-}
-
-void QDCWriterController::setMaximum(unsigned int max)
-{
-    if (maximum == max) {
-        return;
-    }
-
-    maximum = max;
-    emit progress(current, maximum);
+    isCancelled = true;
+    queueNotEmpty.wakeAll();
+    readyForNextWrite.wakeAll();
 }
 
 bool QDCWriterController::getBusy()
@@ -124,14 +129,14 @@ unsigned int QDCWriterController::getMaximum()
     return maximum;
 }
 
-void QDCWriterController::setCurrent(unsigned int cur)
+
+void QDCWriterController::setMaximum(unsigned int max)
 {
-    if (current == cur) {
+    if (maximum == max) {
         return;
     }
 
-    current = cur;
-    emit progress(current, maximum);
+    maximum = max;
 }
 
 unsigned int QDCWriterController::getCurrent()
@@ -139,33 +144,59 @@ unsigned int QDCWriterController::getCurrent()
     return current;
 }
 
+void QDCWriterController::setCurrent(unsigned int cur)
+{
+    if(cur == current) {
+        return;
+    }
+
+    current = cur;
+    emit progress(current, maximum);
+}
+
 void QDCWriterController::process(DCDive *dive)
 {
     writer->write(dive);
-    setCurrent(current + 1);
 }
 
 void QDCWriterController::run()
 {
     writer->start();
 
-    mutex.lock();
-    while (!isWriteReady()) {
-        queueNotEmpty.wait(&mutex);
-    }
-    mutex.unlock();
-
     DCDive *dive;
-    while (!ended || !queue.isEmpty()) {
+    while (!isEnded || !queue.isEmpty()) {
         mutex.lock();
-        while (queue.isEmpty()) {
-            queueNotEmpty.wait(&mutex);
+        waitForQueueNotEmpty(&mutex);
+        waitForWriteReady(&mutex);
+        if (isCancelled) {
+            break;
         }
+
         dive = queue.dequeue();
         mutex.unlock();
         process(dive);
     }
 
+    if (isCancelled) {
+        mutex.unlock();
+        emit cancelled();
+        return;
+    }
+
     writer->end();
     emit finished();
+}
+
+void QDCWriterController::waitForWriteReady(QMutex *mutex)
+{
+    while (!isCancelled && !isWriteReady()) {
+        readyForNextWrite.wait(mutex);
+    }
+}
+
+void QDCWriterController::waitForQueueNotEmpty(QMutex *mutex)
+{
+    while (!isCancelled && queue.isEmpty()) {
+        queueNotEmpty.wait(mutex);
+    }
 }

@@ -19,8 +19,6 @@ class SessionData : public QObject
     Q_PROPERTY(bool selectDives READ getSelectDives WRITE setSelectDives NOTIFY selectDivesChanged)
     Q_PROPERTY(bool useFingerprint READ getUseFingerprint WRITE setUseFingerprint NOTIFY useFingerprintChanged)
 
-
-
 public:
     explicit SessionData(QObject* parent = NULL);
 
