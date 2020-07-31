@@ -1,8 +1,8 @@
 #ifndef JSONREQUEST_H
 #define JSONREQUEST_H
 #include <QObject>
-#include <QtNetwork>
 #include <QJsonDocument>
+#include <QtNetwork>
 #include <QNetworkReply>
 
 #undef DELETE

@@ -35,10 +35,12 @@ SOURCES += main.cpp \
     divecomputer/transports/dctransport.cpp \
     divecomputer/transports/dcusbhidtransport.cpp \
     divecomputer/transports/transporttype.cpp \
+    http/jsonresponse.cpp \
     qtdivecomputer/context/qdccontext.cpp \
     qtdivecomputer/descriptor/qdcdescriptor.cpp \
     qtdivecomputer/device/qdcdevice.cpp \
     qtdivecomputer/entities/qdcdive.cpp \
+    http/jsonasyncrequest.cpp \
     qtdivecomputer/listmodels/qdcdescriptorlistmodel.cpp \
     qtdivecomputer/listmodels/qdcdevicelistmodel.cpp \
     qtdivecomputer/listmodels/qdcdivelistmodel.cpp \
@@ -60,7 +62,7 @@ SOURCES += main.cpp \
     serializer/optionalserializer.cpp \
     sessionstore.cpp \
     littledivelog/littledivelog.cpp \
-    jsonrequest.cpp \
+    http/jsonrequest.cpp \
     littledivelog/userinfo.cpp \
     divecomputer/utils/datetime.cpp
 
@@ -92,10 +94,13 @@ HEADERS += \
     divecomputer/transports/dcusbhidtransport.h \
     divecomputer/transports/transporttype.h \
     divecomputer/writers/dcwriterinterface.h \
+    http/jsonresponse.h \
+    http/requestcontainerinterface.h \
     qtdivecomputer/context/qdccontext.h \
     qtdivecomputer/descriptor/qdcdescriptor.h \
     qtdivecomputer/device/qdcdevice.h \
     qtdivecomputer/entities/qdcdive.h \
+    http/jsonasyncrequest.h \
     qtdivecomputer/listmodels/qdcdescriptorlistmodel.h \
     qtdivecomputer/listmodels/qdcdevicelistmodel.h \
     qtdivecomputer/listmodels/qdcdivelistmodel.h \
@@ -110,6 +115,9 @@ HEADERS += \
     qtdivecomputer/writers/qdcselectionproxy.h \
     qtdivecomputer/writers/qdcwriter.h \
     qtdivecomputer/writers/qdcwritercontroller.h \
+    http/jsonresponseinterface.h \
+    http/requestinterface.h \
+    http/responseinterface.h \
     serializer/dcdivecomputerserializer.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \
@@ -121,7 +129,7 @@ HEADERS += \
     common/list.h \
     common/list.hpp \
     littledivelog/littledivelog.h \
-    jsonrequest.h \
+    http/jsonrequest.h \
     littledivelog/userinfo.h \
     divecomputer/utils/datetime.h
 
