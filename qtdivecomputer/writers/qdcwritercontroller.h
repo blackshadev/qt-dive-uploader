@@ -10,8 +10,21 @@
 #include <QWaitCondition>
 #include <QMutex>
 
+
 class QDCWriterController : public QThread, public DCWriterInterface
 {
+
+    enum WriterState {
+        None,
+        Idle,
+        Starting,
+        Writing,
+        Ending,
+        Ended,
+        Cancelling,
+        Cancelled,
+    };
+
     Q_OBJECT
     Q_PROPERTY(unsigned int current READ getCurrent WRITE setCurrent NOTIFY progress)
     Q_PROPERTY(unsigned int maximum READ getMaximum WRITE setMaximum NOTIFY progress)
@@ -34,7 +47,7 @@ public:
     void setCurrent(unsigned int);
     bool getBusy();
     void setBusy(bool b);
-    bool isWriteReady() override;
+    bool isReadyForData() override;
 public slots:
     void write(DCDive *dive) override;
     void write(QDCDive *dive);
@@ -42,17 +55,22 @@ public slots:
     void end() override;
     void cancel() override;
 
+
 signals:
     void progress(unsigned int current, unsigned int maximum);
-    void finished();
     void cancelled();
-    void started();
     void selectChanged(bool select);
     void isBusyChanged();
     void error(QString msg);
+    void finished();
+    void advance();
+
 protected:
     virtual void process(DCDive *dive);
+    virtual void performAdvance();
+    void setState(WriterState st);
     void run() override;
+
 
     DeviceData device;
     QDCWriter *writer = NULL;
@@ -60,15 +78,12 @@ protected:
 private:
     bool isBusy = false;
     bool isEnded = false;
-    bool isCancelled = false;
     unsigned int current = 0;
     unsigned int maximum = 0;
-    QMutex mutex;
-    QWaitCondition queueNotEmpty;
-    QWaitCondition readyForNextWrite;
     QQueue<DCDive *> queue;
-    void waitForWriteReady(QMutex *mutex);
-    void waitForQueueNotEmpty(QMutex *mutex);
+    QMutex mutex;
+    WriterState state = WriterState::None;
+
 };
 
 #endif // QDCWRITERCONTROLLER_H

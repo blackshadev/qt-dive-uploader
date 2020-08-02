@@ -4,24 +4,7 @@
 #include <QJsonDocument>
 #include <QtNetwork>
 #include <QNetworkReply>
-
-#undef DELETE
-
-enum RequestState {
-    None,
-    Sending,
-    Reading,
-    Completed
-};
-
-enum RequestMethod {
-    GET = 1,
-    POST = 2,
-    PUT = 3,
-    PATCH = 4,
-    DELETE = 5
-};
-
+#include "requestinterface.h"
 
 struct JsonResponse {
     int statuscode;

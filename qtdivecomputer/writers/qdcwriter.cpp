@@ -26,22 +26,23 @@ void QDCWriter::setDescriptor(QDCDescriptor *descr)
     descriptor = descr;
 }
 
-bool QDCWriter::getIsBusy()
+bool QDCWriter::getIsStarted()
 {
-    return isBusy;
+    return isStarted;
 }
 
-void QDCWriter::setIsBusy(bool b)
+void QDCWriter::setIsStarted(bool b)
 {
-    if (isBusy == b) {
+
+    if (isStarted == b) {
         return;
     }
 
-    isBusy = b;
+    isStarted = b;
     emit isBusyChanged();
 }
 
-bool QDCWriter::isWriteReady()
+bool QDCWriter::isReadyForData()
 {
     return writeReady;
 }
@@ -55,5 +56,7 @@ void QDCWriter::writeCompleted()
 void QDCWriter::setWriteReady(bool state)
 {
     writeReady = state;
-    emit isWriteReadyChanged();
+    if (writeReady) {
+        emit readyForData();
+    }
 }

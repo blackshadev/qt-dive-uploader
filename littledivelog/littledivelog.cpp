@@ -1,12 +1,14 @@
 #include "littledivelog.h"
-#include "../jsonrequest.h"
+#include "../http/jsonrequest.h"
 
 LittleDiveLog::LittleDiveLog(QObject *parent) : QObject(parent)
 {
+    requests = new RequestContainer(parent);
 }
 
 LittleDiveLog::~LittleDiveLog()
 {
+    delete requests;
     if(m_user_info != NULL) {
         delete m_user_info;
     }
@@ -19,33 +21,33 @@ bool LittleDiveLog::isLoggedIn()
 
 void LittleDiveLog::login(QString email, QString password)
 {
-    JsonRequest* req = new JsonRequest();
-    req->url = "https://dive.littledev.nl/api/auth/refresh-token";
-    req->method = RequestMethod::POST;
+    auto req = requests->request();
+    req->setURL("https://dive.littledev.nl/api/auth/refresh-token");
+    req->setMethod(RequestMethod::POST);
 
     QJsonObject data;
     data["email"] = email;
     data["password"] = password;
+    req->setBody(data);
 
-    req->data.setObject(data);
+    connect(req, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
+    connect(req, &AsyncRequest::finished, this, [=]() {
+        auto resp = req->getResponse();
 
-    connect(req, &JsonRequest::complete, this, [=](JsonResponse resp) {
-        if(resp.parseError.error != QJsonParseError::NoError) {
-            emit error("Invalid response from server");
+        auto jsonVal = resp->getBodyAsJSON();
+        if (!jsonVal.isObject()) {
+            return;
+        }
+        auto obj = jsonVal.toObject();
+
+        if(obj.contains("error")) {
+            emit error(obj["error"].toString());
         } else {
-            auto obj = resp.data.object();
-            if(resp.hasError()) {
-                emit error(resp.errorString());
-            } else if(obj.contains("error")) {
-                emit error(obj["error"].toString());
-            } else {
-                set_refresh_token(obj["jwt"].toString());
-                emit loggedStateChanged(isLoggedIn());
-                fetch_user_data();
-            }
+            set_refresh_token(obj["jwt"].toString());
+            emit loggedStateChanged(isLoggedIn());
+            fetch_user_data();
         }
 
-        delete req;
     });
 
     req->send();
@@ -72,9 +74,9 @@ void LittleDiveLog::fetch_user_data()
         RequestMethod::GET,
         "/user/profile",
         NULL,
-        [=](JsonResponse resp) {
+        [=](HTTPResponse *resp) {
 
-            auto obj = resp.data.object();
+            auto obj = resp->getBodyAsJSON().toObject();
             if(m_user_info == NULL) {
                 m_user_info = new UserInfo(this);
             }
@@ -110,8 +112,8 @@ void LittleDiveLog::fetch_user_computers(std::function<void()> callback) {
         RequestMethod::GET,
         "/computer",
         NULL,
-        [=](JsonResponse resp) {
-            auto arr = resp.data.array();
+        [=](HTTPResponse *resp) {
+            auto arr = resp->getBodyAsJSON().toArray();
 
             for(auto val : arr) {
                 auto obj = val.toObject();
@@ -131,14 +133,19 @@ void LittleDiveLog::get_access_token(std::function<void()> callback, QObject* pa
         "/auth/access-token",
         RequestTokenType::REFRESH,
         NULL,
-        [=](JsonResponse resp) {
-            auto obj = resp.data.object();
-            if(resp.statuscode == 401 || resp.hasError()) {
+        [=](HTTPResponse *resp) {
+            auto val = resp->getBodyAsJSON();
+
+            if(resp->getStatusCode() == 401 || !val.isObject()) {
                 emit error("Invalid refresh token");
                 m_access_token = QString();
                 set_refresh_token(NULL);
                 emit loggedStateChanged(isLoggedIn());
-            } else if(!obj.contains("jwt")) {
+                return;
+            }
+
+            auto obj = val.toObject();
+            if(!obj.contains("jwt")) {
                 throw std::runtime_error("Expected webservice to return jwt");
             } else {
                 m_access_token = obj["jwt"].toString();
@@ -155,33 +162,28 @@ void LittleDiveLog::raw_request(
         QString path,
         RequestTokenType tokenType,
         QJsonObject *data,
-        std::function<void(JsonResponse)> callback,
+        std::function<void(HTTPResponse *)> callback,
         QObject* parent
 ) {
-    JsonRequest* req = new JsonRequest(parent);
-    req->url = "https://dive.littledev.nl/api" + path;
-    req->method = method;
+    auto req = requests->request();
+    req->setURL("https://dive.littledev.nl/api" + path);
+    req->setMethod(method);
+    if (data) {
+        req->setBody(*data);
+    }
 
     switch(tokenType) {
         case RequestTokenType::ACCESS:
-            req->jwt = m_access_token;
+            req->setHeader("Authorization", QString("Bearer ") + m_access_token);
         break;
         case RequestTokenType::REFRESH:
-            req->jwt = m_refresh_token;
+            req->setHeader("Authorization", QString("Bearer ") + m_refresh_token);
         break;
     }
 
-    if(data != NULL) {
-        req->data.setObject(*data);
-    }
-
-    connect(req, &JsonRequest::complete, this, [=](JsonResponse resp) {
-        if(resp.parseError.error != QJsonParseError::NoError) {
-            emit error(resp.parseError.errorString());
-        } else {
-            callback(resp);
-        }
-        delete req;
+    connect(req, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
+    connect(req, &AsyncRequest::finished, this, [=]() {
+        callback(req->getResponse());
     });
 
     req->send();
@@ -191,7 +193,7 @@ void LittleDiveLog::request(
         RequestMethod method,
         QString path,
         QJsonObject *data,
-        std::function<void(JsonResponse)> callback,
+        std::function<void(HTTPResponse *)> callback,
         bool retry,
         QObject* parent
 ) {
@@ -208,8 +210,8 @@ void LittleDiveLog::request(
             parent
         );
     } else {
-        raw_request(method, path, RequestTokenType::ACCESS, data, [=](JsonResponse resp) {
-            if(retry == true && resp.statuscode == 401) {
+        raw_request(method, path, RequestTokenType::ACCESS, data, [=](HTTPResponse *resp) {
+            if(retry == true && resp->getStatusCode() == 401) {
                 // 401, retry request after get_access_token
                 m_access_token.clear();
                 request(method, path, data, callback, false, parent);
@@ -227,12 +229,12 @@ void LittleDiveLog::logout() {
         return;
     }
 
-    raw_request(RequestMethod::DELETE, "/auth/refresh-token/", RequestTokenType::REFRESH, NULL, [=](JsonResponse resp) {
+    raw_request(RequestMethod::DELETE, "/auth/refresh-token/", RequestTokenType::REFRESH, NULL, [=](HTTPResponse *resp) {
         set_refresh_token(NULL);
         m_access_token.clear();
         emit loggedStateChanged(isLoggedIn());
-        if(resp.statuscode != 200) {
-            emit error(resp.errorString());
+        if(resp->getStatusCode() != 200) {
+            emit error(resp->errorString());
         }
     });
 

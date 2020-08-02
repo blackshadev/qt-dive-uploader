@@ -54,7 +54,7 @@ bool QDCSelectionProxy::getBusy()
     return isBusy;
 }
 
-bool QDCSelectionProxy::isWriteReady()
+bool QDCSelectionProxy::isReadyForData()
 {
     return true;
 }

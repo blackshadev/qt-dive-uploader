@@ -9,7 +9,6 @@
 #include <QSortFilterProxyModel>
 #include "sessionstore.h"
 #include "littledivelog/littledivelog.h"
-#include "jsonrequest.h"
 #include "qtdivecomputer/context/qdccontext.h"
 #include "qtdivecomputer/listmodels/qdcdevicelistmodel.h"
 #include "qtdivecomputer/listmodels/qdcdescriptorlistmodel.h"

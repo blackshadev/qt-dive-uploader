@@ -8,7 +8,7 @@ QDCLittleDiveLogWriter::QDCLittleDiveLogWriter(QObject *parent)
 
 void QDCLittleDiveLogWriter::write(DCDive *dive)
 {
-    if (!getIsBusy()) {
+    if (!getIsStarted()) {
         throw std::runtime_error("Not yet started");
     }
 
@@ -21,9 +21,9 @@ void QDCLittleDiveLogWriter::write(DCDive *dive)
         RequestMethod::POST,
         "/dive",
         &json,
-        [=](JsonResponse resp) {
-            if(resp.hasError()) {
-                emit error(resp.errorString());
+        [=](HTTPResponse *resp) {
+            if(resp->hasError()) {
+                emit error(resp->errorString());
             }
 
             writeCompleted();
@@ -33,17 +33,20 @@ void QDCLittleDiveLogWriter::write(DCDive *dive)
 
 void QDCLittleDiveLogWriter::end()
 {
-
+    setWriteReady(false);
+    emit ended();
 }
 
 void QDCLittleDiveLogWriter::cancel()
 {
-    setIsBusy(false);
+    setIsStarted(false);
+    setWriteReady(false);
+    emit cancelled();
 }
 
 void QDCLittleDiveLogWriter::start()
 {
-    if (getIsBusy()) {
+    if (getIsStarted()) {
         throw std::runtime_error("Already started");
     }
 
@@ -55,15 +58,17 @@ void QDCLittleDiveLogWriter::start()
         RequestMethod::POST,
         "/computer",
         &computer,
-        [=](JsonResponse resp) {
-            if(resp.hasError()) {
-                emit error(resp.errorString());
+        [=](HTTPResponse *resp) {
+            if(resp->hasError()) {
+                emit error(resp->errorString());
                 return;
             }
-            auto obj = resp.data.object();
+
+            auto obj = resp->getBodyAsJSON();
             ldComputerId = obj["computer_id"].toInt();
 
             setWriteReady(true);
+            emit started();
         }
     );
 }

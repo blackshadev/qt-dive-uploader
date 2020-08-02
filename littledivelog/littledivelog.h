@@ -3,7 +3,8 @@
 
 #include <QObject>
 #include <QtNetwork>
-#include "../jsonrequest.h"
+#include "../http/jsonrequest.h"
+#include "../http/requestcontainer.h"
 #include <functional>
 #include "./userinfo.h"
 
@@ -28,7 +29,7 @@ public:
     bool isLoggedIn();
     QString get_refresh_token();
     void set_refresh_token(QString tok);
-    void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(JsonResponse)> callback, bool retry = true, QObject* parent = NULL);
+    void request(RequestMethod method, QString path, QJsonObject* data, std::function<void(HTTPResponse *)> callback, bool retry = true, QObject* parent = NULL);
     UserInfo* m_user_info = NULL;
     void fetch_user_data();
     bool hasUserData();
@@ -41,9 +42,10 @@ public slots:
 protected:
     void fetch_user_computers(std::function<void()> callback);
     void get_access_token(std::function<void()> callback, QObject* parent = NULL);
-    void raw_request(RequestMethod method, QString path, RequestTokenType tokenType, QJsonObject* data, std::function<void(JsonResponse)> callback, QObject* parent = NULL);
+    void raw_request(RequestMethod method, QString path, RequestTokenType tokenType, QJsonObject* data, std::function<void(HTTPResponse *)> callback, QObject* parent = NULL);
     QString m_refresh_token;
     QString m_access_token;
+    RequestContainer *requests;
 };
 
 #endif // LITTLEDIVELOG_H

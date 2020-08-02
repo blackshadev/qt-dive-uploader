@@ -20,7 +20,7 @@ QString QDCFileWriter::getPath()
 
 void QDCFileWriter::write(DCDive *dive)
 {
-    if (!getIsBusy()) {
+    if (!getIsStarted()) {
         throw std::runtime_error("Not yet started");
     }
 
@@ -47,20 +47,24 @@ void QDCFileWriter::end()
     QJsonDocument document(object);
     file.write(document.toJson());
     file.close();
-    setIsBusy(false);
+    setIsStarted(false);
+    setWriteReady(false);
+    emit ended();
 }
 
 void QDCFileWriter::cancel()
 {
-    setIsBusy(false);
+    setIsStarted(false);
+    setWriteReady(false);
+    emit cancelled();
 }
 
 void QDCFileWriter::start()
 {
-    if (getIsBusy()) {
+    if (getIsStarted()) {
         throw std::runtime_error("Already started");
     }
-    setIsBusy(true);
+    setIsStarted(true);
 
     dives = QJsonArray();
     object = QJsonObject();
@@ -73,6 +77,7 @@ void QDCFileWriter::start()
     object["computer"] = computerObject;
 
     setWriteReady(true);
+    emit started();
 }
 
 bool QDCFileWriter::isReady()

@@ -8,7 +8,9 @@ enum RequestState {
     None,
     Sending,
     Reading,
-    Completed
+    Completed,
+    Aborted,
+    Errorred,
 };
 
 enum RequestMethod {
@@ -23,14 +25,25 @@ class RequestInterface {
 public:
     virtual void setMethod(RequestMethod m) = 0;
     virtual RequestMethod getMethod() = 0;
+    virtual QByteArray getQMethod() = 0;
     virtual RequestState getState() = 0;
     virtual void setURL(QString url) = 0;
     virtual QString getURL() = 0;
-    virtual void setHeader(QNetworkRequest::KnownHeaders header, QString content);
-    virtual void setBody(QByteArray data);
+    virtual void setHeader(QString header, QString content) = 0;
+    virtual void setBody(QByteArray data) = 0;
+    virtual void setBody(QJsonObject data) = 0;
+    virtual QByteArray getBody() = 0;
+    virtual ResponseInterface *getResponse() = 0;
+};
+
+class RequestInternalInterface {
+public:
     virtual void send() = 0;
+    virtual void beginSend() = 0;
+    virtual void endSend(QNetworkReply *repl) = 0;
+    virtual QNetworkRequest getNetworkRequest() = 0;
     virtual void abort() = 0;
-    virtual ResponseInterface getResponse();
+    virtual RequestInterface *getRequest() = 0;
 };
 
 #endif // REQUESTINTERFACE_H

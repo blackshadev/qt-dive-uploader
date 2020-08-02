@@ -35,12 +35,14 @@ SOURCES += main.cpp \
     divecomputer/transports/dctransport.cpp \
     divecomputer/transports/dcusbhidtransport.cpp \
     divecomputer/transports/transporttype.cpp \
-    http/jsonresponse.cpp \
+    http/asyncrequest.cpp \
+    http/exceptions.cpp \
+    http/httpresponse.cpp \
+    http/requestcontainer.cpp \
     qtdivecomputer/context/qdccontext.cpp \
     qtdivecomputer/descriptor/qdcdescriptor.cpp \
     qtdivecomputer/device/qdcdevice.cpp \
     qtdivecomputer/entities/qdcdive.cpp \
-    http/jsonasyncrequest.cpp \
     qtdivecomputer/listmodels/qdcdescriptorlistmodel.cpp \
     qtdivecomputer/listmodels/qdcdevicelistmodel.cpp \
     qtdivecomputer/listmodels/qdcdivelistmodel.cpp \
@@ -94,13 +96,16 @@ HEADERS += \
     divecomputer/transports/dcusbhidtransport.h \
     divecomputer/transports/transporttype.h \
     divecomputer/writers/dcwriterinterface.h \
-    http/jsonresponse.h \
+    http/asyncrequest.h \
+    http/exceptions.h \
+    http/httpresponse.h \
+    http/httptransportinterface.h \
+    http/requestcontainer.h \
     http/requestcontainerinterface.h \
     qtdivecomputer/context/qdccontext.h \
     qtdivecomputer/descriptor/qdcdescriptor.h \
     qtdivecomputer/device/qdcdevice.h \
     qtdivecomputer/entities/qdcdive.h \
-    http/jsonasyncrequest.h \
     qtdivecomputer/listmodels/qdcdescriptorlistmodel.h \
     qtdivecomputer/listmodels/qdcdevicelistmodel.h \
     qtdivecomputer/listmodels/qdcdivelistmodel.h \
@@ -115,7 +120,6 @@ HEADERS += \
     qtdivecomputer/writers/qdcselectionproxy.h \
     qtdivecomputer/writers/qdcwriter.h \
     qtdivecomputer/writers/qdcwritercontroller.h \
-    http/jsonresponseinterface.h \
     http/requestinterface.h \
     http/responseinterface.h \
     serializer/dcdivecomputerserializer.h \
