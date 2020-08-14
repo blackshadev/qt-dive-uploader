@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-08-14T17:08:07.326Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36" etag="k93KJBkaX4HTJJ1JR2Zs" version="13.6.2" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2020-08-14T17:09:28.440Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36" etag="kPu7s6R_bdoI31eiw4GE" version="13.6.2" type="github" pages="2">
   <diagram id="l0Hb1Kvt9UqNzEm9A9QA" name="Page-1">
     <mxGraphModel dx="3231" dy="1137" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -1157,7 +1157,7 @@
         <mxCell id="pm4JaG56wtvmTdYzIWLL-25" value="reading" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="pm4JaG56wtvmTdYzIWLL-1">
           <mxGeometry x="380" y="200" width="160" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="pm4JaG56wtvmTdYzIWLL-38" value="StateMachine&amp;lt;TState&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="pm4JaG56wtvmTdYzIWLL-1">
+        <mxCell id="pm4JaG56wtvmTdYzIWLL-38" value="StateMachineInterface&amp;lt;TState&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="pm4JaG56wtvmTdYzIWLL-1">
           <mxGeometry x="40" y="50" width="210" height="30" as="geometry" />
         </mxCell>
         <mxCell id="pm4JaG56wtvmTdYzIWLL-40" value="TState InitialState()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="pm4JaG56wtvmTdYzIWLL-1">
