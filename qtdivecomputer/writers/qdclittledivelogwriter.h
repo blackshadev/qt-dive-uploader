@@ -16,13 +16,18 @@ class QDCLittleDiveLogWriter : public QDCWriter
 
 public:
     QDCLittleDiveLogWriter(QObject *parent = NULL);
+    virtual ~QDCLittleDiveLogWriter();
+    LittleDiveLog *getDiveLog();
+    void setDiveLog(LittleDiveLog *dl);
+    void setWriting();
+    void process(DCDive *dive) override;
+
+public slots:
     void write(DCDive *dive) override;
     void end() override;
     void cancel() override;
     void start() override;
-    LittleDiveLog *getDiveLog();
-    void setDiveLog(LittleDiveLog *dl);
-    void setWriting();
+
 private:
     DCDiveSerializer diveSerializer;
     DCDiveComputerSerializer computerSerializer;

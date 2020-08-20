@@ -13,8 +13,12 @@ class QDCFileWriter : public QDCWriter
     Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
 public:
     QDCFileWriter(QObject *parent = NULL);
+    virtual ~QDCFileWriter();
     void setPath(QString p);
     QString getPath();
+    void process(DCDive *dive) override;
+
+public slots:
     void write(DCDive *dive) override;
     void end() override;
     void cancel() override;

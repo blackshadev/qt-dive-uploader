@@ -13,6 +13,7 @@ enum RequestState {
     Errorred,
 };
 
+#undef DELETE
 enum RequestMethod {
     GET = 1,
     POST = 2,

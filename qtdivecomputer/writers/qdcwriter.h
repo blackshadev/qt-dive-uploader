@@ -1,5 +1,6 @@
 #ifndef QDCWRITER_H
 #define QDCWRITER_H
+#include "../entities/qdcdive.h"
 #include "../divecomputer/writers/dcwriterinterface.h"
 #include "../descriptor/qdcdescriptor.h"
 #include "../device/qdcdevice.h"
@@ -23,8 +24,21 @@ public:
     void unsetBusy();
     void setBusy();
     bool isBusy();
+    virtual void process(DCDive *dive) = 0;
+
+public slots:
+    virtual void write(QDCDive *dive);
+    virtual void write(DCDive *dive) override = 0;
+    virtual void end() override = 0;
+    virtual void cancel() override = 0;
+    virtual void start() override = 0;
 
 signals:
+    void doWrite(QDCDive *);
+    void doEnd();
+    void doCancel();
+    void doStart();
+
     void started();
     void ended();
     void cancelled();

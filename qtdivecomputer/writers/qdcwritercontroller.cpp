@@ -1,36 +1,35 @@
 #include "qdcwritercontroller.h"
 
 QDCWriterController::QDCWriterController(QObject *parent)
-    : QThread(parent)
+    : QObject(parent)
 {
     device.model = 0;
     device.serial = 0;
     device.firmware = 0;
 
-    connect(this, SIGNAL(moreWork(QPivateSignal)), this, SLOT(tryProcessWork()));
-
+    workerThread = new QThread();
+    workerThread->start();
 }
 
 QDCWriterController::~QDCWriterController()
 {
-    quit();
-    wait();
+    workerThread->quit();
+    workerThread->wait();
+    delete workerThread;
 }
 
 void QDCWriterController::setWriter(QDCWriter *w)
 {
+    if (writer) {
+        disconnect(writer, NULL, this, NULL);
+    }
+
+
     writer = w;
+    w->moveToThread(workerThread);
 
-    disconnect(w, NULL, this, NULL);
-    w->moveToThread(this);
-
-    connect(w, SIGNAL(ready()), this, SIGNAL(moreWork(QPrivateSignal)));
-
-    connect(this, SIGNAL(starting(QPrivateSignal)), writer, SLOT(start()));
-    connect(this, SIGNAL(ending(QPrivateSignal)), writer, SLOT(end()));
-    connect(this, SIGNAL(writing(DCDive *, QPrivateSignal)), writer, SLOT(write(DCDive *)));
     connect(writer, &QDCWriter::written, this, [=]() {
-        //
+        setCurrent(getCurrent() + 1);
     });
 
 
@@ -54,44 +53,6 @@ void QDCWriterController::setDescriptor(DCDeviceDescriptor *descr)
 void QDCWriterController::setDescriptor(QDCDescriptor *descr)
 {
     descriptor = descr;
-}
-
-void QDCWriterController::start()
-{
-    setCurrent(0);
-
-    writer->setDevice(device);
-    writer->setDescriptor(descriptor);
-
-    if(!isRunning()) {
-        QThread::start();
-    }
-
-    emit starting(QPrivateSignal());
-}
-
-void QDCWriterController::write(DCDive *dive)
-{
-    mutex.lock();
-    queue.enqueue(dive);
-    mutex.unlock();
-
-    emit moreWork(QPrivateSignal());
-}
-
-void QDCWriterController::write(QDCDive *dive)
-{
-    write((DCDive *)dive);
-}
-
-void QDCWriterController::end()
-{
-    isEnding = true;
-}
-
-void QDCWriterController::cancel()
-{
-    writer->cancel();
 }
 
 unsigned int QDCWriterController::getMaximum()
@@ -123,40 +84,29 @@ void QDCWriterController::setCurrent(unsigned int cur)
     emit progress(current, maximum);
 }
 
-void QDCWriterController::process(DCDive *dive)
+void QDCWriterController::write(QDCDive *dive)
 {
-    writer->write(dive);
+    emit writer->doWrite((QDCDive *)dive);
 }
 
-void QDCWriterController::run()
+void QDCWriterController::write(DCDive *dive)
 {
-    exec();
+    write((QDCDive *)dive);
 }
 
-void QDCWriterController::tryProcessWork()
+void QDCWriterController::start()
 {
-    if (!writer) {
-        throw std::runtime_error("No writer set");
-    }
+    writer->setDevice(device);
+    writer->setDescriptor(descriptor);
+    emit writer->doStart();
+}
 
-    if (writer->isBusy()) {
-        return;
-    }
+void QDCWriterController::end()
+{
+    emit writer->doEnd();
+}
 
-    mutex.lock();
-    if(queue.length() > 0) {
-        DCDive *d = queue.dequeue();
-        mutex.unlock();
-
-        emit writing(d, QPrivateSignal());
-    } else if(isEnding) {
-        // done
-        mutex.unlock();
-
-        emit ending(QPrivateSignal());
-    } else {
-        mutex.unlock();
-    }
-
-
+void QDCWriterController::cancel()
+{
+    emit writer->doCancel();
 }

@@ -6,6 +6,9 @@ QDCFileWriter::QDCFileWriter(QObject *parent)
     : QDCWriter(parent)
 {}
 
+QDCFileWriter::~QDCFileWriter()
+{}
+
 void QDCFileWriter::setPath(QString p)
 {
     path = p;
@@ -17,13 +20,18 @@ QString QDCFileWriter::getPath()
     return path;
 }
 
-void QDCFileWriter::write(DCDive *dive)
+void QDCFileWriter::process(DCDive *dive)
 {
     setBusy();
     QJsonObject diveObject;
     diveSerializer.serialize(diveObject, dive);
     dives.append(diveObject);
     unsetBusy();
+}
+
+void QDCFileWriter::write(DCDive *dive)
+{
+    process(dive);
 }
 
 void QDCFileWriter::end()

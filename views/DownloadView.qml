@@ -12,7 +12,7 @@ import "../components"
 
 GridLayout {
     property bool isDownloading: dcreader.isBusy
-    property bool isWriting: dcwriter.isBusy
+    property bool isWriting: false; //dcwriter.isBusy
     property bool isSelecting: selectionProxy.isBusy
     property bool isBusy: isDownloading || isWriting || isSelecting;
     property variant writeTarget: selectDives.checked ? selectionProxy : dcwriter;
