@@ -66,7 +66,8 @@ SOURCES += main.cpp \
     littledivelog/littledivelog.cpp \
     http/jsonrequest.cpp \
     littledivelog/userinfo.cpp \
-    divecomputer/utils/datetime.cpp
+    divecomputer/utils/datetime.cpp \
+    statemachine/finitestatemachine.cpp
 
 HEADERS += \
     divecomputer/utils/numeric.h \
@@ -135,7 +136,9 @@ HEADERS += \
     littledivelog/littledivelog.h \
     http/jsonrequest.h \
     littledivelog/userinfo.h \
-    divecomputer/utils/datetime.h
+    divecomputer/utils/datetime.h \
+    statemachine/finitestatemachine.h \
+    statemachine/statemachineinterface.h
 
 
 RESOURCES += qml.qrc

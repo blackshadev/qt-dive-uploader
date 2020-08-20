@@ -8,15 +8,12 @@ QDCLittleDiveLogWriter::QDCLittleDiveLogWriter(QObject *parent)
 
 void QDCLittleDiveLogWriter::write(DCDive *dive)
 {
-    if (!getIsStarted()) {
-        throw std::runtime_error("Not yet started");
-    }
+    setBusy();
 
     QJsonObject json;
     diveSerializer.serialize(json, dive);
     json["computer_id"] = ldComputerId;
 
-    setWriteReady(false);
     divelog->request(
         RequestMethod::POST,
         "/dive",
@@ -26,34 +23,29 @@ void QDCLittleDiveLogWriter::write(DCDive *dive)
                 emit error(resp->errorString());
             }
 
-            writeCompleted();
+            unsetBusy();
+            emit written();
         }
     );
 }
 
 void QDCLittleDiveLogWriter::end()
 {
-    setWriteReady(false);
     emit ended();
 }
 
 void QDCLittleDiveLogWriter::cancel()
 {
-    setIsStarted(false);
-    setWriteReady(false);
     emit cancelled();
 }
 
 void QDCLittleDiveLogWriter::start()
 {
-    if (getIsStarted()) {
-        throw std::runtime_error("Already started");
-    }
+    setBusy();
 
     QJsonObject computer;
     computerSerializer.serialize(computer, device, descriptor);
 
-    setWriteReady(false);
     divelog->request(
         RequestMethod::POST,
         "/computer",
@@ -67,15 +59,10 @@ void QDCLittleDiveLogWriter::start()
             auto obj = resp->getBodyAsJSON();
             ldComputerId = obj["computer_id"].toInt();
 
-            setWriteReady(true);
+            unsetBusy();
             emit started();
         }
     );
-}
-
-bool QDCLittleDiveLogWriter::isReady()
-{
-    return divelog != NULL && divelog->isLoggedIn() && divelog->hasUserData();
 }
 
 LittleDiveLog *QDCLittleDiveLogWriter::getDiveLog()
@@ -87,5 +74,4 @@ void QDCLittleDiveLogWriter::setDiveLog(LittleDiveLog *dl)
 {
     divelog = dl;
     connect(dl, SIGNAL(userInfoChanged(UserInfo *)), this, SIGNAL(isReadyChanged()));
-    emit isReadyChanged();
 }

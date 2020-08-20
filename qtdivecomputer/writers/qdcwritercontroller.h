@@ -14,17 +14,6 @@
 class QDCWriterController : public QThread, public DCWriterInterface
 {
 
-    enum WriterState {
-        None,
-        Idle,
-        Starting,
-        Writing,
-        Ending,
-        Ended,
-        Cancelling,
-        Cancelled,
-    };
-
     Q_OBJECT
     Q_PROPERTY(unsigned int current READ getCurrent WRITE setCurrent NOTIFY progress)
     Q_PROPERTY(unsigned int maximum READ getMaximum WRITE setMaximum NOTIFY progress)
@@ -45,9 +34,6 @@ public:
     void setMaximum(unsigned int);
     unsigned int getCurrent();
     void setCurrent(unsigned int);
-    bool getBusy();
-    void setBusy(bool b);
-    bool isReadyForData() override;
 public slots:
     void write(DCDive *dive) override;
     void write(QDCDive *dive);
@@ -55,34 +41,32 @@ public slots:
     void end() override;
     void cancel() override;
 
-
 signals:
     void progress(unsigned int current, unsigned int maximum);
     void cancelled();
     void selectChanged(bool select);
-    void isBusyChanged();
     void error(QString msg);
     void finished();
-    void advance();
+    void moreWork(QPrivateSignal);
+    void starting(QPrivateSignal);
+    void ending(QPrivateSignal);
+    void writing(DCDive *, QPrivateSignal);
 
 protected:
+    bool isEnding = false;
     virtual void process(DCDive *dive);
-    virtual void performAdvance();
-    void setState(WriterState st);
     void run() override;
-
 
     DeviceData device;
     QDCWriter *writer = NULL;
     QDCDescriptor *descriptor = NULL;
+protected slots:
+    void tryProcessWork();
 private:
-    bool isBusy = false;
-    bool isEnded = false;
     unsigned int current = 0;
     unsigned int maximum = 0;
     QQueue<DCDive *> queue;
     QMutex mutex;
-    WriterState state = WriterState::None;
 
 };
 

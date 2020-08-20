@@ -19,7 +19,7 @@ public:
     void end() override;
     void cancel() override;
     void start() override;
-    bool isReady() override;
+
 private:
     QJsonObject getComputerAsJson();
     DCDiveSerializer diveSerializer;
@@ -27,6 +27,7 @@ private:
     QString path;
     QJsonObject object;
     QJsonArray dives;
+
 signals:
     void pathChanged(QString path);
 };

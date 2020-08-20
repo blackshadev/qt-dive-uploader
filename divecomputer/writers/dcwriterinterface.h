@@ -13,7 +13,6 @@ public:
     virtual void cancel() = 0;
     virtual void setDescriptor(DCDeviceDescriptor *descr) = 0;
     virtual void setDevice(DeviceData dev) = 0;
-    virtual bool isReadyForData() = 0;
 };
 
 #endif // DCWRITERINTERFACE_H

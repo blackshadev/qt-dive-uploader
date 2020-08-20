@@ -54,11 +54,6 @@ bool QDCSelectionProxy::getBusy()
     return isBusy;
 }
 
-bool QDCSelectionProxy::isReadyForData()
-{
-    return true;
-}
-
 void QDCSelectionProxy::write(DCDive *dive)
 {
     write((QDCDive *)dive);

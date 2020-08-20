@@ -7,10 +7,8 @@ QDCWriterController::QDCWriterController(QObject *parent)
     device.serial = 0;
     device.firmware = 0;
 
-    connect(this, &QThread::started, this, [=]() {
-        writer->start();
-        performAdvance();
-    });
+    connect(this, SIGNAL(moreWork(QPivateSignal)), this, SLOT(tryProcessWork()));
+
 }
 
 QDCWriterController::~QDCWriterController()
@@ -21,27 +19,21 @@ QDCWriterController::~QDCWriterController()
 
 void QDCWriterController::setWriter(QDCWriter *w)
 {
-    if (writer != NULL) {
-        disconnect(writer, NULL, this, NULL);
-    }
-
     writer = w;
-    connect(this, &QDCWriterController::advance, this, &QDCWriterController::performAdvance);
-    connect(w, SIGNAL(readyForData()), this, SIGNAL(advance()));
-    connect(w, &QDCWriter::started, this, [=]() {
-        setState(WriterState::Writing);
-    });
-    connect(w, &QDCWriter::ended, this, [=]() {
-        setState(WriterState::Ended);
-    });
-    connect(w, &QDCWriter::cancelled, this, [=]() {
-        setState(WriterState::Cancelled);
-    });
-    connect(w, &QDCWriter::written, this, [=]() {
-        setCurrent(getCurrent() + 1);
+
+    disconnect(w, NULL, this, NULL);
+    w->moveToThread(this);
+
+    connect(w, SIGNAL(ready()), this, SIGNAL(moreWork(QPrivateSignal)));
+
+    connect(this, SIGNAL(starting(QPrivateSignal)), writer, SLOT(start()));
+    connect(this, SIGNAL(ending(QPrivateSignal)), writer, SLOT(end()));
+    connect(this, SIGNAL(writing(DCDive *, QPrivateSignal)), writer, SLOT(write(DCDive *)));
+    connect(writer, &QDCWriter::written, this, [=]() {
+        //
     });
 
-    connect(w, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
+
 }
 
 void QDCWriterController::setDevice(QDeviceData dev)
@@ -66,18 +58,6 @@ void QDCWriterController::setDescriptor(QDCDescriptor *descr)
 
 void QDCWriterController::start()
 {
-    if (isBusy) {
-        throw std::runtime_error("Already running");
-    }
-    if (state > WriterState::Idle) {
-        throw std::runtime_error("Already running");
-    }
-    if (!writer || !device.serial || !descriptor) {
-        throw std::runtime_error("Unable to start writing, invalid argument.");
-    }
-
-    isEnded = false;
-
     setCurrent(0);
 
     writer->setDevice(device);
@@ -86,7 +66,8 @@ void QDCWriterController::start()
     if(!isRunning()) {
         QThread::start();
     }
-    setState(WriterState::Starting);
+
+    emit starting(QPrivateSignal());
 }
 
 void QDCWriterController::write(DCDive *dive)
@@ -94,7 +75,8 @@ void QDCWriterController::write(DCDive *dive)
     mutex.lock();
     queue.enqueue(dive);
     mutex.unlock();
-    emit advance();
+
+    emit moreWork(QPrivateSignal());
 }
 
 void QDCWriterController::write(QDCDive *dive)
@@ -104,40 +86,18 @@ void QDCWriterController::write(QDCDive *dive)
 
 void QDCWriterController::end()
 {
-    isEnded = true;
-    emit advance();
+    isEnding = true;
 }
 
 void QDCWriterController::cancel()
 {
-    setState(WriterState::Cancelling);
-}
-
-bool QDCWriterController::getBusy()
-{
-    return isBusy;
-}
-
-void QDCWriterController::setBusy(bool b)
-{
-    if (isBusy == b) {
-        return;
-    }
-
-    isBusy = b;
-    emit isBusyChanged();
-}
-
-bool QDCWriterController::isReadyForData()
-{
-    return writer->isReadyForData();
+    writer->cancel();
 }
 
 unsigned int QDCWriterController::getMaximum()
 {
     return maximum;
 }
-
 
 void QDCWriterController::setMaximum(unsigned int max)
 {
@@ -168,61 +128,35 @@ void QDCWriterController::process(DCDive *dive)
     writer->write(dive);
 }
 
-void QDCWriterController::performAdvance()
-{
-
-    mutex.lock();
-    switch (state) {
-        case WriterState::Idle:
-            break;
-        case WriterState::Starting:
-            writer->start();
-        break;
-
-        case WriterState::Writing:
-            if (!writer->isReadyForData()) {
-                break;
-            }
-
-            if (!queue.isEmpty()) {
-                DCDive *dive = queue.dequeue();
-                process(dive);
-                setState(WriterState::Writing);
-            }
-            if(queue.isEmpty() && isEnded) {
-                setState(WriterState::Ending);
-            }
-            mutex.unlock();
-        break;
-        case WriterState::Cancelling:
-            writer->cancel();
-        break;
-        case WriterState::Cancelled:
-            emit cancelled();
-            setState(WriterState::Idle);
-        break;
-        case WriterState::Ending:
-            writer->end();
-        break;
-        case WriterState::Ended:
-            emit finished();
-            setState(WriterState::Idle);
-        break;
-    }
-    mutex.unlock();
-
-}
-
-void QDCWriterController::setState(QDCWriterController::WriterState st)
-{
-
-    mutex.lock();
-    state = st;
-    mutex.unlock();
-    emit advance();
-}
-
 void QDCWriterController::run()
 {
     exec();
+}
+
+void QDCWriterController::tryProcessWork()
+{
+    if (!writer) {
+        throw std::runtime_error("No writer set");
+    }
+
+    if (writer->isBusy()) {
+        return;
+    }
+
+    mutex.lock();
+    if(queue.length() > 0) {
+        DCDive *d = queue.dequeue();
+        mutex.unlock();
+
+        emit writing(d, QPrivateSignal());
+    } else if(isEnding) {
+        // done
+        mutex.unlock();
+
+        emit ending(QPrivateSignal());
+    } else {
+        mutex.unlock();
+    }
+
+
 }

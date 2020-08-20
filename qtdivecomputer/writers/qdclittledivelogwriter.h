@@ -20,7 +20,6 @@ public:
     void end() override;
     void cancel() override;
     void start() override;
-    bool isReady() override;
     LittleDiveLog *getDiveLog();
     void setDiveLog(LittleDiveLog *dl);
     void setWriting();
