@@ -20,18 +20,13 @@ QString QDCFileWriter::getPath()
     return path;
 }
 
-void QDCFileWriter::process(DCDive *dive)
+void QDCFileWriter::write(DCDive *dive)
 {
     setBusy();
     QJsonObject diveObject;
     diveSerializer.serialize(diveObject, dive);
     dives.append(diveObject);
     unsetBusy();
-}
-
-void QDCFileWriter::write(DCDive *dive)
-{
-    process(dive);
 }
 
 void QDCFileWriter::end()
@@ -41,10 +36,11 @@ void QDCFileWriter::end()
     QFile file;
     file.setFileName(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        auto error = file.error();
+        auto fileError = file.error();
         QString errorText = "Couldn't open save file. ";
-        errorText.append(error);
-        throw std::runtime_error(errorText.toStdString());
+        errorText.append(fileError);
+        emit error(errorText);
+        return;
     }
 
     QJsonDocument document(object);

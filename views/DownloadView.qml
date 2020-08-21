@@ -247,6 +247,7 @@ GridLayout {
             font.family: FontAwesome.fontFamily
             onClicked: {
                 refreshDevices();
+                refreshUI();
             }
             enabled: !isBusy
 

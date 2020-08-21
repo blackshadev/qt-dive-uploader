@@ -20,10 +20,9 @@ public:
     LittleDiveLog *getDiveLog();
     void setDiveLog(LittleDiveLog *dl);
     void setWriting();
-    void process(DCDive *dive) override;
 
 public slots:
-    void write(DCDive *dive) override;
+    void write(DCDive *write) override;
     void end() override;
     void cancel() override;
     void start() override;

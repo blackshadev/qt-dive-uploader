@@ -9,7 +9,7 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QMutex>
-
+#include "qdcwriterworker.h"
 
 class QDCWriterController : public QObject, public DCWriterInterface
 {
@@ -26,8 +26,8 @@ public:
     ~QDCWriterController();
     void setWriter(QDCWriter *writer);
     void setDevice(QDeviceData dev);
-    void setDevice(DeviceData dev);
-    void setDescriptor(DCDeviceDescriptor *descr);
+    void setDevice(DeviceData dev) override;
+    void setDescriptor(DCDeviceDescriptor *descr) override;
     void setDescriptor(QDCDescriptor *descr);
     unsigned int getMaximum();
     void setMaximum(unsigned int);
@@ -39,16 +39,11 @@ signals:
     void started();
     void finished();
 
-protected:
-    DeviceData device;
-    QDCWriter *writer = NULL;
-    QDCDescriptor *descriptor = NULL;
-
 private:
     unsigned int current = 0;
     unsigned int maximum = 0;
     QThread *workerThread;
-
+    QDCWriterWorker *writerWorker;
 
     // DCWriterInterface interface
 public slots:

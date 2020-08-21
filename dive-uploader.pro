@@ -57,6 +57,7 @@ SOURCES += main.cpp \
     qtdivecomputer/writers/qdcselectionproxy.cpp \
     qtdivecomputer/writers/qdcwriter.cpp \
     qtdivecomputer/writers/qdcwritercontroller.cpp \
+    qtdivecomputer/writers/qdcwriterworker.cpp \
     serializer/dcdivecomputerserializer.cpp \
     serializer/dcdivesampleeventserializer.cpp \
     serializer/dcdivesampleserializer.cpp \
@@ -123,6 +124,7 @@ HEADERS += \
     qtdivecomputer/writers/qdcwritercontroller.h \
     http/requestinterface.h \
     http/responseinterface.h \
+    qtdivecomputer/writers/qdcwriterworker.h \
     serializer/dcdivecomputerserializer.h \
     serializer/dcdivesampleeventserializer.h \
     serializer/dcdivesampleserializer.h \

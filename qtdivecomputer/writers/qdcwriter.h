@@ -24,7 +24,6 @@ public:
     void unsetBusy();
     void setBusy();
     bool isBusy();
-    virtual void process(DCDive *dive) = 0;
 
 public slots:
     virtual void write(QDCDive *dive);
@@ -34,11 +33,6 @@ public slots:
     virtual void start() override = 0;
 
 signals:
-    void doWrite(QDCDive *);
-    void doEnd();
-    void doCancel();
-    void doStart();
-
     void started();
     void ended();
     void cancelled();

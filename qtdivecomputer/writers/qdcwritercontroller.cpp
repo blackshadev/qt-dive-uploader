@@ -3,12 +3,18 @@
 QDCWriterController::QDCWriterController(QObject *parent)
     : QObject(parent)
 {
-    device.model = 0;
-    device.serial = 0;
-    device.firmware = 0;
-
+    writerWorker = new QDCWriterWorker();
     workerThread = new QThread();
     workerThread->start();
+    writerWorker->moveToThread(workerThread);
+
+    connect(writerWorker, &QDCWriterWorker::written, this, [=]() {
+        setCurrent(getCurrent() + 1);
+    });
+    connect(writerWorker, SIGNAL(cancelled()), this, SIGNAL(cancelled()));
+    connect(writerWorker, SIGNAL(ended()), this, SIGNAL(ended()));
+    connect(writerWorker, SIGNAL(started()), this, SIGNAL(started()));
+    connect(writerWorker, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
 }
 
 QDCWriterController::~QDCWriterController()
@@ -16,23 +22,13 @@ QDCWriterController::~QDCWriterController()
     workerThread->quit();
     workerThread->wait();
     delete workerThread;
+    delete writerWorker;
 }
 
 void QDCWriterController::setWriter(QDCWriter *w)
 {
-    if (writer) {
-        disconnect(writer, NULL, this, NULL);
-    }
-
-
-    writer = w;
+    writerWorker->setWriter(w);
     w->moveToThread(workerThread);
-
-    connect(writer, &QDCWriter::written, this, [=]() {
-        setCurrent(getCurrent() + 1);
-    });
-
-
 }
 
 void QDCWriterController::setDevice(QDeviceData dev)
@@ -42,7 +38,7 @@ void QDCWriterController::setDevice(QDeviceData dev)
 
 void QDCWriterController::setDevice(DeviceData dev)
 {
-    device = dev;
+    writerWorker->setDevice(dev);
 }
 
 void QDCWriterController::setDescriptor(DCDeviceDescriptor *descr)
@@ -52,7 +48,7 @@ void QDCWriterController::setDescriptor(DCDeviceDescriptor *descr)
 
 void QDCWriterController::setDescriptor(QDCDescriptor *descr)
 {
-    descriptor = descr;
+    writerWorker->setDescriptor(descr);
 }
 
 unsigned int QDCWriterController::getMaximum()
@@ -86,7 +82,7 @@ void QDCWriterController::setCurrent(unsigned int cur)
 
 void QDCWriterController::write(QDCDive *dive)
 {
-    emit writer->doWrite((QDCDive *)dive);
+    emit writerWorker->dive(dive);
 }
 
 void QDCWriterController::write(DCDive *dive)
@@ -96,17 +92,15 @@ void QDCWriterController::write(DCDive *dive)
 
 void QDCWriterController::start()
 {
-    writer->setDevice(device);
-    writer->setDescriptor(descriptor);
-    emit writer->doStart();
+    emit writerWorker->start();
 }
 
 void QDCWriterController::end()
 {
-    emit writer->doEnd();
+    emit writerWorker->end();
 }
 
 void QDCWriterController::cancel()
 {
-    emit writer->doCancel();
+    emit writerWorker->cancel();
 }

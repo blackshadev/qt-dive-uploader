@@ -3,10 +3,6 @@
 QDCWriter::QDCWriter(QObject *parent)
     : QObject(parent)
 {
-    connect(this, SIGNAL(doWrite(QDCDive *)), this, SLOT(write(QDCDive *)));
-    connect(this, SIGNAL(doStart()), this, SLOT(start()));
-    connect(this, SIGNAL(doCancel()), this, SLOT(cancel()));
-    connect(this, SIGNAL(doEnd()), this, SLOT(end()));
 }
 
 QDCWriter::~QDCWriter()

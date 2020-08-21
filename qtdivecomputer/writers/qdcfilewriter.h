@@ -16,10 +16,9 @@ public:
     virtual ~QDCFileWriter();
     void setPath(QString p);
     QString getPath();
-    void process(DCDive *dive) override;
 
 public slots:
-    void write(DCDive *dive) override;
+    void write(DCDive *write) override;
     void end() override;
     void cancel() override;
     void start() override;

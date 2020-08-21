@@ -7,7 +7,7 @@ QDCLittleDiveLogWriter::QDCLittleDiveLogWriter(QObject *parent)
 QDCLittleDiveLogWriter::~QDCLittleDiveLogWriter()
 {}
 
-void QDCLittleDiveLogWriter::process(DCDive *dive)
+void QDCLittleDiveLogWriter::write(DCDive *dive)
 {
     setBusy();
 
@@ -28,11 +28,6 @@ void QDCLittleDiveLogWriter::process(DCDive *dive)
             emit written();
         }
     );
-}
-
-void QDCLittleDiveLogWriter::write(DCDive *dive)
-{
-
 }
 
 void QDCLittleDiveLogWriter::end()
