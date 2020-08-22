@@ -3,9 +3,8 @@
 QDCWriterController::QDCWriterController(QObject *parent)
     : QObject(parent)
 {
-    writerWorker = new QDCWriterWorker();
     workerThread = new QThread();
-    workerThread->start();
+    writerWorker = new QDCWriterWorker();
     writerWorker->moveToThread(workerThread);
 
     connect(writerWorker, &QDCWriterWorker::written, this, [=]() {
@@ -15,6 +14,8 @@ QDCWriterController::QDCWriterController(QObject *parent)
     connect(writerWorker, SIGNAL(ended()), this, SIGNAL(ended()));
     connect(writerWorker, SIGNAL(started()), this, SIGNAL(started()));
     connect(writerWorker, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
+
+    workerThread->start();
 }
 
 QDCWriterController::~QDCWriterController()
@@ -27,8 +28,8 @@ QDCWriterController::~QDCWriterController()
 
 void QDCWriterController::setWriter(QDCWriter *w)
 {
-    writerWorker->setWriter(w);
     w->moveToThread(workerThread);
+    writerWorker->setWriter(w);
 }
 
 void QDCWriterController::setDevice(QDeviceData dev)
@@ -92,6 +93,7 @@ void QDCWriterController::write(DCDive *dive)
 
 void QDCWriterController::start()
 {
+    setCurrent(0);
     emit writerWorker->start();
 }
 

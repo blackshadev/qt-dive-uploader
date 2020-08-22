@@ -18,6 +18,7 @@ public:
     virtual void send(AsyncRequest *request);
     bool isMainThread() override;
 
+    void cleanup();
     void abortAll() override;
     QNetworkAccessManager *getNetworkAccessManager() override;
 protected:

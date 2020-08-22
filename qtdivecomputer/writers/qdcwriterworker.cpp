@@ -7,12 +7,17 @@ QDCWriterWorker::QDCWriterWorker(QObject* parent) : QObject(parent)
     deviceData.serial = 0;
     deviceData.firmware = 0;
 
+    connect(this, SIGNAL(dive(DCDive *)), this, SLOT(receiveDive(DCDive *)));
+    connect(this, SIGNAL(start()), this, SLOT(receiveStart()));
+    connect(this, SIGNAL(cancel()), this, SLOT(receiveCancel()));
+    connect(this, SIGNAL(end()), this, SLOT(receiveEnd()));
+
 }
 
 void QDCWriterWorker::receiveCancel()
 {
+    isStarted = false;
     writer->cancel();
-
 }
 
 void QDCWriterWorker::receiveStart()
@@ -24,6 +29,7 @@ void QDCWriterWorker::receiveStart()
     writer->setDevice(deviceData);
     writer->setDescriptor(descriptor);
 
+    isEnded = false;
     isStarted = true;
     writer->start();
 }
@@ -31,6 +37,7 @@ void QDCWriterWorker::receiveStart()
 void QDCWriterWorker::receiveEnd()
 {
     isEnded = true;
+    consume();
 }
 
 void QDCWriterWorker::receiveDive(DCDive *dive)
@@ -57,7 +64,7 @@ void QDCWriterWorker::setWriter(QDCWriter *w)
 
     writer = w;
 
-    connect(writer, &QDCWriter::ready, this, &QDCWriterWorker::consume);
+    connect(writer, SIGNAL(ready()), this, SLOT(consume()));
     connect(writer, SIGNAL(ended()), this, SIGNAL(ended()));
     connect(writer, SIGNAL(cancelled()), this, SIGNAL(cancelled()));
     connect(writer, SIGNAL(written()), this, SIGNAL(written()));
@@ -73,8 +80,15 @@ void QDCWriterWorker::consume()
     DCDive *dive;
     if (queue.size()) {
         dive = queue.dequeue();
+        writer->write(dive);
     } else if (isEnded) {
-        isStarted = false;
-        emit ended();
+        performEnd();
     }
+
+}
+
+void QDCWriterWorker::performEnd()
+{
+    isStarted = false;
+    writer->end();
 }

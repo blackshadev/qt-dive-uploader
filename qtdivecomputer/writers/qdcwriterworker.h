@@ -13,6 +13,7 @@ public:
     void setDevice(DeviceData data);
     void setDescriptor(QDCDescriptor *descriptor);
     void setWriter(QDCWriter *writer);
+
 signals:
     void dive(DCDive *);
     void cancel();
@@ -24,12 +25,17 @@ signals:
     void started();
     void cancelled();
     void error(QString);
-protected:
+
+protected slots:
     void receiveCancel();
     void receiveStart();
     void receiveEnd();
     void receiveDive(DCDive* dive);
     void consume();
+
+protected:
+    void performEnd();
+
 private:
     QQueue<DCDive *> queue;
     QDCWriter *writer = NULL;

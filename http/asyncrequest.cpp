@@ -1,15 +1,18 @@
 #include "asyncrequest.h"
 
+int iX = 0;
 
 AsyncRequest::AsyncRequest(HTTPTransportInterface *trans)
     : QThread()
 {
+    index = iX++;
     transport = trans;
     response = new HTTPResponse(this);
 }
 
 AsyncRequest::~AsyncRequest()
 {
+    isDeleted = true;
     delete response;
     response = NULL;
 
@@ -103,12 +106,10 @@ void AsyncRequest::endSend(QNetworkReply *nativeReply)
     connect(response, &HTTPResponse::finished, this,  [=]() {
         setState(RequestState::Completed);
         emit finished();
-        autoDelete();
     });
     connect(response, &HTTPResponse::error, this,  [=](QString err) {
         setState(RequestState::Errorred);
         emit error(err);
-        autoDelete();
     });
     response->readReply(nativeReply);
     mutex.unlock();
@@ -172,7 +173,5 @@ void AsyncRequest::setState(RequestState s)
 
 void AsyncRequest::autoDelete()
 {
-    if (shouldAutoDelete) {
-        deleteLater();
-    }
+
 }

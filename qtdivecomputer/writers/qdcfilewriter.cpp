@@ -27,6 +27,7 @@ void QDCFileWriter::write(DCDive *dive)
     diveSerializer.serialize(diveObject, dive);
     dives.append(diveObject);
     unsetBusy();
+    emit written();
 }
 
 void QDCFileWriter::end()
@@ -56,7 +57,7 @@ void QDCFileWriter::cancel()
 
 void QDCFileWriter::start()
 {
-    unsetBusy();
+    setBusy();
 
     dives = QJsonArray();
     object = QJsonObject();
@@ -68,9 +69,9 @@ void QDCFileWriter::start()
     computerSerializer.serialize(computerObject, device, descriptor);
     object["computer"] = computerObject;
 
+    unsetBusy();
     emit started();
 
-    setBusy();
 }
 
 

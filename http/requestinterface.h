@@ -45,6 +45,7 @@ public:
     virtual QNetworkRequest getNetworkRequest() = 0;
     virtual void abort() = 0;
     virtual RequestInterface *getRequest() = 0;
+    virtual bool getAutoDelete() = 0;
 };
 
 #endif // REQUESTINTERFACE_H

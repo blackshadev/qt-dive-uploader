@@ -9,6 +9,7 @@ RequestContainer::RequestContainer(QObject *parent)
 RequestContainer::~RequestContainer()
 {
     abortAll();
+    cleanup();
 }
 
 void RequestContainer::sendRequest(RequestInternalInterface *request)
@@ -60,6 +61,17 @@ void RequestContainer::track(RequestInternalInterface *request)
 void RequestContainer::untrack(RequestInternalInterface *request)
 {
     pendingRequests.remove(request);
+    if (request->getAutoDelete()) {
+        trashheap.insert(request);
+    }
+}
+
+void RequestContainer::cleanup()
+{
+    for (auto req : trashheap) {
+        delete req;
+    }
+    trashheap.clear();
 }
 
 void RequestContainer::abortAll()

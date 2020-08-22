@@ -15,6 +15,7 @@ public:
     ~AsyncRequest();
 
     void setAutoDelete(bool d);
+    bool getAutoDelete() override;
 
     // RequestInterface interface
     void setMethod(RequestMethod m) override;
@@ -44,8 +45,10 @@ signals:
 protected:
     void run() override;
     void setState(RequestState state);
-    void autoDelete();
+
 private:
+    int index = 0;
+    bool isDeleted = false;
     bool shouldAutoDelete = true;
     QMutex mutex;
     RequestMethod method = RequestMethod::GET;
@@ -53,8 +56,8 @@ private:
     QString url;
     QMap<QString, QString> headers;
     QByteArray body;
-    HTTPResponse *response;
-    HTTPTransportInterface *transport;
+    HTTPResponse *response = NULL;
+    HTTPTransportInterface *transport = NULL;
 
 };
 
