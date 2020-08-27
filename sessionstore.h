@@ -56,29 +56,46 @@ signals:
     void useFingerprintChanged(bool);
 
 protected :
-    QString m_computer;
-    QString m_path;
-    QString m_refresh_token;
-    QString m_write_type;
-    QString m_transport_type;
-    bool m_select_dives;
-    bool m_use_fingerprint;
+    QString m_computer = "";
+    QString m_path = "";
+    QString m_refresh_token = "";
+    QString m_write_type = "file";
+    QString m_transport_type = "";
+    bool m_select_dives = true;
+    bool m_use_fingerprint = true;
 };
 
 Q_DECLARE_METATYPE(SessionData*)
 
-class SessionStore
+class SessionStore : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(SessionData *data READ getData CONSTANT)
+
 public:
-    SessionStore(QString path);
+    SessionStore();
     ~SessionStore();
+
+    void setPath(QString p);
+    QString getPath();
+    SessionData *getData();
+
+public slots:
     bool save();
     bool load();
-    SessionData m_data;
+
+signals:
+    void pathChanged(QString);
+    void loaded();
+
 protected:
-    QJsonDocument m_jsonDoc;
-    QString m_path;
+    bool isLoaded = false;
+    SessionData sessionData;
+    QJsonDocument jsonDocument;
+    QString path;
 
 };
+Q_DECLARE_METATYPE(SessionStore *)
 
 #endif // SESSIONSTORE_H

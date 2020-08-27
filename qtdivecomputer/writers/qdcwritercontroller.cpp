@@ -22,13 +22,13 @@ QDCWriterController::~QDCWriterController()
 {
     workerThread->quit();
     workerThread->wait();
+
     delete workerThread;
     delete writerWorker;
 }
 
 void QDCWriterController::setWriter(QDCWriter *w)
 {
-    w->moveToThread(workerThread);
     writerWorker->setWriter(w);
 }
 

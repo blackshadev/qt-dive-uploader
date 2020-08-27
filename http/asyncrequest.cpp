@@ -1,11 +1,8 @@
 #include "asyncrequest.h"
 
-int iX = 0;
-
 AsyncRequest::AsyncRequest(HTTPTransportInterface *trans)
-    : QThread()
+    : QObject()
 {
-    index = iX++;
     transport = trans;
     response = new HTTPResponse(this);
 }
@@ -15,14 +12,16 @@ AsyncRequest::~AsyncRequest()
     isDeleted = true;
     delete response;
     response = NULL;
-
-    quit();
-    wait();
 }
 
-void AsyncRequest::setAutoDelete(bool d)
+void AsyncRequest::done()
 {
-    shouldAutoDelete = d;
+    shouldBeDelete = true;
+}
+
+bool AsyncRequest::shouldDelete()
+{
+    return shouldBeDelete;
 }
 
 void AsyncRequest::setMethod(RequestMethod m)
@@ -96,7 +95,6 @@ void AsyncRequest::beginSend()
         throw std::runtime_error("Already sending");
     }
 
-    mutex.lock();
     setState(RequestState::Sending);
 }
 
@@ -112,7 +110,6 @@ void AsyncRequest::endSend(QNetworkReply *nativeReply)
         emit error(err);
     });
     response->readReply(nativeReply);
-    mutex.unlock();
 }
 
 QByteArray AsyncRequest::getBody()
@@ -143,15 +140,11 @@ QNetworkRequest AsyncRequest::getNetworkRequest()
 
 void AsyncRequest::abort()
 {
-    mutex.lock();
     if (response) {
         response->getNetworkReply()->abort();
     }
+    done();
     setState(RequestState::Aborted);
-    mutex.unlock();
-
-    quit();
-    wait();
 }
 
 void AsyncRequest::send()
@@ -159,19 +152,9 @@ void AsyncRequest::send()
     transport->sendRequest(this);
 }
 
-void AsyncRequest::run()
-{
-    send();
-    exec();
-}
-
 void AsyncRequest::setState(RequestState s)
 {
     state = s;
-    emit stateChanged();
+    emit stateChanged(s);
 }
 
-void AsyncRequest::autoDelete()
-{
-
-}

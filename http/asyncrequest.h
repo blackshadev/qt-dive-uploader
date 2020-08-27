@@ -7,15 +7,15 @@
 #include <QNetworkReply>
 #include "httptransportinterface.h"
 
-class AsyncRequest :  public QThread, public RequestInterface, public RequestInternalInterface
+class AsyncRequest :  public QObject, public RequestInterface, public RequestInternalInterface
 {
     Q_OBJECT
 public:
     AsyncRequest(HTTPTransportInterface *transport);
     ~AsyncRequest();
 
-    void setAutoDelete(bool d);
-    bool getAutoDelete() override;
+    void done();
+    bool shouldDelete() override;
 
     // RequestInterface interface
     void setMethod(RequestMethod m) override;
@@ -39,18 +39,15 @@ public:
 signals:
     void error(QString);
     void finished();
-    void stateChanged();
+    void stateChanged(RequestState state);
 
-    // QRunnable interface
 protected:
-    void run() override;
     void setState(RequestState state);
 
 private:
     int index = 0;
     bool isDeleted = false;
-    bool shouldAutoDelete = true;
-    QMutex mutex;
+    bool shouldBeDelete = false;
     RequestMethod method = RequestMethod::GET;
     RequestState state = RequestState::None;
     QString url;
@@ -58,7 +55,6 @@ private:
     QByteArray body;
     HTTPResponse *response = NULL;
     HTTPTransportInterface *transport = NULL;
-
 };
 
 #endif // ASYNCREQUEST_H

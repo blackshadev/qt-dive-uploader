@@ -18,6 +18,7 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
+    directories.cpp \
     divecomputer/utils/numeric.cpp \
     divecomputer/data/fingerprintdata.cpp \
     divecomputer/reader/dcreader.cpp \
@@ -67,10 +68,10 @@ SOURCES += main.cpp \
     littledivelog/littledivelog.cpp \
     http/jsonrequest.cpp \
     littledivelog/userinfo.cpp \
-    divecomputer/utils/datetime.cpp \
-    statemachine/finitestatemachine.cpp
+    divecomputer/utils/datetime.cpp
 
 HEADERS += \
+    directories.h \
     divecomputer/utils/numeric.h \
     divecomputer/data/rawfingerprintdata.h \
     divecomputer/data/rawdivedata.h \
@@ -138,9 +139,7 @@ HEADERS += \
     littledivelog/littledivelog.h \
     http/jsonrequest.h \
     littledivelog/userinfo.h \
-    divecomputer/utils/datetime.h \
-    statemachine/finitestatemachine.h \
-    statemachine/statemachineinterface.h
+    divecomputer/utils/datetime.h
 
 
 RESOURCES += qml.qrc

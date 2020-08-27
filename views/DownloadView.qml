@@ -93,6 +93,15 @@ GridLayout {
         return filepath;
     }
 
+    function updateComputerSelection() {
+        computerSelection.loaded = false;
+        var idx = computerSelection.find(sessionStore.data.computer);
+        if(idx > -1) {
+            computerSelection.currentIndex = idx;
+        }
+        computerSelection.loaded = true;
+    }
+
     FileDialog {
         visible: false
         id: fileDialog
@@ -130,6 +139,7 @@ GridLayout {
     }
 
     ComboBox {
+
         Layout.fillWidth: true
 
         property bool loaded: false
@@ -142,15 +152,13 @@ GridLayout {
                 id: descriptorlist
                 Component.onCompleted: {
                     descriptorlist.loadDescriptors(dccontext);
-                    var idx = computerSelection.find(session.computer);
-                    if(idx > -1) {
-                        computerSelection.currentIndex = idx;
-                    }
-                    computerSelection.loaded = true;
+                    updateComputerSelection();
                 }
             }
             sortRoleName: "description"
             sortOrder: "AscendingOrder"
+
+
         }
         textRole: "description"
         onCurrentIndexChanged: {
@@ -172,7 +180,7 @@ GridLayout {
             selectionProxy.descriptor = descr;
 
             if(loaded) {
-                session.computer = comp;
+                sessionStore.data.computer = comp;
             }
 
             refreshUI();
@@ -210,7 +218,7 @@ GridLayout {
             var value = transportSelection.model.data(idx, TransportRoles.DescriptionRole);
 
             if(loaded && value) {
-                session.transportType = value || "";
+                sessionStore.data.transportType = value || "";
             }
 
             refreshDevices();
@@ -269,11 +277,8 @@ GridLayout {
     CheckBox {
         id: selectDives
         enabled: !isBusy
-        Component.onCompleted: {
-            checked = session.selectDives;
-        }
         onCheckStateChanged: {
-            session.selectDives = checked;
+            sessionStore.data.selectDives = checked;
         }
     }
 
@@ -288,13 +293,12 @@ GridLayout {
         Layout.fillWidth: true
 
         RadioButton {
-            checked: session.writeType == "File"
             text: "File"
             id: fileRadio
             enabled: !isBusy
             onCheckedChanged: {
                 if (checked) {
-                    session.writeType = "File";
+                    sessionStore.data.writeType = "File";
                 }
                 refreshUI();
             }
@@ -302,12 +306,11 @@ GridLayout {
 
         RadioButton {
             text: "LittleLog"
-            checked: session.writeType == "Littlelog"
             id: llRadio
             enabled: !isBusy && littledivelog.userInfo !== null
             onCheckedChanged: {
                 if (checked) {
-                    session.writeType = "Littlelog";
+                    sessionStore.data.writeType = "Littlelog";
                 }
                 refreshUI();
             }
@@ -325,11 +328,8 @@ GridLayout {
         visible: littledivelog.isLoggedIn
         id: useFingerprint
         enabled: !isBusy
-        Component.onCompleted: {
-            checked = session.useFingerprint;
-        }
         onCheckStateChanged: {
-            session.onlyNewDives = checked;
+            sessionStore.data.onlyNewDives = checked;
         }
     }
 
@@ -348,7 +348,6 @@ GridLayout {
             Layout.fillWidth: true
 
             id: filePath
-            text: session.path
             enabled: !isBusy
             onTextChanged: {
                 var fixedText = ensureJSON(filePath.text);
@@ -356,7 +355,7 @@ GridLayout {
                     filePath.text = fixedText;
                 }
 
-                session.path = fixedText;
+                sessionStore.data.path = fixedText;
                 dcfilewriter.path = fixedText;
                 refreshUI();
             }
@@ -470,6 +469,7 @@ GridLayout {
         }
         onFinished: {
             isWriting = false;
+            requests.cleanup();
         }
     }
 
@@ -538,4 +538,17 @@ GridLayout {
             dcreader.cancel();
         }
     }
+
+    Connections {
+        target: sessionStore
+        function onLoaded() {
+            updateComputerSelection();
+            fileRadio.checked = sessionStore.data.writeType === "File";
+            llRadio.checked = sessionStore.data.writeType === "Littlelog";
+            filePath.text = sessionStore.data.path;
+            selectDives.checked = sessionStore.data.selectDives;
+            useFingerprint.checked = sessionStore.data.useFingerprint;
+        }
+    }
+
 }

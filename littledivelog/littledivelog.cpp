@@ -2,13 +2,11 @@
 #include "../http/jsonrequest.h"
 
 LittleDiveLog::LittleDiveLog(QObject *parent) : QObject(parent)
-{
-    requests = new RequestContainer(parent);
-}
+{}
 
 LittleDiveLog::~LittleDiveLog()
 {
-    delete requests;
+    requests = NULL;
     if(m_user_info != NULL) {
         delete m_user_info;
     }
@@ -184,6 +182,7 @@ void LittleDiveLog::raw_request(
     connect(req, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
     connect(req, &AsyncRequest::finished, this, [=]() {
         callback(req->getResponse());
+        req->done();
     });
 
     req->send();
@@ -238,4 +237,9 @@ void LittleDiveLog::logout() {
         }
     });
 
+}
+
+void LittleDiveLog::setRequestContainer(RequestContainer *req)
+{
+    requests = req;
 }

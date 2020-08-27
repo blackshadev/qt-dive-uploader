@@ -79,31 +79,31 @@ QString SessionData::getTransportType() {
 void SessionData::read(const QJsonObject &json)
 {
     if(json.contains("path") && json["path"].isString()) {
-        m_path = json["path"].toString();
+        setPath(json["path"].toString());
     }
 
     if(json.contains("computer") && json["computer"].isString()) {
-        m_computer = json["computer"].toString();
+        setComputer(json["computer"].toString());
     }
 
     if(json.contains("refreshToken") && json["refreshToken"].isString()) {
-        m_refresh_token = json["refreshToken"].toString();
+        setRefreshToken(json["refreshToken"].toString());
     }
 
     if(json.contains("writeType") && json["writeType"].isString()) {
-        m_write_type = json["writeType"].toString();
+        setWriteType(json["writeType"].toString());
     }
 
     if(json.contains("selectDives") && json["selectDives"].isBool()) {
-        m_select_dives = json["selectDives"].toBool();
+        setSelectDives(json["selectDives"].toBool());
     }
 
     if(json.contains("transportType") && json["transportType"].isString()) {
-        m_transport_type = json["transportType"].toString();
+        setTransportType(json["transportType"].toString());
     }
 
     if(json.contains("useFingerprint") && json["useFingerprint"].isString()) {
-        m_use_fingerprint = json["useFingerprint"].toBool();
+        setUseFingerprint(json["useFingerprint"].toBool());
     }
 }
 
@@ -119,9 +119,16 @@ void SessionData::write(QJsonObject &json)
 }
 
 // -- SessionStore --
-SessionStore::SessionStore(QString path)
+SessionStore::SessionStore() : QObject()
 {
-    m_path = path;
+    connect(&sessionData, SIGNAL(pathChanged(QString)), this, SLOT(save()));
+    connect(&sessionData, SIGNAL(computerChanged(QString)), this, SLOT(save()));
+    connect(&sessionData, SIGNAL(refreshTokenChanged(QString)), this, SLOT(save()));
+    connect(&sessionData, SIGNAL(writeTypeChanged(QString)), this, SLOT(save()));
+    connect(&sessionData, SIGNAL(selectDivesChanged(bool)), this, SLOT(save()));
+    connect(&sessionData, SIGNAL(transportTypeChanged(QString)), this, SLOT(save()));
+    connect(&sessionData, SIGNAL(useFingerprintChanged(bool)), this, SLOT(save()));
+
 }
 
 SessionStore::~SessionStore()
@@ -129,26 +136,49 @@ SessionStore::~SessionStore()
 
 }
 
+void SessionStore::setPath(QString p)
+{
+    path = p;
+    isLoaded = false;
+    emit pathChanged(p);
+}
+
+QString SessionStore::getPath()
+{
+    return path;
+}
+
+SessionData *SessionStore::getData()
+{
+    return &sessionData;
+}
+
 bool SessionStore::load()
 {
-     QFile loadFile(m_path);
-     if (!loadFile.open(QIODevice::ReadOnly)) {
-         qWarning("Couldn't open save file.");
-         return false;
-     }
+    QFile loadFile(path);
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open save file.");
+        return false;
+    }
 
-     QByteArray saveData = loadFile.readAll();
-     QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
-     m_data.read(loadDoc.object());
+    QByteArray saveData = loadFile.readAll();
+    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+    sessionData.read(loadDoc.object());
 
-     return true;
+    isLoaded = true;
+    emit loaded();
+    return true;
 }
 
 bool SessionStore::save()
 {
-    QFileInfo fileInfo(m_path);
+    if (!isLoaded) {
+        return false;
+    }
+
+    QFileInfo fileInfo(path);
     fileInfo.absoluteDir().mkpath(".");
-    QFile saveFile(m_path);
+    QFile saveFile(path);
 
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
@@ -156,7 +186,7 @@ bool SessionStore::save()
     }
 
     QJsonObject jsonObj;
-    m_data.write(jsonObj);
+    sessionData.write(jsonObj);
     QJsonDocument saveDoc(jsonObj);
     saveFile.write(saveDoc.toJson());
 

@@ -6,8 +6,9 @@
 
 class RequestContainer : public QObject, public RequestContainerInterface, public HTTPTransportInterface
 {
+    Q_OBJECT
 public:
-    RequestContainer(QObject *parent);
+    RequestContainer(QObject *parent = NULL);
     ~RequestContainer();
 
     // RequestContainerInterface interface
@@ -16,18 +17,20 @@ public:
     virtual AsyncRequest *request();
     virtual void send(RequestInterface *req) override;
     virtual void send(AsyncRequest *request);
-    bool isMainThread() override;
-
-    void cleanup();
     void abortAll() override;
     QNetworkAccessManager *getNetworkAccessManager() override;
+
+public slots:
+    void cleanup();
+
 protected:
     void track(RequestInternalInterface *request);
     void untrack(RequestInternalInterface *request);
 private:
     QNetworkAccessManager networkAccessManager;
     QSet<RequestInternalInterface *> pendingRequests;
-    Qt::HANDLE mainThreadId;
+    QSet<RequestInternalInterface *> trashheap;
 };
+Q_DECLARE_METATYPE(RequestContainer *)
 
 #endif // REQUESTCONTAINER_H

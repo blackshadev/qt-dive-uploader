@@ -4,11 +4,42 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.1
 import Libdivecomputer 0.2
+import LittleDiveLog 0.1
+import LittleUtils 0.1
 import QtQuick.Controls.Material 2.12
 import "views"
 
 ApplicationWindow {
     objectName: "appWindow"
+
+    Directories {
+        id: dirs
+    }
+
+    SessionStore {
+        id: sessionStore
+        path: dirs.join([
+            dirs.userHome,
+            ".littledivelog",
+            "session.json"
+        ])
+        Component.onCompleted: {
+            sessionStore.load();
+        }
+    }
+
+    RequestContainer {
+        id: requests
+    }
+
+    LittleDiveLog {
+        id: littledivelog
+        requestContainer: requests
+        refreshToken: sessionStore.data.refreshToken
+        Component.onCompleted: {
+            littledivelog.refreshToken = sessionStore.data.refreshToken;
+        }
+    }
 
     QDCContext {
         id: dccontext
@@ -79,12 +110,6 @@ ApplicationWindow {
         }
     }
 
-    Component.onCompleted: {
-        if(!littledivelog.isLoggedIn) {
-            stackView.push(loginViewComp);
-        }
-    }
-
     Connections {
         target: littledivelog
         function onLoggedStateChanged(isLoggedIn) {
@@ -95,7 +120,7 @@ ApplicationWindow {
             }
         }
         function onRefreshTokenChanged(token) {
-            session.refreshToken = token;
+            sessionStore.data.refreshToken = token;
         }
     }
 

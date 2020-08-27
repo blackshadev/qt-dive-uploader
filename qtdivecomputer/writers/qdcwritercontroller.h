@@ -20,6 +20,8 @@ class QDCWriterController : public QObject, public DCWriterInterface
     Q_PROPERTY(QDeviceData device WRITE setDevice)
     Q_PROPERTY(QDCDescriptor *descriptor WRITE setDescriptor)
     Q_PROPERTY(QDCWriter *writer WRITE setWriter)
+   // Q_PROPERTY(bool isBusy READ getIsBusy NOTIFY isBusyChanged)
+
 
 public:
     QDCWriterController(QObject *parent = NULL);
@@ -36,6 +38,9 @@ public:
 
 signals:
     void progress(unsigned int current, unsigned int maximum);
+    void cancelled();
+    void ended();
+    void error(QString);
     void started();
     void finished();
 

@@ -19,7 +19,9 @@ class LittleDiveLog : public QObject
     Q_OBJECT
     Q_PROPERTY(QVariant isLoggedIn READ isLoggedIn NOTIFY loggedStateChanged)
     Q_PROPERTY(UserInfo* userInfo MEMBER m_user_info NOTIFY userInfoChanged)
-    Q_PROPERTY(QString refreshToken READ get_refresh_token NOTIFY refreshTokenChanged)
+    Q_PROPERTY(QString refreshToken WRITE set_refresh_token READ get_refresh_token NOTIFY refreshTokenChanged)
+    Q_PROPERTY(RequestContainer *requestContainer WRITE setRequestContainer)
+
 
 public:
     explicit LittleDiveLog(QObject *parent = nullptr);
@@ -39,6 +41,7 @@ signals:
     void userInfoChanged(UserInfo* ui);
     void refreshTokenChanged(QString tok);
 public slots:
+    void setRequestContainer(RequestContainer *req);
 protected:
     void fetch_user_computers(std::function<void()> callback);
     void get_access_token(std::function<void()> callback, QObject* parent = NULL);

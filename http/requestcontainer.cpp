@@ -3,7 +3,6 @@
 RequestContainer::RequestContainer(QObject *parent)
     : QObject(parent)
 {
-    mainThreadId = QThread::currentThreadId();
 }
 
 RequestContainer::~RequestContainer()
@@ -14,11 +13,6 @@ RequestContainer::~RequestContainer()
 
 void RequestContainer::sendRequest(RequestInternalInterface *request)
 {
-    if (isMainThread()) {
-        send((AsyncRequest *)request);
-        return;
-    }
-
     request->beginSend();
     track(request);
     QNetworkAccessManager *nam = new QNetworkAccessManager();
@@ -41,17 +35,9 @@ void RequestContainer::send(RequestInterface *req)
 
 void RequestContainer::send(AsyncRequest *request)
 {
-    if (isMainThread()) {
-        request->start();
-    } else {
-        sendRequest(request);
-    }
+    request->send();
 }
 
-bool RequestContainer::isMainThread()
-{
-    return QThread::currentThreadId() == mainThreadId;
-}
 
 void RequestContainer::track(RequestInternalInterface *request)
 {
@@ -61,17 +47,17 @@ void RequestContainer::track(RequestInternalInterface *request)
 void RequestContainer::untrack(RequestInternalInterface *request)
 {
     pendingRequests.remove(request);
-    if (request->getAutoDelete()) {
-        trashheap.insert(request);
-    }
+    trashheap.insert(request);
 }
 
 void RequestContainer::cleanup()
 {
     for (auto req : trashheap) {
-        delete req;
+        if(req->shouldDelete()) {
+            trashheap.remove(req);
+            delete req;
+        }
     }
-    trashheap.clear();
 }
 
 void RequestContainer::abortAll()

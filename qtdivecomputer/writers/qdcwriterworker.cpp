@@ -64,6 +64,10 @@ void QDCWriterWorker::setWriter(QDCWriter *w)
 
     writer = w;
 
+    if (!writer) {
+        return;
+    }
+
     connect(writer, SIGNAL(ready()), this, SLOT(consume()));
     connect(writer, SIGNAL(ended()), this, SIGNAL(ended()));
     connect(writer, SIGNAL(cancelled()), this, SIGNAL(cancelled()));
