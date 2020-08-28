@@ -3,7 +3,7 @@
 #include <QQueue>
 #include <QObject>
 #include "../entities/qdcdive.h"
-#include "../writers/qdcwriter.h"
+#include "../exporters/qdcwritetarget.h"
 
 class QDCWriterWorker : public QObject
 {
@@ -12,7 +12,7 @@ public:
     QDCWriterWorker(QObject *parent = NULL);
     void setDevice(DeviceData data);
     void setDescriptor(QDCDescriptor *descriptor);
-    void setWriter(QDCWriter *writer);
+    void setWriter(QDCWriteTarget *writer);
 
 signals:
     void dive(DCDive *);
@@ -38,7 +38,7 @@ protected:
 
 private:
     QQueue<DCDive *> queue;
-    QDCWriter *writer = NULL;
+    QDCWriteTarget *writer = NULL;
     DeviceData deviceData;
     QDCDescriptor *descriptor;
     bool isEnded = false;

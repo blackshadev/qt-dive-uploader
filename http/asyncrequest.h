@@ -12,7 +12,7 @@ class AsyncRequest :  public QObject, public RequestInterface, public RequestInt
     Q_OBJECT
 public:
     AsyncRequest(HTTPTransportInterface *transport);
-    ~AsyncRequest();
+    virtual ~AsyncRequest();
 
     void done();
     bool shouldDelete() override;

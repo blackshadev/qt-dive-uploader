@@ -8,7 +8,7 @@ UserInfo::UserInfo(QObject *parent) : QObject(parent)
 
 UserInfo::~UserInfo()
 {
-    for(std::pair<uint, t_user_computer*> comp : m_computers) {
+    for(std::pair<uint, LittleDiveLogComputer *> comp : m_computers) {
         delete comp.second;
     }
 
@@ -16,19 +16,13 @@ UserInfo::~UserInfo()
 
 void UserInfo::addComputer(QJsonObject obj)
 {
-    auto comp = new t_user_computer;
-    int comp_id = obj["computer_id"].toInt();
-    uint serial = (uint)std::stoul(obj["serial"].toString().toStdString());
-    auto strFingerprint = obj["last_fingerprint"].toString();
-    auto fingerprint = QByteArray::fromBase64(strFingerprint.toLatin1());
-    comp->id = comp_id;
-    comp->fingerprint = fingerprint;
+    auto comp = LittleDiveLogComputer::fromData(obj);
 
-    m_computers[serial] = comp;
+    m_computers[comp->getSerial()] = comp;
 }
 
-t_user_computer* UserInfo::getComputer(uint serial)
+LittleDiveLogComputer *UserInfo::getComputer(QDeviceData data)
 {
-    auto data = m_computers.find(serial);
-    return data == m_computers.end() ? NULL : data->second;
+    auto computer = m_computers.find(data.serial);
+    return computer == m_computers.end() ? NULL : computer->second;
 }

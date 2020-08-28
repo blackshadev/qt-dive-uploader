@@ -40,10 +40,14 @@ SOURCES += main.cpp \
     http/exceptions.cpp \
     http/httpresponse.cpp \
     http/requestcontainer.cpp \
+    littledivelog/littledivelogcomputer.cpp \
     qtdivecomputer/context/qdccontext.cpp \
     qtdivecomputer/descriptor/qdcdescriptor.cpp \
     qtdivecomputer/device/qdcdevice.cpp \
     qtdivecomputer/entities/qdcdive.cpp \
+    qtdivecomputer/exporters/qdcfileexporter.cpp \
+    qtdivecomputer/exporters/qdclittledivelogexporter.cpp \
+    qtdivecomputer/exporters/qdcwritetarget.cpp \
     qtdivecomputer/listmodels/qdcdescriptorlistmodel.cpp \
     qtdivecomputer/listmodels/qdcdevicelistmodel.cpp \
     qtdivecomputer/listmodels/qdcdivelistmodel.cpp \
@@ -53,10 +57,7 @@ SOURCES += main.cpp \
     qtdivecomputer/reader/qdcasyncreader.cpp \
     qtdivecomputer/reader/qdcreader.cpp \
     qtdivecomputer/transports/qdctransport.cpp \
-    qtdivecomputer/writers/qdcfilewriter.cpp \
-    qtdivecomputer/writers/qdclittledivelogwriter.cpp \
-    qtdivecomputer/writers/qdcselectionproxy.cpp \
-    qtdivecomputer/writers/qdcwriter.cpp \
+    qtdivecomputer/exporters/qdcselectionproxy.cpp \
     qtdivecomputer/writers/qdcwritercontroller.cpp \
     qtdivecomputer/writers/qdcwriterworker.cpp \
     serializer/dcdivecomputerserializer.cpp \
@@ -72,6 +73,7 @@ SOURCES += main.cpp \
 
 HEADERS += \
     directories.h \
+    divecomputer/exporters/dcexporterinterface.h \
     divecomputer/utils/numeric.h \
     divecomputer/data/rawfingerprintdata.h \
     divecomputer/data/rawdivedata.h \
@@ -98,17 +100,20 @@ HEADERS += \
     divecomputer/transports/dctransportinterface.h \
     divecomputer/transports/dcusbhidtransport.h \
     divecomputer/transports/transporttype.h \
-    divecomputer/writers/dcwriterinterface.h \
     http/asyncrequest.h \
     http/exceptions.h \
     http/httpresponse.h \
     http/httptransportinterface.h \
     http/requestcontainer.h \
     http/requestcontainerinterface.h \
+    littledivelog/littledivelogcomputer.h \
     qtdivecomputer/context/qdccontext.h \
     qtdivecomputer/descriptor/qdcdescriptor.h \
     qtdivecomputer/device/qdcdevice.h \
     qtdivecomputer/entities/qdcdive.h \
+    qtdivecomputer/exporters/qdcfileexporter.h \
+    qtdivecomputer/exporters/qdclittledivelogexporter.h \
+    qtdivecomputer/exporters/qdcwritetarget.h \
     qtdivecomputer/listmodels/qdcdescriptorlistmodel.h \
     qtdivecomputer/listmodels/qdcdevicelistmodel.h \
     qtdivecomputer/listmodels/qdcdivelistmodel.h \
@@ -118,10 +123,7 @@ HEADERS += \
     qtdivecomputer/reader/qdcasyncreader.h \
     qtdivecomputer/reader/qdcreader.h \
     qtdivecomputer/transports/qdctransport.h \
-    qtdivecomputer/writers/qdcfilewriter.h \
-    qtdivecomputer/writers/qdclittledivelogwriter.h \
-    qtdivecomputer/writers/qdcselectionproxy.h \
-    qtdivecomputer/writers/qdcwriter.h \
+    qtdivecomputer/exporters/qdcselectionproxy.h \
     qtdivecomputer/writers/qdcwritercontroller.h \
     http/requestinterface.h \
     http/responseinterface.h \

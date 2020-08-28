@@ -102,7 +102,7 @@ ColumnLayout {
 
         headerPositioning: ListView.OverlayHeader
         header: Rectangle {
-            width: parent.width
+            width: parent && parent.width
             height: 32
 
             z: 2
@@ -146,7 +146,7 @@ ColumnLayout {
         }
 
         delegate: ItemDelegate {
-            width: parent.width
+            width: parent  && parent.width
             topPadding: 8
 
             checkable: true

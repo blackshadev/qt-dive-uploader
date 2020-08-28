@@ -104,6 +104,14 @@ bool LittleDiveLog::hasUserData()
     return m_user_info != NULL;
 }
 
+QVariant LittleDiveLog::getComputer(QDeviceData data)
+{
+    if (!this->isLoggedIn()) {
+        return QVariant::fromValue(NULL);
+    }
+    return QVariant::fromValue(this->m_user_info->getComputer(data));
+}
+
 void LittleDiveLog::fetch_user_computers(std::function<void()> callback) {
 
     request(
@@ -200,6 +208,7 @@ void LittleDiveLog::request(
         emit error("Cannot execute request. Not yet logged in.");
         return;
     }
+    qInfo() << m_access_token.toLocal8Bit().data();
     if(m_access_token.isNull()) {
         get_access_token(
             [=]() {

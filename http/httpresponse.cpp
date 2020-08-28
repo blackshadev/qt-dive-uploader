@@ -84,13 +84,20 @@ QJsonValue HTTPResponse::getBodyAsJSON()
     }
 
     QJsonParseError parseError;
-    jsonBody = QJsonDocument::fromJson(body, &parseError).object();
+    jsonBody = QJsonDocument::fromJson(body, &parseError);
     if(parseError.error != QJsonParseError::NoError) {
         setError(parseError.errorString());
         return QJsonValue::Null;
     }
 
-    return jsonBody;
+    if (jsonBody.isArray()) {
+        return QJsonValue(jsonBody.array());
+    }
+    if (jsonBody.isObject()) {
+        return QJsonValue(jsonBody.object());
+    }
+
+    return QJsonValue::Null;
 }
 
 void HTTPResponse::setError(QString err)

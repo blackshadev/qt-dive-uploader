@@ -56,7 +56,7 @@ void QDCWriterWorker::setDescriptor(QDCDescriptor *descr)
     descriptor = descr;
 }
 
-void QDCWriterWorker::setWriter(QDCWriter *w)
+void QDCWriterWorker::setWriter(QDCWriteTarget *w)
 {
     if (writer) {
         disconnect(writer, NULL, this, NULL);

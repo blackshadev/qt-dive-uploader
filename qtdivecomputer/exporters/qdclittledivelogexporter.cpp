@@ -1,13 +1,11 @@
-#include "qdclittledivelogwriter.h"
+#include "qdclittledivelogexporter.h"
 
-QDCLittleDiveLogWriter::QDCLittleDiveLogWriter(QObject *parent)
-    : QDCWriter(parent)
+QDCLittleDiveLogExporter::QDCLittleDiveLogExporter(QObject *parent)
+    : QDCWriteTarget(parent)
 {}
 
-QDCLittleDiveLogWriter::~QDCLittleDiveLogWriter()
-{}
 
-void QDCLittleDiveLogWriter::write(DCDive *dive)
+void QDCLittleDiveLogExporter::write(QDCDive *dive)
 {
     setBusy();
 
@@ -30,22 +28,22 @@ void QDCLittleDiveLogWriter::write(DCDive *dive)
     );
 }
 
-void QDCLittleDiveLogWriter::end()
+void QDCLittleDiveLogExporter::end()
 {
     emit ended();
 }
 
-void QDCLittleDiveLogWriter::cancel()
+void QDCLittleDiveLogExporter::cancel()
 {
     emit cancelled();
 }
 
-void QDCLittleDiveLogWriter::start()
+void QDCLittleDiveLogExporter::start()
 {
     setBusy();
 
     QJsonObject computer;
-    computerSerializer.serialize(computer, device, descriptor);
+    computerSerializer.serialize(computer, getDevice(), getDescriptor());
 
     divelog->request(
         RequestMethod::POST,
@@ -66,12 +64,12 @@ void QDCLittleDiveLogWriter::start()
     );
 }
 
-LittleDiveLog *QDCLittleDiveLogWriter::getDiveLog()
+LittleDiveLog *QDCLittleDiveLogExporter::getDiveLog()
 {
     return divelog;
 }
 
-void QDCLittleDiveLogWriter::setDiveLog(LittleDiveLog *dl)
+void QDCLittleDiveLogExporter::setDiveLog(LittleDiveLog *dl)
 {
     divelog = dl;
 }

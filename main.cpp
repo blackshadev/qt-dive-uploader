@@ -19,10 +19,10 @@
 #include "qtdivecomputer/parsers/qdiveparser.h"
 #include "qtdivecomputer/reader/qdcreader.h"
 #include "qtdivecomputer/reader/qdcasyncreader.h"
-#include "qtdivecomputer/writers/qdcfilewriter.h"
-#include "qtdivecomputer/writers/qdclittledivelogwriter.h"
+#include "qtdivecomputer/exporters/qdcfileexporter.h"
+#include "qtdivecomputer/exporters/qdclittledivelogexporter.h"
+#include "qtdivecomputer/exporters/qdcselectionproxy.h"
 #include "qtdivecomputer/writers/qdcwritercontroller.h"
-#include "qtdivecomputer/writers/qdcselectionproxy.h"
 #include <QList>
 
 int main(int argc, char *argv[])
@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<QDCReader>("Libdivecomputer", 0, 2, "QDCReader");
     qmlRegisterType<QDCDiveParser>("Libdivecomputer", 0, 2, "QDCDiveParser");
     qmlRegisterType<QDCAsyncReader>("Libdivecomputer", 0, 2, "QDCAsyncReader");
-    qmlRegisterType<QDCFileWriter>("Libdivecomputer", 0, 2, "QDCFileWriter");
-    qmlRegisterType<QDCLittleDiveLogWriter>("Libdivecomputer", 0, 2, "QDCLittleDiveLogWriter");
+    qmlRegisterType<QDCFileExporter>("Libdivecomputer", 0, 2, "QDCFileExporter");
+    qmlRegisterType<QDCLittleDiveLogExporter>("Libdivecomputer", 0, 2, "QDCLittleDiveLogExporter");
     qmlRegisterType<QDCWriterController>("Libdivecomputer", 0, 2, "QDCWriterController");
     qmlRegisterType<QDCSelectionProxy>("Libdivecomputer", 0, 2, "QDCSelectionProxy");
     qmlRegisterType<LittleDiveLog>("LittleDiveLog", 0, 1, "LittleDiveLog");

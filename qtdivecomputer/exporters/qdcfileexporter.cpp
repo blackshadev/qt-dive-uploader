@@ -1,26 +1,23 @@
-#include "qdcfilewriter.h"
+#include "qdcfileexporter.h"
 #include "../divecomputer/utils/datetime.h"
 #include <QJsonDocument>
 
-QDCFileWriter::QDCFileWriter(QObject *parent)
-    : QDCWriter(parent)
+QDCFileExporter::QDCFileExporter(QObject *parent)
+    : QDCWriteTarget(parent)
 {}
 
-QDCFileWriter::~QDCFileWriter()
-{}
-
-void QDCFileWriter::setPath(QString p)
+void QDCFileExporter::setPath(QString p)
 {
     path = p;
     emit pathChanged(p);
 }
 
-QString QDCFileWriter::getPath()
+QString QDCFileExporter::getPath()
 {
     return path;
 }
 
-void QDCFileWriter::write(DCDive *dive)
+void QDCFileExporter::write(QDCDive *dive)
 {
     setBusy();
     QJsonObject diveObject;
@@ -30,7 +27,7 @@ void QDCFileWriter::write(DCDive *dive)
     emit written();
 }
 
-void QDCFileWriter::end()
+void QDCFileExporter::end()
 {
     object["dives"] = dives;
 
@@ -50,12 +47,12 @@ void QDCFileWriter::end()
     emit ended();
 }
 
-void QDCFileWriter::cancel()
+void QDCFileExporter::cancel()
 {
     emit cancelled();
 }
 
-void QDCFileWriter::start()
+void QDCFileExporter::start()
 {
     setBusy();
 
@@ -66,7 +63,7 @@ void QDCFileWriter::start()
     object["readtime"] = QString::fromStdString(format_datetime_iso(dt_now));
 
     QJsonObject computerObject;
-    computerSerializer.serialize(computerObject, device, descriptor);
+    computerSerializer.serialize(computerObject, getDevice(), getDescriptor());
     object["computer"] = computerObject;
 
     unsetBusy();

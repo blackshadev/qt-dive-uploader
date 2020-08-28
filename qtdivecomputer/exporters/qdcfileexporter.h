@@ -1,24 +1,23 @@
-#ifndef QDCFILEWRITER_H
-#define QDCFILEWRITER_H
+#ifndef QDCFILEEXPORTER_H
+#define QDCFILEEXPORTER_H
 
 #include <QObject>
 #include <QFile>
-#include "qdcwriter.h"
+#include "qdcwritetarget.h"
 #include "serializer/dcdiveserializer.h"
 #include "serializer/dcdivecomputerserializer.h"
 
-class QDCFileWriter : public QDCWriter
+class QDCFileExporter : public QDCWriteTarget
 {
     Q_OBJECT
     Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
 public:
-    QDCFileWriter(QObject *parent = NULL);
-    virtual ~QDCFileWriter();
+    QDCFileExporter(QObject *parent = NULL);
     void setPath(QString p);
     QString getPath();
 
 public slots:
-    void write(DCDive *write) override;
+    void write(QDCDive *write) override;
     void end() override;
     void cancel() override;
     void start() override;
@@ -34,6 +33,6 @@ private:
 signals:
     void pathChanged(QString path);
 };
-Q_DECLARE_METATYPE(QDCFileWriter *)
+Q_DECLARE_METATYPE(QDCFileExporter *)
 
-#endif // QDCFILEWRITER_H
+#endif // QDCFILEEXPORTER_H

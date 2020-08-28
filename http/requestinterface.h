@@ -24,6 +24,7 @@ enum RequestMethod {
 
 class RequestInterface {
 public:
+    virtual ~RequestInterface() {};
     virtual void setMethod(RequestMethod m) = 0;
     virtual RequestMethod getMethod() = 0;
     virtual QByteArray getQMethod() = 0;
@@ -39,6 +40,7 @@ public:
 
 class RequestInternalInterface {
 public:
+    virtual ~RequestInternalInterface() {};
     virtual void send() = 0;
     virtual void beginSend() = 0;
     virtual void endSend(QNetworkReply *repl) = 0;

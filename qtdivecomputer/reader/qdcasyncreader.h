@@ -29,6 +29,7 @@ public:
 public slots:
     void startReading() override;
     void cancel() override;
+    void setFingerprint(QByteArray fingerprint);
 
 signals:
     void dive(QDCDive *dive);

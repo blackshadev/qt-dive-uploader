@@ -4,25 +4,24 @@
 #include <QObject>
 #include <QObject>
 #include <QFile>
-#include "qdcwriter.h"
+#include "qdcwritetarget.h"
 #include "serializer/dcdiveserializer.h"
 #include "serializer/dcdivecomputerserializer.h"
 #include "littledivelog/littledivelog.h"
 
-class QDCLittleDiveLogWriter : public QDCWriter
+class QDCLittleDiveLogExporter : public QDCWriteTarget
 {
     Q_OBJECT
     Q_PROPERTY(LittleDiveLog *divelog READ getDiveLog WRITE setDiveLog)
 
 public:
-    QDCLittleDiveLogWriter(QObject *parent = NULL);
-    virtual ~QDCLittleDiveLogWriter();
+    QDCLittleDiveLogExporter(QObject *parent = NULL);
     LittleDiveLog *getDiveLog();
     void setDiveLog(LittleDiveLog *dl);
     void setWriting();
 
 public slots:
-    void write(DCDive *write) override;
+    void write(QDCDive *write) override;
     void end() override;
     void cancel() override;
     void start() override;
@@ -33,10 +32,11 @@ private:
     LittleDiveLog *divelog = NULL;
     int ldComputerId;
     bool isWriting = false;
+
 signals:
     void isWriteReadyChanged();
 
 };
-Q_DECLARE_METATYPE(QDCLittleDiveLogWriter *)
+Q_DECLARE_METATYPE(QDCLittleDiveLogExporter *)
 
 #endif // QDCLITTLELOGWRITER_H

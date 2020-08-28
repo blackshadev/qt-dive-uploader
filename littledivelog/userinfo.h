@@ -1,12 +1,9 @@
 #ifndef USERINFO_H
 #define USERINFO_H
+#include "../qtdivecomputer/device/qdcdevice.h"
 #include <QObject>
 #include <QDateTime>
-
-struct t_user_computer {
-    int id;
-    QByteArray fingerprint;
-};
+#include "littledivelogcomputer.h"
 
 class UserInfo : public QObject
 {
@@ -30,12 +27,13 @@ public:
     int m_computer_count;
     int m_buddy_count;
     int m_tag_count;
-    t_user_computer* getComputer(uint serial);
     void addComputer(QJsonObject comp);
-protected:
-    std::map<uint, t_user_computer*> m_computers;
-};
+public slots:
+    LittleDiveLogComputer *getComputer(QDeviceData data);
 
+protected:
+    std::map<uint, LittleDiveLogComputer *> m_computers;
+};
 Q_DECLARE_METATYPE(UserInfo*)
 
 #endif // USERINFO_H

@@ -3,12 +3,14 @@
 RequestContainer::RequestContainer(QObject *parent)
     : QObject(parent)
 {
+    trashheap = new QSet<RequestInternalInterface *>();
 }
 
 RequestContainer::~RequestContainer()
 {
     abortAll();
     cleanup();
+    delete trashheap;
 }
 
 void RequestContainer::sendRequest(RequestInternalInterface *request)
@@ -38,7 +40,6 @@ void RequestContainer::send(AsyncRequest *request)
     request->send();
 }
 
-
 void RequestContainer::track(RequestInternalInterface *request)
 {
     pendingRequests.insert(request);
@@ -47,17 +48,20 @@ void RequestContainer::track(RequestInternalInterface *request)
 void RequestContainer::untrack(RequestInternalInterface *request)
 {
     pendingRequests.remove(request);
-    trashheap.insert(request);
+    trashheap->insert(request);
 }
 
 void RequestContainer::cleanup()
 {
-    for (auto req : trashheap) {
+    auto oldHeap = trashheap;
+    trashheap = new QSet<RequestInternalInterface *>();
+
+    for (auto req : *oldHeap) {
         if(req->shouldDelete()) {
-            trashheap.remove(req);
             delete req;
         }
     }
+    delete oldHeap;
 }
 
 void RequestContainer::abortAll()
@@ -65,6 +69,7 @@ void RequestContainer::abortAll()
     for (auto req : pendingRequests) {
         req->abort();
     }
+    cleanup();
 }
 
 QNetworkAccessManager *RequestContainer::getNetworkAccessManager()

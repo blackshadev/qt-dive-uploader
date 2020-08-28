@@ -64,3 +64,8 @@ void QDCAsyncReader::cancel()
     reader->cancel();
 }
 
+void QDCAsyncReader::setFingerprint(QByteArray fingerprint)
+{
+    reader->setFingerprint(fingerprint);
+}
+

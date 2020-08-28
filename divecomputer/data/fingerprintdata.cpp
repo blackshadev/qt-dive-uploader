@@ -7,6 +7,13 @@ fingerprint_t::fingerprint_t()
     size = 0;
 }
 
+fingerprint_t::fingerprint_t(unsigned char *d, unsigned int s)
+{
+    size = s;
+    data = new unsigned char[size];
+    std::memcpy(data, d, size);
+}
+
 fingerprint_t::~fingerprint_t()
 {
     if (data) {

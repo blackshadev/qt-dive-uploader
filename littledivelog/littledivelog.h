@@ -7,6 +7,7 @@
 #include "../http/requestcontainer.h"
 #include <functional>
 #include "./userinfo.h"
+#include "littledivelogcomputer.h"
 
 enum RequestTokenType {
     NONE,
@@ -21,7 +22,6 @@ class LittleDiveLog : public QObject
     Q_PROPERTY(UserInfo* userInfo MEMBER m_user_info NOTIFY userInfoChanged)
     Q_PROPERTY(QString refreshToken WRITE set_refresh_token READ get_refresh_token NOTIFY refreshTokenChanged)
     Q_PROPERTY(RequestContainer *requestContainer WRITE setRequestContainer)
-
 
 public:
     explicit LittleDiveLog(QObject *parent = nullptr);
@@ -41,6 +41,7 @@ signals:
     void userInfoChanged(UserInfo* ui);
     void refreshTokenChanged(QString tok);
 public slots:
+    QVariant getComputer(QDeviceData data);
     void setRequestContainer(RequestContainer *req);
 protected:
     void fetch_user_computers(std::function<void()> callback);

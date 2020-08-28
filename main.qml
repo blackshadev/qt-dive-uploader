@@ -124,5 +124,12 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: sessionStore
+        function onLoaded() {
+            littledivelog.refreshToken = sessionStore.data.refreshToken;
+        }
+    }
+
 
 }

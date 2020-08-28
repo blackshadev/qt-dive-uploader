@@ -35,7 +35,7 @@ private:
     bool isRead = false;
 
     QByteArray body;
-    QJsonObject jsonBody;
+    QJsonDocument jsonBody;
     QNetworkReply *reply = NULL;
     QString errMsg;
 };

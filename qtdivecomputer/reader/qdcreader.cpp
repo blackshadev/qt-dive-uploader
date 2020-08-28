@@ -33,10 +33,7 @@ void QDCReader::startReading()
 
 void QDCReader::setFingerprint(QByteArray data)
 {
-    fingerprint_t fp;
-    fp.data = (unsigned char *)data.data();
-    fp.size = data.size();
-
+    fingerprint_t fp((unsigned char *)data.data(), data.size());
     setFingerprint(fp);
 }
 

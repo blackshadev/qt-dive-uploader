@@ -12,7 +12,7 @@ import "../components"
 
 GridLayout {
     property bool isDownloading: dcreader.isBusy
-    property bool isWriting: false; //dcwriter.isBusy
+    property bool isWriting: dcwriter.isBusy
     property bool isSelecting: selectionProxy.isBusy
     property bool isBusy: isDownloading || isWriting || isSelecting;
     property variant writeTarget: selectDives.checked ? selectionProxy : dcwriter;
@@ -420,6 +420,11 @@ GridLayout {
         onDeviceInfo: {
             dcwriter.device = data;
             selectionProxy.device = data;
+            const computer = littledivelog.getComputer(data);
+            if (computer) {
+                dcreader.setFingerprint(computer.fingerprint);
+            }
+
             writeTarget.start();
         }
     }
@@ -429,8 +434,7 @@ GridLayout {
         function onStarted() {
             isSelecting = true;
         }
-        function onFinished() {
-
+        function onEnded() {
             var selected = selectionProxy.selected;
 
             dcwriter.maximum = selected.length;
@@ -449,11 +453,11 @@ GridLayout {
         }
     }
 
-    QDCFileWriter {
+    QDCFileExporter {
         id: dcfilewriter
     }
 
-    QDCLittleDiveLogWriter{
+    QDCLittleDiveLogExporter {
         id: dclittlelogwriter
         divelog: littledivelog
     }

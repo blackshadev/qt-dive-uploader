@@ -1,10 +1,10 @@
-#ifndef DCWRITERINTERFACE_H
-#define DCWRITERINTERFACE_H
+#ifndef DCEXPORTERINTERFACE_H
+#define DCEXPORTERINTERFACE_H
 #include "../entities/dcdive.h"
 #include "../devices/dcdeviceinterface.h"
 #include "../descriptor/dcdevicedescriptor.h"
 
-class DCWriterInterface
+class DCExporterInterface
 {
 public:
     virtual void write(DCDive *dive) = 0;
@@ -15,4 +15,4 @@ public:
     virtual void setDevice(DeviceData dev) = 0;
 };
 
-#endif // DCWRITERINTERFACE_H
+#endif // DCEXPORTERINTERFACE_H

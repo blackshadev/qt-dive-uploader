@@ -29,7 +29,7 @@ protected:
 private:
     QNetworkAccessManager networkAccessManager;
     QSet<RequestInternalInterface *> pendingRequests;
-    QSet<RequestInternalInterface *> trashheap;
+    QSet<RequestInternalInterface *> *trashheap;
 };
 Q_DECLARE_METATYPE(RequestContainer *)
 

@@ -27,9 +27,18 @@ QDCWriterController::~QDCWriterController()
     delete writerWorker;
 }
 
-void QDCWriterController::setWriter(QDCWriter *w)
+void QDCWriterController::setWriter(QDCWriteTarget *w)
 {
+    if (writeTarget) {
+        disconnect(w, NULL, this, NULL);
+    }
+
+    writeTarget = w;
     writerWorker->setWriter(w);
+
+    if (writeTarget) {
+        connect(writeTarget, SIGNAL(isBusyChanged()), this, SIGNAL(isBusyChanged()));
+    }
 }
 
 void QDCWriterController::setDevice(QDeviceData dev)
@@ -79,6 +88,11 @@ void QDCWriterController::setCurrent(unsigned int cur)
 
     current = cur;
     emit progress(current, maximum);
+}
+
+bool QDCWriterController::isBusy()
+{
+    return writeTarget != NULL && writeTarget->isBusy();
 }
 
 void QDCWriterController::write(QDCDive *dive)
