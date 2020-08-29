@@ -16,6 +16,9 @@ class QDCAsyncReader : public QObject, public DCReaderInterface
     Q_PROPERTY(QDCDiveParser *parser WRITE setParser)
     Q_PROPERTY(QDCContext *context WRITE setContext)
     Q_PROPERTY(bool isBusy READ getIsBusy NOTIFY isBusyChanged)
+    Q_PROPERTY(unsigned int divesRead READ getDivesRead NOTIFY divesReadChanged)
+    Q_PROPERTY(unsigned int current READ getCurrent NOTIFY progress)
+    Q_PROPERTY(unsigned int maximum READ getMaximum NOTIFY progress)
 
 public:
     QDCAsyncReader();
@@ -25,6 +28,9 @@ public:
     DCReaderInterface *setParser(DCDiveParserInterface *parser) override;
     DCReaderInterface *setContext(DCContextInterface *context) override;
     bool getIsBusy();
+    unsigned int getDivesRead();
+    unsigned int getMaximum();
+    unsigned int getCurrent();
 
 public slots:
     void startReading() override;
@@ -34,6 +40,7 @@ public slots:
     void clearFingerprint() override;
 
 signals:
+    void divesReadChanged();
     void dive(QDCDive *dive);
     void progress(unsigned int current, unsigned int maximum);
     void deviceInfo(QDeviceData data);
@@ -46,6 +53,10 @@ signals:
     void isBusyChanged();
 
 private:
+
+    int maximum = 0;
+    int current = 0;
+
     bool isBusy = false;
     QThread *workerThread;
     DCDeviceInterface* device;

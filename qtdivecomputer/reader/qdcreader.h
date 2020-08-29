@@ -14,6 +14,7 @@ class QDCReader : public QObject, public DCReader
     Q_PROPERTY(QDCDiveParser *parser WRITE setParser)
     Q_PROPERTY(QDCContext *context WRITE setContext)
     Q_PROPERTY(bool isBusy READ getIsBusy NOTIFY isBusyChanged)
+    Q_PROPERTY(unsigned int divesRead READ getDivesRead NOTIFY divesReadChanged)
 
 public:
     QDCReader(QObject *parent = NULL);
@@ -30,16 +31,20 @@ public:
     void receiveFinished() override;
     void receiveCancelled() override;
     void setFingerprint(fingerprint_t data) override;
-    void clearFingerprint() override;
     bool getIsBusy();
+    unsigned int getDivesRead();
+
 public slots:
     void cancel() override;
     void startReading() override;
     void setFingerprint(QByteArray data);
+    void clearFingerprint() override;
+
 signals:
     void isReadyChanged();
     void isBusyChanged();
     void dive(QDCDive *dive);
+    void divesReadChanged();
     void progress(unsigned int current, unsigned int maximum);
     void deviceInfo(QDeviceData data);
     void clock(unsigned int deviceClock, dc_ticks_t systime);
@@ -50,6 +55,7 @@ signals:
 protected:
     void setIsBusy(bool b);
 private:
+    unsigned int divesRead = 0;
     bool isBusy = false;
 };
 Q_DECLARE_METATYPE(QDCReader *)

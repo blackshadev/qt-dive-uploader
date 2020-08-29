@@ -7,6 +7,10 @@ QDCAsyncReader::QDCAsyncReader()
     reader->moveToThread(workerThread);
     reader->connect(this, SIGNAL(startWork()), reader, SLOT(startReading()));
     reader->connect(reader, SIGNAL(progress(unsigned int, unsigned int)), this, SIGNAL(progress(unsigned int, unsigned int)));
+    reader->connect(reader, &QDCReader::progress, this, [=](unsigned int cur, unsigned max) {
+        current = cur;
+        maximum = max;
+    });
     reader->connect(reader, SIGNAL(clock(unsigned int, dc_ticks_t)), this, SIGNAL(clock(unsigned int, dc_ticks_t)));
     reader->connect(reader, SIGNAL(deviceInfo(QDeviceData)), this, SIGNAL(deviceInfo(QDeviceData)));
     reader->connect(reader, SIGNAL(waiting()), this, SIGNAL(waiting()));
@@ -14,6 +18,7 @@ QDCAsyncReader::QDCAsyncReader()
     reader->connect(reader, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
     reader->connect(reader, SIGNAL(finished()), this, SIGNAL(finished()));
     reader->connect(reader, SIGNAL(isBusyChanged()), this, SIGNAL(isBusyChanged()));
+    reader->connect(reader, SIGNAL(cancelled()), this, SIGNAL(cancelled()));
     reader->connect(reader, SIGNAL(cancelled()), this, SIGNAL(cancelled()));
     reader->moveToThread(workerThread);
     workerThread->start();
@@ -51,6 +56,21 @@ DCReaderInterface *QDCAsyncReader::setContext(DCContextInterface *c)
 bool QDCAsyncReader::getIsBusy()
 {
     return reader->getIsBusy();
+}
+
+unsigned int QDCAsyncReader::getDivesRead()
+{
+    return reader->getDivesRead();
+}
+
+unsigned int QDCAsyncReader::getMaximum()
+{
+    return maximum;
+}
+
+unsigned int QDCAsyncReader::getCurrent()
+{
+    return current;
 }
 
 

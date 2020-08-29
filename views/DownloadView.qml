@@ -417,6 +417,7 @@ GridLayout {
             writeTarget.cancel();
         }
         onFinished: {
+            dcwriter.maximum = divesRead;
             writeTarget.end();
         }
         onDeviceInfo: {
@@ -425,6 +426,8 @@ GridLayout {
             const computer = littledivelog.getComputer(data);
             if (computer && useFingerprint.checked) {
                 dcreader.setFingerprint(computer.fingerprint);
+            } else {
+                dcreader.clearFingerprint();
             }
 
             writeTarget.start();
@@ -472,9 +475,13 @@ GridLayout {
         }
         onEnded: {
             const usedFingerprint = useFingerprint.checked;
+            const divesRead = dcreader.divesRead;
+            const divesSkipped = maximum - divesRead;
+            const divesWritten = dcwriter.current;
+
             requests.cleanup();
             statusLabel.isError = false;
-            statusLabel.text = `Successfully downloaded ${dcwriter.maximum} ${usedFingerprint  ? "new " : ""}dives`;
+            statusLabel.text = `Successfully downloaded ${divesRead}, skipped ${divesSkipped}, written ${divesWritten}`;
         }
     }
 

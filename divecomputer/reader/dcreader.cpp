@@ -45,12 +45,10 @@ void DCReader::startReading()
     }
 
     readAll();
-
 }
 
 void DCReader::readAll()
 {
-
     auto dev = device->getNative(context);
 
     dc_device_set_cancel(dev, nativeCancelCallback, this);

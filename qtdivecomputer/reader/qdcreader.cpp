@@ -27,6 +27,7 @@ void QDCReader::startReading()
         throw std::runtime_error("Already reading");
     }
 
+    divesRead = 0;
     setIsBusy(true);
     DCReader::startReading();
 }
@@ -35,6 +36,11 @@ void QDCReader::setFingerprint(QByteArray data)
 {
     fingerprint_t fp((unsigned char *)data.data(), data.size());
     setFingerprint(fp);
+}
+
+void QDCReader::clearFingerprint()
+{
+    DCReader::clearFingerprint();
 }
 
 void QDCReader::setIsBusy(bool b)
@@ -54,6 +60,11 @@ void QDCReader::setFingerprint(fingerprint_t fp)
 bool QDCReader::getIsBusy()
 {
     return isBusy;
+}
+
+unsigned int QDCReader::getDivesRead()
+{
+    return divesRead;
 }
 
 void QDCReader::cancel()
@@ -93,6 +104,8 @@ void QDCReader::receiveClockEvent(dc_event_clock_t *data)
 
 void QDCReader::receiveDive(DCDive *data)
 {
+    divesRead += 1;
+    emit divesReadChanged();
     emit dive((QDCDive *)data);
 }
 

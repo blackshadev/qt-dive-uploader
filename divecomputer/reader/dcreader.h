@@ -20,6 +20,7 @@ public:
     virtual void cancel() override;
     virtual bool isReady();
     virtual void setFingerprint(fingerprint_t fp) override;
+    virtual void clearFingerprint() override;
     void readAll();
     bool isCancelled();
 
