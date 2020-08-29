@@ -33,7 +33,7 @@ ColumnLayout {
         }
 
         Label {
-            text: "vTODO"
+            text: dccontext.version
         }
     }
 

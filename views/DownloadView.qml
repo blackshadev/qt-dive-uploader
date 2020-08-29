@@ -432,7 +432,7 @@ GridLayout {
           anchors.fill: parent
           hoverEnabled: true
           ToolTip.visible: hovered
-          ToolTip.delay: 1000
+          ToolTip.timeout: 5000
           ToolTip.text: "Only download new dives based on the previously download dives on your littledev account"
         }
     }

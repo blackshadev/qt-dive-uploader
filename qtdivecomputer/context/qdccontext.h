@@ -9,6 +9,7 @@ class QDCContext : public QObject, public DCContext
 {
     Q_OBJECT
     Q_PROPERTY(LogLevel loglevel READ getQLogLevel WRITE setQLogLevel NOTIFY loglevelChanged)
+    Q_PROPERTY(QString version READ getVersion CONSTANT)
 
 public:
     enum LogLevel {
@@ -26,6 +27,7 @@ public:
     void log(logdata_t logdata) override;
 
     LogLevel getQLogLevel();
+    QString getVersion();
 
     static loglevel_t translateLogLevel(LogLevel ll);
     static LogLevel translateLogLevel(loglevel_t ll);

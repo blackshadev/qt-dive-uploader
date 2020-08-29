@@ -1,4 +1,5 @@
 #include "qdccontext.h"
+#include <libdivecomputer/version.h>
 #include <QVector>
 
 QDCContext::QDCContext(QObject *parent)
@@ -38,6 +39,16 @@ void QDCContext::log(QString loglevel, QString msg)
 QDCContext::LogLevel QDCContext::getQLogLevel()
 {
     return translateLogLevel(logLevel);
+}
+
+QString QDCContext::getVersion()
+{
+    dc_version_t version;
+    dc_version(&version);
+
+    char buff[64];
+    sprintf(buff, "v%d.%d.%d", version.major, version.minor, version.micro);
+    return QString::fromLocal8Bit(buff);
 }
 
 QDCContext::LogLevel QDCContext::translateLogLevel(loglevel_t ll)
