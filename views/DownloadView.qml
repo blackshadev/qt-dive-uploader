@@ -386,9 +386,10 @@ GridLayout {
     }
 
     Label {
+        property bool isError: true
         Layout.fillWidth: true
-        id: errorLabel
-        color: "red"
+        id: statusLabel
+        color: isError ? "red" : Material.color(Material.Blue)
         text: ""
     }
 
@@ -409,7 +410,8 @@ GridLayout {
             writeTarget.write(dive);
         }
         onError: {
-            errorLabel.text = msg;
+            statusLabel.isError = true;
+            statusLabel.text = msg;
         }
         onCancelled: {
             writeTarget.cancel();
@@ -421,7 +423,7 @@ GridLayout {
             dcwriter.device = data;
             selectionProxy.device = data;
             const computer = littledivelog.getComputer(data);
-            if (computer) {
+            if (computer && useFingerprint.checked) {
                 dcreader.setFingerprint(computer.fingerprint);
             }
 
@@ -468,12 +470,11 @@ GridLayout {
         onProgress: {
             writeProgress.value = current / maximum;
         }
-        onStarted: {
-            isWriting = true;
-        }
-        onFinished: {
-            isWriting = false;
+        onEnded: {
+            const usedFingerprint = useFingerprint.checked;
             requests.cleanup();
+            statusLabel.isError = false;
+            statusLabel.text = `Successfully downloaded ${dcwriter.maximum} ${usedFingerprint  ? "new " : ""}dives`;
         }
     }
 
@@ -510,7 +511,7 @@ GridLayout {
                 return;
             }
 
-            errorLabel.text = "";
+            statusLabel.text = "";
             writeProgress.value = 0;
             readProgress.value = 0;
 

@@ -7,6 +7,7 @@ struct fingerprint_t {
     unsigned char *data;
 public:
     fingerprint_t();
+    fingerprint_t(const fingerprint_t &fp);
     fingerprint_t(unsigned char *data, unsigned int size);
     ~fingerprint_t();
     void operator=(const fingerprint_t &fp );

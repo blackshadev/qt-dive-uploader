@@ -17,9 +17,9 @@ public:
     virtual DCReader *setContext(DCContextInterface *ctx) override;
 
     virtual void startReading() override;
-    virtual void cancel();
+    virtual void cancel() override;
     virtual bool isReady();
-    virtual void setFingerprint(fingerprint_t fp);
+    virtual void setFingerprint(fingerprint_t fp) override;
     void readAll();
     bool isCancelled();
 

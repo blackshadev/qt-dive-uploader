@@ -30,6 +30,7 @@ public:
     void receiveFinished() override;
     void receiveCancelled() override;
     void setFingerprint(fingerprint_t data) override;
+    void clearFingerprint() override;
     bool getIsBusy();
 public slots:
     void cancel() override;

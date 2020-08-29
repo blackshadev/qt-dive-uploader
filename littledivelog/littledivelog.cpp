@@ -208,7 +208,7 @@ void LittleDiveLog::request(
         emit error("Cannot execute request. Not yet logged in.");
         return;
     }
-    qInfo() << m_access_token.toLocal8Bit().data();
+
     if(m_access_token.isNull()) {
         get_access_token(
             [=]() {

@@ -82,6 +82,12 @@ void DCReader::setFingerprint(fingerprint_t fp)
     dc_device_set_fingerprint(dev, fp.data, fp.size);
 }
 
+void DCReader::clearFingerprint()
+{
+    auto dev = device->getNative(context);
+    dc_device_set_fingerprint(dev, NULL, 0);
+}
+
 void DCReader::receiveError(const char *msg)
 {
     throw std::runtime_error(msg);

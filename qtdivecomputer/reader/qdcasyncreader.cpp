@@ -64,8 +64,18 @@ void QDCAsyncReader::cancel()
     reader->cancel();
 }
 
+void QDCAsyncReader::setFingerprint(fingerprint_t fp)
+{
+    reader->setFingerprint(fp);
+}
+
 void QDCAsyncReader::setFingerprint(QByteArray fingerprint)
 {
     reader->setFingerprint(fingerprint);
+}
+
+void QDCAsyncReader::clearFingerprint()
+{
+    reader->clearFingerprint();
 }
 
