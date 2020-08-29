@@ -19,6 +19,7 @@ bool LittleDiveLog::isLoggedIn()
 
 void LittleDiveLog::login(QString email, QString password)
 {
+    setIsBusy();
     auto req = requests->request();
     req->setURL("https://dive.littledev.nl/api/auth/refresh-token");
     req->setMethod(RequestMethod::POST);
@@ -40,6 +41,7 @@ void LittleDiveLog::login(QString email, QString password)
 
         if(obj.contains("error")) {
             emit error(obj["error"].toString());
+            unsetIsBusy();
         } else {
             set_refresh_token(obj["jwt"].toString());
             emit loggedStateChanged(isLoggedIn());
@@ -93,6 +95,7 @@ void LittleDiveLog::fetch_user_data()
 
             fetch_user_computers([=]() {
                 emit userInfoChanged(m_user_info);
+                unsetIsBusy();
             });
 
         }
@@ -102,6 +105,11 @@ void LittleDiveLog::fetch_user_data()
 bool LittleDiveLog::hasUserData()
 {
     return m_user_info != NULL;
+}
+
+bool LittleDiveLog::getIsBusy()
+{
+    return isBusy;
 }
 
 QVariant LittleDiveLog::getComputer(QDeviceData data)
@@ -194,6 +202,18 @@ void LittleDiveLog::raw_request(
     });
 
     req->send();
+}
+
+void LittleDiveLog::setIsBusy()
+{
+    isBusy = true;
+    emit isBusyChanged();
+}
+
+void LittleDiveLog::unsetIsBusy()
+{
+    isBusy = false;
+    emit isBusyChanged();
 }
 
 void LittleDiveLog::request(

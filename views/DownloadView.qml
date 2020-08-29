@@ -14,7 +14,7 @@ GridLayout {
     property bool isDownloading: dcreader.isBusy
     property bool isWriting: dcwriter.isBusy
     property bool isSelecting: selectionProxy.isBusy
-    property bool isBusy: isDownloading || isWriting || isSelecting;
+    property bool isBusy: isDownloading || isWriting || isSelecting || littledivelog.isBusy;
     property variant writeTarget: selectDives.checked ? selectionProxy : dcwriter;
 
     Layout.fillWidth: true
@@ -131,6 +131,111 @@ GridLayout {
 
         }
     }
+
+    QDCDiveParser {
+        id: dcparser
+        context: dccontext
+    }
+
+    QDCAsyncReader {
+        id: dcreader
+        parser: dcparser
+        context: dccontext
+        onProgress: {
+            readProgress.value = current / maximum;
+            dcwriter.maximum = maximum;
+        }
+        onDive: {
+            writeTarget.write(dive);
+        }
+        onError: {
+            statusLabel.isError = true;
+            statusLabel.text = msg;
+        }
+        onCancelled: {
+            writeTarget.cancel();
+        }
+        onFinished: {
+            dcwriter.maximum = divesRead;
+            writeTarget.end();
+        }
+        onDeviceInfo: {
+            dcwriter.device = data;
+            selectionProxy.device = data;
+            const computer = littledivelog.getComputer(data);
+            if (computer && useFingerprint.checked) {
+                dcreader.setFingerprint(computer.fingerprint);
+            } else {
+                dcreader.clearFingerprint();
+            }
+
+            writeTarget.start();
+        }
+    }
+
+    QDCWriterController {
+        id: dcwriter
+        writer: fileRadio.checked ? dcfilewriter : llRadio.checked ? dclittlelogwriter : null;
+        onProgress: {
+            writeProgress.value = current / maximum;
+        }
+        onEnded: {
+            const usedFingerprint = useFingerprint.checked;
+            const divesRead = dcreader.divesRead;
+            const divesSkipped = dcreader.maximum - divesRead;
+            const divesWritten = dcwriter.current;
+
+            requests.cleanup();
+            statusLabel.isError = false;
+            statusLabel.text = `Successfully downloaded ${divesRead}; written ${divesWritten}; skipped ${divesSkipped}.`;
+        }
+    }
+
+    QDCFileExporter {
+        id: dcfilewriter
+    }
+
+    QDCLittleDiveLogExporter {
+        id: dclittlelogwriter
+        divelog: littledivelog
+    }
+
+    Connections {
+        target: sessionStore
+        function onLoaded() {
+            updateComputerSelection();
+            fileRadio.checked = sessionStore.data.writeType === "File";
+            llRadio.checked = sessionStore.data.writeType === "Littlelog";
+            filePath.text = sessionStore.data.path;
+            selectDives.checked = sessionStore.data.selectDives;
+            useFingerprint.checked = sessionStore.data.useFingerprint;
+        }
+    }
+
+    Connections {
+        target: selectionProxy
+        function onStarted() {
+            isSelecting = true;
+        }
+        function onEnded() {
+            var selected = selectionProxy.selected;
+
+            dcwriter.maximum = selected.length;
+            dcwriter.start();
+
+            for (let iX = 0; iX < selected.length; iX++) {
+                dcwriter.write(selected[iX]);
+            }
+
+            dcwriter.end();
+
+            isSelecting = false;
+        }
+        function onCancelled() {
+            isSelecting = false;
+        }
+    }
+
 
     Label {
         text: "Computer"
@@ -319,9 +424,17 @@ GridLayout {
 
     Label {
         visible: littledivelog.isLoggedIn
-        text: "Only download new dives"
+        text: "New dives only"
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
+
+        MouseArea {
+          anchors.fill: parent
+          hoverEnabled: true
+          ToolTip.visible: hovered
+          ToolTip.delay: 1000
+          ToolTip.text: "Only download new dives based on the previously download dives on your littledev account"
+        }
     }
 
     CheckBox {
@@ -388,105 +501,15 @@ GridLayout {
     Label {
         property bool isError: true
         Layout.fillWidth: true
+        Layout.columnSpan: 2
         id: statusLabel
         color: isError ? "red" : Material.color(Material.Blue)
         text: ""
     }
 
-    QDCDiveParser {
-        id: dcparser
-        context: dccontext
-    }
-
-    QDCAsyncReader {
-        id: dcreader
-        parser: dcparser
-        context: dccontext
-        onProgress: {
-            readProgress.value = current / maximum;
-            dcwriter.maximum = maximum;
-        }
-        onDive: {
-            writeTarget.write(dive);
-        }
-        onError: {
-            statusLabel.isError = true;
-            statusLabel.text = msg;
-        }
-        onCancelled: {
-            writeTarget.cancel();
-        }
-        onFinished: {
-            dcwriter.maximum = divesRead;
-            writeTarget.end();
-        }
-        onDeviceInfo: {
-            dcwriter.device = data;
-            selectionProxy.device = data;
-            const computer = littledivelog.getComputer(data);
-            if (computer && useFingerprint.checked) {
-                dcreader.setFingerprint(computer.fingerprint);
-            } else {
-                dcreader.clearFingerprint();
-            }
-
-            writeTarget.start();
-        }
-    }
-
-    Connections {
-        target: selectionProxy
-        function onStarted() {
-            isSelecting = true;
-        }
-        function onEnded() {
-            var selected = selectionProxy.selected;
-
-            dcwriter.maximum = selected.length;
-            dcwriter.start();
-
-            for (let iX = 0; iX < selected.length; iX++) {
-                dcwriter.write(selected[iX]);
-            }
-
-            dcwriter.end();
-
-            isSelecting = false;
-        }
-        function onCancelled() {
-            isSelecting = false;
-        }
-    }
-
-    QDCFileExporter {
-        id: dcfilewriter
-    }
-
-    QDCLittleDiveLogExporter {
-        id: dclittlelogwriter
-        divelog: littledivelog
-    }
-
-    QDCWriterController {
-        id: dcwriter
-        writer: fileRadio.checked ? dcfilewriter : llRadio.checked ? dclittlelogwriter : null;
-        onProgress: {
-            writeProgress.value = current / maximum;
-        }
-        onEnded: {
-            const usedFingerprint = useFingerprint.checked;
-            const divesRead = dcreader.divesRead;
-            const divesSkipped = maximum - divesRead;
-            const divesWritten = dcwriter.current;
-
-            requests.cleanup();
-            statusLabel.isError = false;
-            statusLabel.text = `Successfully downloaded ${divesRead}, skipped ${divesSkipped}, written ${divesWritten}`;
-        }
-    }
-
     RoundButton {
         Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+        Layout.columnSpan: 2
 
         id: startButton
         text: FontAwesome.download
@@ -534,6 +557,7 @@ GridLayout {
 
     RoundButton {
         Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+        Layout.columnSpan: 2
 
         id: cancelButton
         text: FontAwesome.ban
@@ -548,18 +572,6 @@ GridLayout {
 
         onClicked: {
             dcreader.cancel();
-        }
-    }
-
-    Connections {
-        target: sessionStore
-        function onLoaded() {
-            updateComputerSelection();
-            fileRadio.checked = sessionStore.data.writeType === "File";
-            llRadio.checked = sessionStore.data.writeType === "Littlelog";
-            filePath.text = sessionStore.data.path;
-            selectDives.checked = sessionStore.data.selectDives;
-            useFingerprint.checked = sessionStore.data.useFingerprint;
         }
     }
 

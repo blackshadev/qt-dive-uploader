@@ -22,6 +22,7 @@ class LittleDiveLog : public QObject
     Q_PROPERTY(UserInfo* userInfo MEMBER m_user_info NOTIFY userInfoChanged)
     Q_PROPERTY(QString refreshToken WRITE set_refresh_token READ get_refresh_token NOTIFY refreshTokenChanged)
     Q_PROPERTY(RequestContainer *requestContainer WRITE setRequestContainer)
+    Q_PROPERTY(bool isBusy READ getIsBusy NOTIFY isBusyChanged)
 
 public:
     explicit LittleDiveLog(QObject *parent = nullptr);
@@ -35,7 +36,9 @@ public:
     UserInfo* m_user_info = NULL;
     void fetch_user_data();
     bool hasUserData();
+    bool getIsBusy();
 signals:
+    void isBusyChanged();
     void error(QString msg);
     void loggedStateChanged(bool isLoggedIn);
     void userInfoChanged(UserInfo* ui);
@@ -50,6 +53,10 @@ protected:
     QString m_refresh_token;
     QString m_access_token;
     RequestContainer *requests;
+private:
+    void setIsBusy();
+    void unsetIsBusy();
+    bool isBusy = false;
 };
 
 #endif // LITTLEDIVELOG_H

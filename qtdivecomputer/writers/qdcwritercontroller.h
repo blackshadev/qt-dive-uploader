@@ -20,7 +20,6 @@ class QDCWriterController : public QObject
     Q_PROPERTY(QDCDescriptor *descriptor WRITE setDescriptor)
     Q_PROPERTY(QDCWriteTarget *writer WRITE setWriter)
     Q_PROPERTY(bool isBusy READ isBusy NOTIFY isBusyChanged)
-    Q_PROPERTY(int divesWritten read getDivesWritten NOTIFY divesWrittenChanged)
 
 public:
     QDCWriterController(QObject *parent = NULL);
@@ -35,7 +34,6 @@ public:
     void setMaximum(unsigned int);
     unsigned int getCurrent();
     void setCurrent(unsigned int);
-    void getDivesWritten();
 
 public:
     bool isBusy();
