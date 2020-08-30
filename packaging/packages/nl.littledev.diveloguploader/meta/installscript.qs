@@ -20,29 +20,40 @@ Component.prototype.createOperations = function()
             "workingDirectory=@TargetDir@", "iconPath=@TargetDir@/icon.ico",
             "description=Open DiveUploader");
     }
+
+    if (installer.value("os") === "x11") {
+        component.addOperation("CreateDesktopEntry", "/usr/share/applications/LittleDiveLogUploader.desktop", "Version=1.0\nType=Application\nTerminal=false\nExec=@TargetDir@/dive-uploader.sh\nName=Littlelog Dive Log Uploader\nIcon=@TargetDir@/resources/icon.ico\nName[en_US]=Little Dive Log Uploader");
+        component.addElevatedOperation("Copy", "/usr/share/applications/LittleDiveLogUploader.desktop", "@HomeDir@/Desktop/LittleDiveLogUploader.desktop");
+    }
 }
 
 Component.prototype.installationFinishedPageIsShown = function()
 {
-    try {
-        if (installer.isInstaller() && installer.status == QInstaller.Success) {
-            installer.addWizardPageItem( component, "AfterInstallationForm", QInstaller.InstallationFinished );
-        }
-    } catch(e) {
-        console.log(e);
-    }
+//    try {
+//        if (installer.isInstaller() && installer.status == QInstaller.Success) {
+//            installer.addWizardPageItem( component, "AfterInstallationForm", QInstaller.InstallationFinished );
+//        }
+//    } catch(e) {
+//        console.log(e);
+//    }
 }
 
 Component.prototype.installationFinished = function()
 {
-    try {
-        if (installer.isInstaller() && installer.status == QInstaller.Success) {
-            var isChecked = component.userInterface("AfterInstallationForm").checkbox.checked;
-            if (isChecked) {
-                QDesktopServices.openUrl("file:///" + installer.value("TargetDir") + "/dive-uploader.exe");
-            }
-        }
-    } catch(e) {
-        console.log(e);
-    }
+//    try {
+//        if (installer.isInstaller() && installer.status == QInstaller.Success) {
+//            var isChecked = component.userInterface("AfterInstallationForm").checkbox.checked;
+//            var fileName = installer.value("TargetDir") + "/dive-uploader";
+//            switch (installer.value("os")) {
+//                case "x11": fileName += ".sh"; break;
+//                case "windows": fileName += ".exe"; break;
+//            }
+
+//            if (isChecked) {
+//                QProcess.startDetached(fileName);
+//            }
+//        }
+//    } catch(e) {
+//        console.log(e);
+//    }
 }

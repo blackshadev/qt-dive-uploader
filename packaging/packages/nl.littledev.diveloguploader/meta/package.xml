@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
-    <DisplayName>Divelog Uploader</DisplayName>
-    <Description>Uploader for the Little Divelog</Description>
+    <DisplayName>Little Dive Log Uploader</DisplayName>
+    <Description>Uploader for the Little Dive Log</Description>
     <Name>nl.littledev.diveloguploader</Name>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <ReleaseDate>2020-05-19</ReleaseDate>
     <Licenses>
         <License name="GNU GENERAL PUBLIC LICENSE Version 3" file="license.txt" />

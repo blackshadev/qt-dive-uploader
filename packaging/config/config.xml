@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
-    <Name>Little Divelog uploader</Name>
-    <Version>0.1.0</Version>
-    <Title>Little Divelog uploader</Title>
+    <Name>Little Dive Log Uploader</Name>
+    <Version>0.2.0</Version>
+    <Title>Little Dive Log Uploader</Title>
     <Publisher>Littledev</Publisher>
-    <StartMenuDir>Little Divelog</StartMenuDir>
-    <TargetDir>@HomeDir@/LittleDivelog</TargetDir>
+    <StartMenuDir>LittleDiveLogUploader</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/LittleDiveLogUploader</TargetDir>
     <AllowSpaceInPath>true</AllowSpaceInPath>
 </Installer>

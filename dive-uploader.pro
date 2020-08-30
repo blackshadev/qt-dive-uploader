@@ -8,7 +8,7 @@ unix:OS = "unix"
 win32:OS = "win32"
 macx:OS = "macx"
 
-QT += qml quick serialport quickcontrols2 network
+QT += qml quick quickcontrols2 network
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -236,8 +236,15 @@ QMAKE_EXTRA_TARGETS += installer
 
 
 DISTFILES += \
+    packaging/config/config.xml \
+    packaging/packages/nl.littledev.diveloguploader/meta/installscript.qs \
+    packaging/packages/nl.littledev.diveloguploader/meta/license.txt \
+    packaging/packages/nl.littledev.diveloguploader/meta/package.xml \
     tools/linux-deploy.sh \
     tools/linux-run.sh
+
+FORMS += \
+    packaging/packages/nl.littledev.diveloguploader/meta/afterinstallationform.ui
 
 
 
