@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-08-30T21:06:31.649Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36" etag="2Vc63nbBaZOOC9hqcKBf" version="13.6.5" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2020-08-30T21:15:55.518Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36" etag="g0tKSGODbSAkyVhbT_Ou" version="13.6.5" type="github" pages="2">
   <diagram id="l0Hb1Kvt9UqNzEm9A9QA" name="Page-1">
     <mxGraphModel dx="2432" dy="1112" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -618,7 +618,7 @@
           <mxGeometry x="57.5" y="1980" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="ltwnF_Ncu5DMhvB-tiFt-4" value="QT specific" style="swimlane;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
-          <mxGeometry x="-550" y="390" width="550" height="2220" as="geometry" />
+          <mxGeometry x="-550" y="390" width="550" height="2320" as="geometry" />
         </mxCell>
         <mxCell id="NFH4je1Bz-bS19m63YZz-1" value="QDCDiveSerializer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="295" y="1297.5" width="215" height="20" as="geometry" />
@@ -810,10 +810,10 @@
         <mxCell id="Yi1RsBnDBWCXkwgNJwWb-2" value="QDCFileExporter" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="15" y="1970" width="220" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-15" value="QDCExporter" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
+        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-15" value="QDCWriteTarget" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="290" y="1900" width="220" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-18" value=": DCWriterInterface" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
+        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-18" value=": DCExporterInterface" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="310" y="1920" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="Yi1RsBnDBWCXkwgNJwWb-20" value="setFilePath(QString)" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
@@ -822,7 +822,7 @@
         <mxCell id="Yi1RsBnDBWCXkwgNJwWb-21" value="QDCLittlelogExporter" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="15" y="1860" width="220" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-22" value="setSomething()" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
+        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-22" value="void setDivelog(LittleDiveLog *)" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="35" y="1900" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="Yi1RsBnDBWCXkwgNJwWb-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" source="Yi1RsBnDBWCXkwgNJwWb-23" target="Yi1RsBnDBWCXkwgNJwWb-15" edge="1">
@@ -833,7 +833,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-23" value=": QDCWriter" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
+        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-23" value=": QDCWriteTarget" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="35" y="1990" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="Yi1RsBnDBWCXkwgNJwWb-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;dashed=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" source="Yi1RsBnDBWCXkwgNJwWb-25" target="Yi1RsBnDBWCXkwgNJwWb-15" edge="1">
@@ -844,7 +844,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-25" value=": QDCWriter" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
+        <mxCell id="Yi1RsBnDBWCXkwgNJwWb-25" value=": QDCWriteTarget" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="35" y="1880" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="EdBtkRFsHFvFqW60ku9V-1" value="QDCWriterController" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
@@ -880,7 +880,7 @@
           <mxGeometry x="35" y="2030" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="EdBtkRFsHFvFqW60ku9V-18" value="QDCDiveSerializer serializer" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
-          <mxGeometry x="35" y="1920" width="200" height="20" as="geometry" />
+          <mxGeometry x="35" y="1940" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="EdBtkRFsHFvFqW60ku9V-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" parent="ltwnF_Ncu5DMhvB-tiFt-4" source="EdBtkRFsHFvFqW60ku9V-18" target="NFH4je1Bz-bS19m63YZz-1" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -920,6 +920,63 @@
         </mxCell>
         <mxCell id="oyR1tuiYwehjDmbi2ydT-10" value="deselect(DCDive *)" style="rounded=0;whiteSpace=wrap;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" vertex="1">
           <mxGeometry x="300" y="1650" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-3" value="bool getIsBusy()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="1940" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-12" value="void write(QDCDive *)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="1960" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-17" value="void setDevice(QDeviceData)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="1980" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-18" value="void setDescriptor(QDCDescriptor)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="2000" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-19" value="signal started()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="2020" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-20" value="signal ended()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="2040" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-22" value="signal error(QString)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="2060" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-21" value="signal written()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="2080" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-23" value="signal ready()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="2100" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-24" value="signal isBusyChanged()" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="310" y="2120" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-25" value="QDCSelectionProxy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="20" y="2090" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-30" value=": QDCWriteTarget" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="40" y="2110" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-31" value="LittleDiveLog *getDivelog()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="35" y="1920" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-32" value="void done()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="40" y="2130" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-33" value="void select(QDCDive *dive)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="40" y="2150" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-34" value="void deselect(QDCDive *dive)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="40" y="2170" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-35" value="QList&amp;lt;QDCDive *&amp;gt; getSelected()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="40" y="2190" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-36" value="signal show()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="40" y="2210" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-37" value="signal hide()" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="40" y="2230" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="ltwnF_Ncu5DMhvB-tiFt-5" value="QML" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="-1080" y="390" width="450" height="2030" as="geometry" />
