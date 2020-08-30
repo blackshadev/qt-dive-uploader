@@ -50,7 +50,7 @@ protected:
 private:
     QDeviceData device;
     QDCDescriptor *descriptor;
-    bool _isBusy;
+    bool _isBusy = false;
 };
 Q_DECLARE_METATYPE(QDCWriteTarget *)
 

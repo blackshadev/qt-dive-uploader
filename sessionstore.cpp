@@ -158,6 +158,8 @@ bool SessionStore::load()
     QFile loadFile(path);
     if (!loadFile.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open save file.");
+        isLoaded = true;
+        emit loaded();
         return false;
     }
 

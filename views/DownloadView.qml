@@ -236,7 +236,6 @@ GridLayout {
         }
     }
 
-
     Label {
         text: "Computer"
         Layout.minimumWidth: labelColumnWidth
