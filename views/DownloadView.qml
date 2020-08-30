@@ -428,12 +428,13 @@ GridLayout {
         Layout.minimumWidth: labelColumnWidth
         Layout.maximumWidth: labelColumnWidth
 
+        ToolTip.visible: useFinderprintLabelMouseArea.containsMouse
+        ToolTip.timeout: 5000
+        ToolTip.text: "Only download new dives based on the previously download dives on your littledev account"
         MouseArea {
-          anchors.fill: parent
-          hoverEnabled: true
-          ToolTip.visible: hovered
-          ToolTip.timeout: 5000
-          ToolTip.text: "Only download new dives based on the previously download dives on your littledev account"
+            id: useFinderprintLabelMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
         }
     }
 
