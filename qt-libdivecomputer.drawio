@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-08-30T21:21:22.727Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36" etag="vShZtV5ouyTkf3E1v_jV" version="13.6.5" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2020-08-30T21:21:38.920Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36" etag="yomuJ91XSM3oJwULT6MF" version="13.6.5" type="github" pages="2">
   <diagram id="l0Hb1Kvt9UqNzEm9A9QA" name="Page-1">
     <mxGraphModel dx="2432" dy="1112" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -856,7 +856,7 @@
         <mxCell id="oyR1tuiYwehjDmbi2ydT-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="ltwnF_Ncu5DMhvB-tiFt-4" source="EdBtkRFsHFvFqW60ku9V-5" target="Yi1RsBnDBWCXkwgNJwWb-15" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="540" y="1580" />
+              <mxPoint x="540" y="1560" />
               <mxPoint x="540" y="1910" />
             </Array>
           </mxGeometry>
@@ -967,6 +967,9 @@
         </mxCell>
         <mxCell id="8aRruAoTylOwwgUBHldr-40" value="int getMaximum(uint)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
           <mxGeometry x="312.5" y="1590" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="8aRruAoTylOwwgUBHldr-41" value=": QObject" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ltwnF_Ncu5DMhvB-tiFt-4">
+          <mxGeometry x="312.5" y="1760" width="200" height="20" as="geometry" />
         </mxCell>
         <mxCell id="ltwnF_Ncu5DMhvB-tiFt-5" value="QML" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="-1080" y="390" width="450" height="2030" as="geometry" />
