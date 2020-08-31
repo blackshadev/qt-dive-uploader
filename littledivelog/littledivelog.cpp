@@ -257,6 +257,10 @@ void LittleDiveLog::logout() {
         return;
     }
 
+    delete this->m_user_info;
+    this->m_user_info = NULL;
+    emit userInfoChanged(m_user_info);
+
     raw_request(RequestMethod::DELETE, "/auth/refresh-token/", RequestTokenType::REFRESH, NULL, [=](HTTPResponse *resp) {
         set_refresh_token(NULL);
         m_access_token.clear();

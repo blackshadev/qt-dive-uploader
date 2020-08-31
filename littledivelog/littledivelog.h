@@ -27,8 +27,6 @@ class LittleDiveLog : public QObject
 public:
     explicit LittleDiveLog(QObject *parent = nullptr);
     virtual ~LittleDiveLog();
-    Q_INVOKABLE void login(QString username, QString password);
-    Q_INVOKABLE void logout();
     bool isLoggedIn();
     QString get_refresh_token();
     void set_refresh_token(QString tok);
@@ -37,6 +35,7 @@ public:
     void fetch_user_data();
     bool hasUserData();
     bool getIsBusy();
+    void setRequestContainer(RequestContainer *req);
 signals:
     void isBusyChanged();
     void error(QString msg);
@@ -44,8 +43,9 @@ signals:
     void userInfoChanged(UserInfo* ui);
     void refreshTokenChanged(QString tok);
 public slots:
+    void login(QString username, QString password);
+    void logout();
     QVariant getComputer(QDeviceData data);
-    void setRequestContainer(RequestContainer *req);
 protected:
     void fetch_user_computers(std::function<void()> callback);
     void get_access_token(std::function<void()> callback, QObject* parent = NULL);
