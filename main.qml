@@ -68,24 +68,27 @@ ApplicationWindow {
 
     StackView {
         id: stackView
-        initialItem: mainViewComp
+        initialItem: loginViewComp
         anchors.fill: parent
         anchors.margins: margin
 
-        Component {
-            id: mainViewComp
-            MainView {
-                id: mainView
-            }
-        }
+    }
 
-        Component {
-            id: loginViewComp
-            LoginView {
-                id: loginView
-            }
+    Component {
+        id: mainViewComp
+        MainView {
+            id: mainView
         }
     }
+
+    Component {
+        id: loginViewComp
+        LoginView {
+            showOffineButton: true
+            id: loginView
+        }
+    }
+
     Component {
         id: selectionViewComp
         SelectionWindow {
@@ -114,9 +117,9 @@ ApplicationWindow {
         target: littledivelog
         function onLoggedStateChanged(isLoggedIn) {
             if(isLoggedIn) {
-                stackView.pop();
-            } else {
-                stackView.push(loginViewComp);
+                stackView.replace(mainViewComp);
+            } else if(stackView.currentItem !== loginViewComp) {
+                stackView.replace(loginViewComp);
             }
         }
         function onRefreshTokenChanged(token) {

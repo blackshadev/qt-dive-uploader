@@ -5,7 +5,7 @@ import QtQuick.Controls.Material 2.12
 import Libdivecomputer 0.2
 
 ColumnLayout {
-
+    property bool showOffineButton: false
     Layout.fillWidth: true
 
     Text {
@@ -69,16 +69,15 @@ ColumnLayout {
             Layout.alignment: Qt.AlignRight
 
             Button {
-                visible: stackView.depth > 1
+                visible: showOffineButton
                 text: "Offline"
                 Material.elevation: 0
                 onClicked: {
-                    stackView.pop();
+                    stackView.replace(mainViewComp);
                 }
             }
 
             Button {
-                visible: stackView.depth > 1
                 text: "Register"
                 Material.elevation: 0
                 onClicked: {
