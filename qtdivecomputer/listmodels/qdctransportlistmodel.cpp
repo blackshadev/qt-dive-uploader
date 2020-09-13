@@ -50,7 +50,7 @@ void QDCTransportListModel::loadTransports(QDCContext *ctx) {
 
     for (int iX = 0; iX < TRANSPORTS_COUNT; iX++) {
         auto transportType = allTransports[iX];
-        if(supportedTypes & transportType) {
+        if(transportType & supportedTypes) {
             auto transport = factory.create(transportType);
             if (transport) {
                 add(new QDCTransport(transport, this));
