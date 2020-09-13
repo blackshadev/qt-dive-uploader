@@ -1,5 +1,6 @@
 #include "dctransportfactory.h"
 #include "dcusbhidtransport.h"
+#include "dcirdatransport.h"
 
 DCTransportInterface *DCTransportFactory::create(TransportType type)
 {
@@ -7,7 +8,7 @@ DCTransportInterface *DCTransportFactory::create(TransportType type)
         case TransportType::USBHID:
             return  (DCTransportInterface *)(new DCUSBHIDTransport(context));
         case TransportType::IRDA:
-            return  (DCTransportInterface *)(new DCUSBHIDTransport(context));
+            return  (DCTransportInterface *)(new DCIRDATransport(context));
         default:
             return NULL;
     }
