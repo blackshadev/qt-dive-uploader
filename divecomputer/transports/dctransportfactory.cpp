@@ -6,6 +6,8 @@ DCTransportInterface *DCTransportFactory::create(TransportType type)
     switch (type) {
         case TransportType::USBHID:
             return  (DCTransportInterface *)(new DCUSBHIDTransport(context));
+        case TransportType::IRDA:
+            return  (DCTransportInterface *)(new DCUSBHIDTransport(context));
         default:
             return NULL;
     }
