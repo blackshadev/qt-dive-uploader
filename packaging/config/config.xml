@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
     <Name>Little Dive Log Uploader</Name>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Title>Little Dive Log Uploader</Title>
     <Publisher>Littledev</Publisher>
     <StartMenuDir>LittleDiveLogUploader</StartMenuDir>
