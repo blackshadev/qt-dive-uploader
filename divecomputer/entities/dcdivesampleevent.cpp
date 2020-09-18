@@ -16,6 +16,7 @@ DCDiveSampleEvent::DCDiveSampleEvent()
 {
     data.type = 0;
     data.value = 0;
+    data.flags = 0;
 }
 
 unsigned int DCDiveSampleEvent::getType()
@@ -41,4 +42,14 @@ int DCDiveSampleEvent::getValue()
 void DCDiveSampleEvent::setValue(int value)
 {
     data.value = value;
+}
+
+unsigned int DCDiveSampleEvent::getFlags()
+{
+    return data.flags;
+}
+
+void DCDiveSampleEvent::setFlags(unsigned int flags)
+{
+    data.flags = flags;
 }

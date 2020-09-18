@@ -18,7 +18,7 @@ public:
     void addSample(sampledata_t sample);
     void finalize();
 private:
-    static DCDiveSampleEvent *createEvent(unsigned int type, int value);
+    static DCDiveSampleEvent *createEvent(unsigned int type, unsigned int flags, int value);
     sampleparser_callback callback;
     DCDiveSample *currentSample;
 };

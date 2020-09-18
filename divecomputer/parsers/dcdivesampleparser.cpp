@@ -27,7 +27,7 @@ void DiveSampleParser::addSample(sampledata_t sample)
     switch(sample.type) {
         case DC_SAMPLE_EVENT:
         {
-            auto event = createEvent(sample.value.event.type, sample.value.event.value);
+            auto event = createEvent(sample.value.event.type, sample.value.event.flags, sample.value.event.value);
             currentSample->addEvent(event);
             break;
         }
@@ -78,9 +78,11 @@ void DiveSampleParser::finalize()
     currentSample = NULL;
 }
 
-DCDiveSampleEvent *DiveSampleParser::createEvent(unsigned int type, int value)
+DCDiveSampleEvent *DiveSampleParser::createEvent(unsigned int type, unsigned int flags, int value)
 {
     auto event = new DCDiveSampleEvent();
     event->setType(type);
+    event->setFlags(flags);
     event->setValue(value);
+    return event;
 }

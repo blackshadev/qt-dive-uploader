@@ -76,7 +76,7 @@ const TransportType allTypes[TRANSPORTS_COUNT] = {
 //    TransportType::BLE,
     TransportType::USBHID,
 //    TransportType::USB,
-//    TransportType::Serial,
+    TransportType::Serial,
 //    TransportType::Bluetooth,
     TransportType::IRDA,
 };

@@ -4,6 +4,7 @@
 typedef struct {
     unsigned int type;
     int value;
+    unsigned int flags;
 } event_data_t;
 
 class DCDiveSampleEvent
@@ -15,6 +16,8 @@ public:
     const char *getTypeName();
     int getValue();
     void setValue(int value);
+    unsigned int getFlags();
+    void setFlags(unsigned int flags);
 private:
     event_data_t data;
 };

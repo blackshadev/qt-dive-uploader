@@ -1,6 +1,7 @@
 #include "dctransportfactory.h"
 #include "dcusbhidtransport.h"
 #include "dcirdatransport.h"
+#include "dcserialtransport.h"
 
 DCTransportInterface *DCTransportFactory::create(TransportType type)
 {
@@ -9,6 +10,8 @@ DCTransportInterface *DCTransportFactory::create(TransportType type)
             return  (DCTransportInterface *)(new DCUSBHIDTransport(context));
         case TransportType::IRDA:
             return  (DCTransportInterface *)(new DCIRDATransport(context));
+        case TransportType::Serial:
+            return  (DCTransportInterface *)(new DCSerialTransport(context));
         default:
             return NULL;
     }

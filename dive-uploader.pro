@@ -20,7 +20,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     directories.cpp \
     divecomputer/devices/dcirdadevice.cpp \
+    divecomputer/devices/dcserialdevice.cpp \
     divecomputer/transports/dcirdatransport.cpp \
+    divecomputer/transports/dcserialtransport.cpp \
     divecomputer/utils/numeric.cpp \
     divecomputer/data/fingerprintdata.cpp \
     divecomputer/reader/dcreader.cpp \
@@ -76,8 +78,10 @@ SOURCES += main.cpp \
 HEADERS += \
     directories.h \
     divecomputer/devices/dcirdadevice.h \
+    divecomputer/devices/dcserialdevice.h \
     divecomputer/exporters/dcexporterinterface.h \
     divecomputer/transports/dcirdatransport.h \
+    divecomputer/transports/dcserialtransport.h \
     divecomputer/utils/numeric.h \
     divecomputer/data/rawfingerprintdata.h \
     divecomputer/data/rawdivedata.h \
