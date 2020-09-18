@@ -60,6 +60,14 @@ void DiveSampleParser::addSample(sampledata_t sample)
             break;
         case DC_SAMPLE_PRESSURE:
         {
+            /**
+             * ignore 0 samples. Some computers report a pressure of 0 when
+             * they don't (yet) receive any  data from the transponder
+             */
+            if (sample.value.pressure.value == 0) {
+                break;
+            }
+
             pressures_t pressure;
             pressure.tank = sample.value.pressure.tank;
             pressure.pressure = sample.value.pressure.value;
