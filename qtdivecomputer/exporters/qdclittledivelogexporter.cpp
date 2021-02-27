@@ -15,7 +15,7 @@ void QDCLittleDiveLogExporter::write(QDCDive *dive)
 
     divelog->request(
         RequestMethod::POST,
-        "/dive",
+        "/dives",
         &json,
         [=](HTTPResponse *resp) {
             if(resp->hasError()) {
@@ -47,7 +47,7 @@ void QDCLittleDiveLogExporter::start()
 
     divelog->request(
         RequestMethod::POST,
-        "/computer",
+        "/computers",
         &computer,
         [=](HTTPResponse *resp) {
             if(resp->hasError()) {

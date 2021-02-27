@@ -21,7 +21,7 @@ void LittleDiveLog::login(QString email, QString password)
 {
     setIsBusy();
     auto req = requests->request();
-    req->setURL("https://dive.littledev.nl/api/auth/refresh-token");
+    req->setURL(QString(REMOTE_URL) + "/auth/sessions");
     req->setMethod(RequestMethod::POST);
 
     QJsonObject data;
@@ -32,7 +32,6 @@ void LittleDiveLog::login(QString email, QString password)
     connect(req, SIGNAL(error(QString)), this, SIGNAL(error(QString)));
     connect(req, &AsyncRequest::finished, this, [=]() {
         auto resp = req->getResponse();
-
         auto jsonVal = resp->getBodyAsJSON();
         if (!jsonVal.isObject()) {
             return;
@@ -43,7 +42,8 @@ void LittleDiveLog::login(QString email, QString password)
             emit error(obj["error"].toString());
             unsetIsBusy();
         } else {
-            set_refresh_token(obj["jwt"].toString());
+            m_access_token = obj["access_token"].toString();
+            set_refresh_token(obj["refresh_token"].toString());
             emit loggedStateChanged(isLoggedIn());
             fetch_user_data();
         }
@@ -124,7 +124,7 @@ void LittleDiveLog::fetch_user_computers(std::function<void()> callback) {
 
     request(
         RequestMethod::GET,
-        "/computer",
+        "/computers",
         NULL,
         [=](HTTPResponse *resp) {
             auto arr = resp->getBodyAsJSON().toArray();
@@ -144,7 +144,7 @@ void LittleDiveLog::get_access_token(std::function<void()> callback, QObject* pa
 {
     raw_request(
         RequestMethod::GET,
-        "/auth/access-token",
+        "/auth/sessions/refresh",
         RequestTokenType::REFRESH,
         NULL,
         [=](HTTPResponse *resp) {
@@ -159,10 +159,10 @@ void LittleDiveLog::get_access_token(std::function<void()> callback, QObject* pa
             }
 
             auto obj = val.toObject();
-            if(!obj.contains("jwt")) {
+            if(!obj.contains("access_token")) {
                 throw std::runtime_error("Expected webservice to return jwt");
             } else {
-                m_access_token = obj["jwt"].toString();
+                m_access_token = obj["access_token"].toString();
                 callback();
             }
 
@@ -180,7 +180,7 @@ void LittleDiveLog::raw_request(
         QObject* parent
 ) {
     auto req = requests->request();
-    req->setURL("https://dive.littledev.nl/api" + path);
+    req->setURL(REMOTE_URL + path);
     req->setMethod(method);
     if (data) {
         req->setBody(*data);
@@ -261,7 +261,7 @@ void LittleDiveLog::logout() {
     this->m_user_info = NULL;
     emit userInfoChanged(m_user_info);
 
-    raw_request(RequestMethod::DELETE, "/auth/refresh-token/", RequestTokenType::REFRESH, NULL, [=](HTTPResponse *resp) {
+    raw_request(RequestMethod::DELETE, "/auth/sessions/", RequestTokenType::REFRESH, NULL, [=](HTTPResponse *resp) {
         set_refresh_token(NULL);
         m_access_token.clear();
         emit loggedStateChanged(isLoggedIn());

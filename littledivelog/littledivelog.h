@@ -8,6 +8,8 @@
 #include <functional>
 #include "./userinfo.h"
 #include "littledivelogcomputer.h"
+//#define REMOTE_URL "https://dive.littledev.nl/api"
+#define REMOTE_URL "http://localhost:8000/api"
 
 enum RequestTokenType {
     NONE,
